@@ -28,9 +28,7 @@ public class Categoria {
         this.estado = Estado.Activo;
     }
 
-    enum Estado {
-        Activo, Inactivo
-    }
+
 
     public long getIdCategoria() {
         return idCategoria;

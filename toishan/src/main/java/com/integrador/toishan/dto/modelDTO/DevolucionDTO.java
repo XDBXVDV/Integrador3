@@ -1,4 +1,4 @@
-package com.integrador.toishan.dto;
+package com.integrador.toishan.dto.modelDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

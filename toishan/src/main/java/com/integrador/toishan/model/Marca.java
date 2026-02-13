@@ -16,9 +16,7 @@ public class Marca {
 
     @Enumerated(EnumType.STRING)
     private Estado estado;
-    enum Estado {
-        Activo, Inactivo
-    }
+
 @OneToMany(mappedBy = "marca")
 private List<Producto> productos;
     public Marca(Long idMarca, String nombre, Estado estado) {

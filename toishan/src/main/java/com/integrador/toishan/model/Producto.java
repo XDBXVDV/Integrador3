@@ -2,6 +2,7 @@ package com.integrador.toishan.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -20,28 +21,21 @@ public class Producto {
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
-    private Double precio;
+    private BigDecimal precio;
     @Column(name = "stock_minimo", nullable = false)
     private Integer stockMinimo;
     @Column(nullable = false)
     private Integer stock;
     @Enumerated(EnumType.STRING)
     private Estado estado;
-    enum Estado {
-        Activo, Inactivo
-    }
     @Enumerated(EnumType.STRING)
     @Column(name = "condicion")
     private Condicion condicion;
-    enum Condicion {
-        EN_STOCK,
-        STOCK_BAJO,
-        AGOTADO
-    }
+
 @OneToMany(mappedBy = "producto")
 private List<DetalleVenta> detalleVentas;
 
-    public Producto(long idproducto, String nombre, Double precio, Integer stockMinimo, Integer stock, Estado estado, Condicion condicion, Categoria categoria, Marca marca) {
+    public Producto(long idproducto, String nombre, BigDecimal precio, Integer stockMinimo, Integer stock, Estado estado, Condicion condicion, Categoria categoria, Marca marca) {
         this.idproducto = idproducto;
         this.nombre = nombre;
         this.precio = precio;
@@ -72,11 +66,11 @@ private List<DetalleVenta> detalleVentas;
         this.nombre = nombre;
     }
 
-    public Double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

@@ -1,4 +1,4 @@
-package com.integrador.toishan.dto;
+package com.integrador.toishan.dto.modelDTO;
 
 public class UsuarioDTO {
     private Long idUsuario;

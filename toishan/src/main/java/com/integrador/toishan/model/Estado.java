@@ -1,6 +1,6 @@
 package com.integrador.toishan.model;
 
-public enum EstadoUsuario {
+public enum Estado {
 Activo,
-Inactivo;
+Inactivo
 }

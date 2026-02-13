@@ -26,10 +26,7 @@ public class Venta {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
     private EstadoVenta estado;
-enum EstadoVenta
-{
-    Registrada, Anulada
-}
+
     @OneToMany(
             mappedBy = "venta",
             cascade = CascadeType.ALL,

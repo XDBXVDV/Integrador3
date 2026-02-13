@@ -1,6 +1,5 @@
-package com.integrador.toishan.dto;
+package com.integrador.toishan.dto.createDTO;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class DevolucionCreateDTO {

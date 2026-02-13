@@ -24,13 +24,11 @@ public class Usuario {
     private Rol rol;
 
     @Enumerated(EnumType.STRING)
-    private EstadoUsuario estado;
+    private Estado estado;
 
-    private enum EstadoUsuario {
-        Activo,Inactivo
-    }
 
-    public Usuario(Long idUsuario, String usuario, String email, String contrasena, EstadoUsuario estado, Rol rol) {
+
+    public Usuario(Long idUsuario, String usuario, String email, String contrasena, Estado estado, Rol rol) {
         this.idUsuario = idUsuario;
         this.usuario = usuario;
         this.email = email;
@@ -72,11 +70,11 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    public EstadoUsuario getEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoUsuario estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 

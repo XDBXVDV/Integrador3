@@ -28,10 +28,7 @@ public class Devolucion {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
     private EstadoDevolucion estado;
-    public enum EstadoDevolucion {
-        Registrada,
-        Aunlada
-    }
+
 
     @OneToMany(
             mappedBy = "devolucion",
