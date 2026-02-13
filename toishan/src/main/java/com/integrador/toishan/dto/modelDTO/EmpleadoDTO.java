@@ -1,13 +1,12 @@
-package com.integrador.toishan.model;
+package com.integrador.toishan.dto;
 
 public class EmpleadoDTO {
     private Long idEmpleado;
     private String nombre;
     private String apellido;
     private String dni;
-    private String usuario;
-    private String email;
-    private String rolName;
+    private String rol;
+    private String estadoUsuario;
 
     public Long getIdEmpleado() {
         return idEmpleado;
@@ -41,27 +40,19 @@ public class EmpleadoDTO {
         this.dni = dni;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getRol() {
+        return rol;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEstadoUsuario() {
+        return estadoUsuario;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getRolName() {
-        return rolName;
-    }
-
-    public void setRolName(String rolName) {
-        this.rolName = rolName;
+    public void setEstadoUsuario(String estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
     }
 }

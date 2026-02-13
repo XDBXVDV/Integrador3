@@ -1,13 +1,12 @@
-package com.integrador.toishan.model;
+package com.integrador.toishan.dto;
 
 public class ClienteDTO {
-private Long idCliente;
-private String Usuario;
-private String email;
-private String nombre;
-private String apellido;;
-private String telefono;
-private String direccion;
+    private Long idCliente;
+    private String nombre;
+    private String apellido;
+    private String dni;
+    private String telefono;
+    private String estadoUsuario;
 
     public Long getIdCliente() {
         return idCliente;
@@ -15,22 +14,6 @@ private String direccion;
 
     public void setIdCliente(Long idCliente) {
         this.idCliente = idCliente;
-    }
-
-    public String getUsuario() {
-        return Usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        Usuario = usuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getNombre() {
@@ -49,6 +32,14 @@ private String direccion;
         this.apellido = apellido;
     }
 
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
     public String getTelefono() {
         return telefono;
     }
@@ -57,11 +48,11 @@ private String direccion;
         this.telefono = telefono;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getEstadoUsuario() {
+        return estadoUsuario;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setEstadoUsuario(String estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
     }
 }

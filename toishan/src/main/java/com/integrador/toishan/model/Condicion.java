@@ -1,4 +1,4 @@
 package com.integrador.toishan.model;
 
-public class DevolucionDTO {
+public enum Condicion {
 }
