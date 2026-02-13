@@ -17,6 +17,9 @@ public class Venta {
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
+    @ManyToOne
+    @JoinColumn(name = "id_empleado", nullable = false)
+    private Empleado empleado;
     @Column(name = "fecha_venta")
     private LocalDateTime fechaVenta;
 
@@ -37,12 +40,30 @@ public class Venta {
     @OneToMany(mappedBy = "venta")
     private List<Devolucion> devoluciones;
 
-    public Venta(Long idVenta, Cliente cliente, LocalDateTime fechaVenta, BigDecimal total, EstadoVenta estado, List<DetalleVenta> detalles) {
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    public List<Devolucion> getDevoluciones() {
+        return devoluciones;
+    }
+
+    public void setDevoluciones(List<Devolucion> devoluciones) {
+        this.devoluciones = devoluciones;
+    }
+
+    public Venta(Long idVenta, Cliente cliente, LocalDateTime fechaVenta, Empleado empleado, BigDecimal total, EstadoVenta estado, List<Devolucion> devoluciones, List<DetalleVenta> detalles) {
         this.idVenta = idVenta;
         this.cliente = cliente;
         this.fechaVenta = fechaVenta;
+        this.empleado = empleado;
         this.total = total;
-        this.estado = EstadoVenta.Registrada;
+        this.estado = estado;
+        this.devoluciones = devoluciones;
         this.detalles = detalles;
     }
 

@@ -1,6 +1,7 @@
 package com.integrador.toishan.dto.createDTO;
 
 public class ClienteCreateDTO {
+    private Long idUsuario;
     private String usuario;
     private String email;
     private String contrasena;
@@ -8,6 +9,22 @@ public class ClienteCreateDTO {
     private String apellido;
     private String dni;
     private String telefono;
+    private String direccion;
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     public String getUsuario() {
         return usuario;

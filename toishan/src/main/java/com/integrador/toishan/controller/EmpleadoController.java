@@ -14,11 +14,11 @@ public class EmpleadoController {
     @Autowired
     private EmpleadoService empleadoService;
 
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody EmpleadoCreateDTO dto) {
         return ResponseEntity.ok(empleadoService.crearEmpleado(dto));
     }
-    @PutMapping("/{id}")
+    @PutMapping("/editar/{id}")
     public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody EmpleadoUpdateDTO dto)
     {
         return ResponseEntity.ok(empleadoService.editarEmpleado(id, dto));

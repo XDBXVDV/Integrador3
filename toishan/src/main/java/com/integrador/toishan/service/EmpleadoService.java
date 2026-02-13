@@ -35,13 +35,16 @@ public class EmpleadoService {
 
     public Empleado crearEmpleado(EmpleadoCreateDTO dto) {
 
-        UsuarioCreateDTO userDTO = new UsuarioCreateDTO();
-        userDTO.setUsuario(dto.getUsuario());
-        userDTO.setEmail(dto.getEmail());
-        userDTO.setContrasena(dto.getContrasena());
-        userDTO.setIdRol(dto.getIdRol());
+        if (dto.getIdUsuario() == null) {
+            throw new RuntimeException("El idUsuario es obligatorio");
+        }
 
-        Usuario usuario = usuarioService.crearUsuario(userDTO);
+        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
+
+        if (empleadoRepo.existsByUsuario(usuario)) {
+            throw new RuntimeException("Este usuario ya está asociado a un empleado");
+        }
 
         Empleado empleado = new Empleado();
         empleado.setUsuario(usuario);

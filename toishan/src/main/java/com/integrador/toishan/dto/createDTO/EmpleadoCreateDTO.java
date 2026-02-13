@@ -1,45 +1,17 @@
 package com.integrador.toishan.dto.createDTO;
 
 public class EmpleadoCreateDTO {
-    private String usuario;
-    private String email;
-    private String contrasena;
-    private Long idRol;
-
+    private Long idUsuario;
     private String nombre;
     private String apellido;
     private String dni;
 
-    public String getUsuario() {
-        return usuario;
+    public Long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public Long getIdRol() {
-        return idRol;
-    }
-
-    public void setIdRol(Long idRol) {
-        this.idRol = idRol;
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {

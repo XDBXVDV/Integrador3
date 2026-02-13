@@ -26,6 +26,7 @@ import java.util.List;
         private String dni;
     @OneToMany(mappedBy = "empleado")
     private List<Venta> ventas;
+
         public Empleado(Long idEmpleado, Usuario usuario, String nombre, String apellido, String dni) {
             this.idEmpleado = idEmpleado;
             this.usuario = usuario;

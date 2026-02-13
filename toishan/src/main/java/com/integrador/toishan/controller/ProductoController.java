@@ -8,13 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/productos")
+@RequestMapping("/producto")
 public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
 
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody ProductoCreateDTO dto) {
         return ResponseEntity.ok(productoService.crear(dto));
     }

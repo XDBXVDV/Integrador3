@@ -7,18 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody UsuarioCreateDTO dto) {
         return ResponseEntity.ok(usuarioService.crearUsuario(dto));
     }
 
-    @PutMapping("/{id}/desactivar")
+    @PutMapping("/desactivar/{id}")
     public ResponseEntity<?> desactivar(@PathVariable Long id) {
         usuarioService.desactivarUsuario(id);
         return ResponseEntity.ok("Usuario desactivado");

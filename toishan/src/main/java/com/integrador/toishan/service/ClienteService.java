@@ -27,13 +27,13 @@ public class ClienteService {
 
     public Cliente crearCliente(ClienteCreateDTO dto) {
 
-        UsuarioCreateDTO userDTO = new UsuarioCreateDTO();
-        userDTO.setUsuario(dto.getUsuario());
-        userDTO.setEmail(dto.getEmail());
-        userDTO.setContrasena(dto.getContrasena());
-        userDTO.setIdRol(1L);
+        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
 
-        Usuario usuario = usuarioService.crearUsuario(userDTO);
+        // VALIDACIÓN: evitar duplicado
+        if (clienteRepo.existsByUsuario(usuario)) {
+            throw new RuntimeException("Este usuario ya está asociado a un cliente");
+        }
 
         Cliente cliente = new Cliente();
         cliente.setUsuario(usuario);
@@ -41,6 +41,7 @@ public class ClienteService {
         cliente.setApellido(dto.getApellido());
         cliente.setDni(dto.getDni());
         cliente.setTelefono(dto.getTelefono());
+        cliente.setDireccion(dto.getDireccion());
 
         return clienteRepo.save(cliente);
     }
