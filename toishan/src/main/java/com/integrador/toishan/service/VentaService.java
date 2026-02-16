@@ -7,6 +7,7 @@ import com.integrador.toishan.model.EstadoVenta;
 import com.integrador.toishan.model.Producto;
 import com.integrador.toishan.model.Venta;
 import com.integrador.toishan.repo.ClienteRepo;
+import com.integrador.toishan.repo.EmpleadoRepo;
 import com.integrador.toishan.repo.ProductoRepo;
 import com.integrador.toishan.repo.VentaRepo;
 import jakarta.transaction.Transactional;
@@ -28,17 +29,32 @@ public class VentaService {
     @Autowired
     private ClienteRepo clienteRepo;
 
+     @Autowired
+     private EmpleadoRepo empleadoRepo;
+
+    @Transactional
     public Venta crearVenta(VentaCreateDTO dto) {
 
         Venta venta = new Venta();
-        venta.setCliente(clienteRepo.findById(dto.getIdCliente()).orElseThrow());
+
+        venta.setCliente(
+                clienteRepo.findById(dto.getIdCliente())
+                        .orElseThrow(() -> new RuntimeException("Cliente no encontrado"))
+        );
+
+        venta.setEmpleado(
+                empleadoRepo.findById(dto.getIdEmpleado())
+                        .orElseThrow(() -> new RuntimeException("Empleado no encontrado"))
+        );
+
         venta.setEstado(EstadoVenta.Registrada);
 
         BigDecimal total = BigDecimal.ZERO;
 
         for (DetalleVentaCreateDTO det : dto.getDetalles()) {
 
-            Producto p = productoRepo.findById(det.getIdProducto()).orElseThrow();
+            Producto p = productoRepo.findById(det.getIdProducto())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
             if (p.getStock() < det.getCantidad()) {
                 throw new RuntimeException("Stock insuficiente");
@@ -51,7 +67,9 @@ public class VentaService {
             dv.setProducto(p);
             dv.setCantidad(det.getCantidad());
             dv.setPrecioUnitario(p.getPrecio());
-            dv.setSubtotal(p.getPrecio().multiply(BigDecimal.valueOf(det.getCantidad())));
+            dv.setSubtotal(
+                    p.getPrecio().multiply(BigDecimal.valueOf(det.getCantidad()))
+            );
 
             venta.getDetalles().add(dv);
             total = total.add(dv.getSubtotal());

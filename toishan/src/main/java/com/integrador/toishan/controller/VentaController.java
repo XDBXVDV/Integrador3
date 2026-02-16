@@ -7,20 +7,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/ventas")
+@RequestMapping("/venta")
 public class VentaController {
 
     @Autowired
     private VentaService ventaService;
 
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody VentaCreateDTO dto) {
         return ResponseEntity.ok(ventaService.crearVenta(dto));
     }
 
-    @PutMapping("/{id}/anular")
-    public ResponseEntity<?> anular(@PathVariable Long id) {
-        ventaService.anularVenta(id);
+    @PutMapping("/anular/{id_venta}")
+    public ResponseEntity<?> anular(@PathVariable Long id_venta) {
+        ventaService.anularVenta(id_venta);
         return ResponseEntity.ok("Venta anulada");
     }
 }

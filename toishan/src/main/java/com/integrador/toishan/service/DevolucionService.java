@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -25,39 +26,53 @@ public class DevolucionService {
     @Autowired
     private ProductoRepo productoRepo;
 
+    @Transactional
     public Devolucion crearDevolucion(DevolucionCreateDTO dto) {
 
         Venta venta = ventaRepo.findById(dto.getIdVenta())
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
 
-        Devolucion dev = new Devolucion();
-        dev.setVenta(venta);
-        dev.setEstado(EstadoDevolucion.Registrada);
+        Devolucion devolucion = new Devolucion();
+        devolucion.setVenta(venta);
+        devolucion.setMotivo(dto.getMotivo());
+        devolucion.setEstado(EstadoDevolucion.Registrada);
+        devolucion.setDetalles(new ArrayList<>());
 
-        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal totalDevuelto = BigDecimal.ZERO;
 
         for (DetalleDevolucionCreateDTO det : dto.getDetalles()) {
 
-            Producto p = productoRepo.findById(det.getIdProducto())
+            Producto producto = productoRepo.findById(det.getIdProducto())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-            DetalleDevolucion dd = new DetalleDevolucion();
-            dd.setDevolucion(dev);
-            dd.setProducto(p);
-            dd.setCantidad(det.getCantidad());
-            dd.setPrecioUnitario(p.getPrecio());
-            dd.setSubtotal(
-                    p.getPrecio().multiply(BigDecimal.valueOf(det.getCantidad()))
-            );
+            // 1️⃣ Buscar detalle original de la venta
+            DetalleVenta detalleVenta = venta.getDetalles().stream()
+                    .filter(dv -> dv.getProducto().getIdproducto()==producto.getIdproducto())
+                    .findFirst()
+                    .orElseThrow(() ->
+                            new RuntimeException("El producto no pertenece a esta venta")
+                    );
 
-            p.setStock(p.getStock() + det.getCantidad());
+            int cantidadVendida = detalleVenta.getCantidad();
 
-            dev.getDetalles().add(dd);
-            total = total.add(dd.getSubtotal());
+            // 2️⃣ Calcular lo ya devuelto
+            int cantidadDevuelta = cantidadYaDevuelta(venta, producto);
+
+            // 3️⃣ Validar
+            if (cantidadDevuelta + det.getCantidad() > cantidadVendida) {
+                throw new RuntimeException(
+                        "Cantidad a devolver supera lo vendido. " +
+                                "Vendida: " + cantidadVendida +
+                                ", Ya devuelta: " + cantidadDevuelta
+                );
+            }
+
+            // 👉 SI PASA, RECIÉN CREAS EL DETALLE
         }
 
-        dev.setTotalDevuelto(total);
-        return devolucionRepo.save(dev);
+        devolucion.setTotalDevuelto(totalDevuelto);
+
+        return devolucionRepo.save(devolucion);
     }
 
     public void anularDevolucion(Long id) {
@@ -71,5 +86,14 @@ public class DevolucionService {
             Producto p = det.getProducto();
             p.setStock(p.getStock() - det.getCantidad());
         }
+    }
+    private int cantidadYaDevuelta(Venta venta, Producto producto) {
+
+        return venta.getDevoluciones().stream()
+                .filter(d -> d.getEstado() != EstadoDevolucion.Anulada)
+                .flatMap(d -> d.getDetalles().stream())
+                .filter(dd -> dd.getProducto().getIdproducto()==producto.getIdproducto())
+                .mapToInt(DetalleDevolucion::getCantidad)
+                .sum();
     }
 }

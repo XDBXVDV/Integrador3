@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,8 @@ public class Devolucion {
     @JoinColumn(name = "id_venta", nullable = false)
     private Venta venta;
 
+    private String motivo;
+
     @Column(name = "fecha_devolucion")
     private LocalDateTime fechaDevolucion;
 
@@ -30,23 +33,29 @@ public class Devolucion {
     private EstadoDevolucion estado;
 
 
-    @OneToMany(
-            mappedBy = "devolucion",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<DetalleDevolucion> detalles ;
+    @OneToMany(mappedBy = "devolucion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleDevolucion> detalles = new ArrayList<>();
 
-    public Devolucion(Long idDevolucion, Venta venta, LocalDateTime fechaDevolucion, BigDecimal totalDevuelto, EstadoDevolucion estado, List<DetalleDevolucion> detalles) {
+    public Devolucion(Long idDevolucion, Venta venta, LocalDateTime fechaDevolucion, String motivo, EstadoDevolucion estado, BigDecimal totalDevuelto, List<DetalleDevolucion> detalles) {
         this.idDevolucion = idDevolucion;
         this.venta = venta;
         this.fechaDevolucion = fechaDevolucion;
+        this.motivo = motivo;
+        this.estado = estado;
         this.totalDevuelto = totalDevuelto;
-        this.estado = EstadoDevolucion.Registrada;
         this.detalles = detalles;
     }
+
     public Devolucion() {
 
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
     }
 
     public Long getIdDevolucion() {

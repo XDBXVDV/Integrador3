@@ -4,7 +4,16 @@ import java.util.List;
 
 public class VentaCreateDTO {
     private Long idCliente;
+    private Long idEmpleado;
     private List<DetalleVentaCreateDTO> detalles;
+
+    public Long getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Long idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
 
     public Long getIdCliente() {
         return idCliente;

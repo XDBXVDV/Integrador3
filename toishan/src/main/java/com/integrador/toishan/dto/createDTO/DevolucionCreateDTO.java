@@ -1,10 +1,22 @@
 package com.integrador.toishan.dto.createDTO;
 
+import com.integrador.toishan.model.Devolucion;
+
 import java.util.List;
 
 public class DevolucionCreateDTO {
     private Long idVenta;
     private List<DetalleDevolucionCreateDTO> detalles;
+private String motivo;
+
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
 
     public Long getIdVenta() {
         return idVenta;

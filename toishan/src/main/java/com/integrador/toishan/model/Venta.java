@@ -20,7 +20,7 @@ public class Venta {
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false)
     private Empleado empleado;
-    @Column(name = "fecha_venta")
+    @Column(name = "fechaventa")
     private LocalDateTime fechaVenta;
 
     @Column(name = "total", nullable = false)
@@ -30,12 +30,8 @@ public class Venta {
     @Column(name = "estado")
     private EstadoVenta estado;
 
-    @OneToMany(
-            mappedBy = "venta",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<DetalleVenta> detalles;
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleVenta> detalles = new ArrayList<>();
 
     @OneToMany(mappedBy = "venta")
     private List<Devolucion> devoluciones;

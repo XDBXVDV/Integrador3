@@ -7,18 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/devoluciones")
+@RequestMapping("/devolucione")
 public class DevolucionController {
 
     @Autowired
     private DevolucionService devolucionService;
 
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody DevolucionCreateDTO dto) {
         return ResponseEntity.ok(devolucionService.crearDevolucion(dto));
     }
 
-    @PutMapping("/{id}/anular")
+    @PutMapping("/anular/{id}")
     public ResponseEntity<?> anular(@PathVariable Long id) {
         devolucionService.anularDevolucion(id);
         return ResponseEntity.ok("Devolución anulada");
