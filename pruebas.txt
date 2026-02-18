@@ -1,0 +1,98 @@
+http://localhost:8080/usuario/crear
+{
+  "usuario": "cliente01",
+  "email": "cliente01@gmail.com",
+  "contrasena": "123456",
+  "idRol": 1
+}
+
+http://localhost:8080/cliente/crear
+
+{
+  "idUsuario": 1,
+  "nombre": "Juan",
+  "apellido": "Perez",
+  "dni": "12345678",
+  "telefono": "999888777",
+  "direccion": "Av. Lima 123"
+}
+
+http://localhost:8080/usuario/crear
+
+{
+  "usuario": "empleado01",
+  "email": "empleado01@empresa.com",
+  "contrasena": "123456",
+  "idRol": 2
+}
+
+http://localhost:8080/empleado/crear
+
+{
+  "idUsuario": 2,
+  "nombre": "Carlos",
+  "apellido": "Gomez",
+  "dni": "87654321"
+}
+
+http://localhost:8080/categoria/crear
+
+{
+  "nombre": "Bebidas"
+}
+
+http://localhost:8080/marca/crear
+
+{
+  "nombre": "Coca Cola"
+}
+
+http://localhost:8080/producto/crear
+
+{
+  "idCategoria": 1,
+  "idMarca": 1,
+  "nombre": "Coca Cola 500ml",
+  "precio": 3.50,
+  "stockMinimo": 10,
+  "stock": 50,
+  "estado": "Activo"
+}
+
+http://localhost:8080/producto/actualizar/1
+
+{
+  "idCategoria": 1,
+  "idMarca": 1,
+  "nombre": "Coca Cola 500ml",
+  "precio": 3.80,
+  "stockMinimo": 8,
+  "stock": 40,
+  "estado": "Activo"
+}
+
+http://localhost:8080/venta/crear
+{
+  "idCliente": 1,
+  "idEmpleado": 1,
+  "detalles": [
+    {
+      "idProducto": 1,
+      "cantidad": 2,
+      "precioUnitario": 3.80
+    }
+  ]
+}
+
+http://localhost:8080/devolucione/crear
+{
+  "idVenta": 1,
+  "motivo": "Producto defectuoso",
+  "detalles": [
+    {
+      "idProducto": 1,
+      "cantidad": 1
+    }
+
+  ]
+}

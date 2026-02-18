@@ -1,6 +1,6 @@
 package com.integrador.toishan.model;
 
-public enum EstadoPeidoCompra {
+public enum EstadoPedidoCompra {
     REGISTRADO,
     APROBADO,
     RECIBIDO,

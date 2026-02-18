@@ -1,4 +1,7 @@
 package com.integrador.toishan.repo;
 
-public interface DetallePedidoCompraRepo {
+import com.integrador.toishan.model.DetallePedidoCompra;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DetallePedidoCompraRepo extends JpaRepository<DetallePedidoCompra,Long> {
 }
