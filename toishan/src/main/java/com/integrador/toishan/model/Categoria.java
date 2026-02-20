@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class Categoria {
     @Column(name = "estado")
     @Enumerated(EnumType.STRING)
     private Estado estado;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "categoria")
     private List<Producto> productos;
     public Categoria() {

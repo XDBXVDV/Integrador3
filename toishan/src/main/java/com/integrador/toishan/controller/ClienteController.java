@@ -1,7 +1,7 @@
 package com.integrador.toishan.controller;
 
-import com.integrador.toishan.dto.createDTO.ClienteCreateDTO;
-import com.integrador.toishan.dto.updateDTO.ClienteUpdateDTO;
+
+import com.integrador.toishan.model.Cliente;
 import com.integrador.toishan.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody ClienteCreateDTO dto) {
-        return ResponseEntity.ok(clienteService.crearCliente(dto));
+    public ResponseEntity<?> crear(@RequestBody Cliente cliente) {
+        return ResponseEntity.ok(clienteService.crearCliente(cliente));
     }
     @PutMapping("/editar/{id}")
-    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody ClienteUpdateDTO dto) {
-        return ResponseEntity.ok(clienteService.editarCliente(id, dto));
+    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Cliente cliente) {
+        return ResponseEntity.ok(clienteService.editarCliente(id, cliente));
     }
 }
 

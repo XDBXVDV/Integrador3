@@ -3,13 +3,17 @@ http://localhost:8080/usuario/crear
   "usuario": "cliente01",
   "email": "cliente01@gmail.com",
   "contrasena": "123456",
-  "idRol": 1
+  "rol": {
+    "idrol": 1
+  }
 }
-
 http://localhost:8080/cliente/crear
 
 {
-  "idUsuario": 1,
+    "usuario":{
+        "idUsuario": 1
+    }
+  ,
   "nombre": "Juan",
   "apellido": "Perez",
   "dni": "12345678",
@@ -23,13 +27,17 @@ http://localhost:8080/usuario/crear
   "usuario": "empleado01",
   "email": "empleado01@empresa.com",
   "contrasena": "123456",
-  "idRol": 2
+  "rol":{
+    "idrol": 2
+  }
 }
 
 http://localhost:8080/empleado/crear
 
 {
-  "idUsuario": 2,
+  "usuario":{
+        "idUsuario": 2
+    },
   "nombre": "Carlos",
   "apellido": "Gomez",
   "dni": "87654321"

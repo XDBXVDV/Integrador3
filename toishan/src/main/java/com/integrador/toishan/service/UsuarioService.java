@@ -1,6 +1,6 @@
 package com.integrador.toishan.service;
 
-import com.integrador.toishan.dto.createDTO.UsuarioCreateDTO;
+
 import com.integrador.toishan.model.Estado;
 import com.integrador.toishan.model.Usuario;
 import com.integrador.toishan.repo.RolRepo;
@@ -20,19 +20,19 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario crearUsuario(UsuarioCreateDTO dto) {
+    public Usuario crearUsuario(Usuario u) {
 
-        if (usuarioRepo.existsByUsuario(dto.getUsuario())) {
+        if (usuarioRepo.existsByUsuario(u.getUsuario())) {
             throw new RuntimeException("Usuario ya existe");
         }
-        if (usuarioRepo.existsByEmail(dto.getEmail())) {
+        if (usuarioRepo.existsByEmail(u.getEmail())) {
             throw new RuntimeException("Email ya registrado");
         }
         Usuario usuario = new Usuario();
-        usuario.setUsuario(dto.getUsuario());
-        usuario.setEmail(dto.getEmail());
-        usuario.setContrasena(passwordEncoder.encode(dto.getContrasena()));
-        usuario.setRol(rolRepo.findById(dto.getIdRol()).orElseThrow());
+        usuario.setUsuario(u.getUsuario());
+        usuario.setEmail(u.getEmail());
+        usuario.setContrasena(passwordEncoder.encode(u.getContrasena()));
+        usuario.setRol(rolRepo.findById(u.getRol().getIdrol()).orElse(null));
         usuario.setEstado(Estado.Activo);
 
         return usuarioRepo.save(usuario);

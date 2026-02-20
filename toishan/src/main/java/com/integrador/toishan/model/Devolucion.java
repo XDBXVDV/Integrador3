@@ -22,7 +22,7 @@ public class Devolucion {
 
     private String motivo;
 
-    @Column(name = "fecha_devolucion")
+    @Column(insertable = false,name = "fecha_devolucion")
     private LocalDateTime fechaDevolucion;
 
     @Column(name = "total_devuelto", nullable = false)

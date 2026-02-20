@@ -1,8 +1,6 @@
 package com.integrador.toishan.service;
 
-import com.integrador.toishan.dto.createDTO.EmpleadoCreateDTO;
-import com.integrador.toishan.dto.createDTO.UsuarioCreateDTO;
-import com.integrador.toishan.dto.updateDTO.EmpleadoUpdateDTO;
+
 import com.integrador.toishan.model.Empleado;
 import com.integrador.toishan.model.Rol;
 import com.integrador.toishan.model.Usuario;
@@ -33,13 +31,13 @@ public class EmpleadoService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Empleado crearEmpleado(EmpleadoCreateDTO dto) {
+    public Empleado crearEmpleado(Empleado empleado1) {
 
-        if (dto.getIdUsuario() == null) {
+        if (empleado1.getUsuario().getIdUsuario() == null) {
             throw new RuntimeException("El idUsuario es obligatorio");
         }
 
-        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
+        Usuario usuario = usuarioRepo.findById(empleado1.getUsuario().getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no existe"));
 
         if (empleadoRepo.existsByUsuario(usuario)) {
@@ -48,47 +46,47 @@ public class EmpleadoService {
 
         Empleado empleado = new Empleado();
         empleado.setUsuario(usuario);
-        empleado.setNombre(dto.getNombre());
-        empleado.setApellido(dto.getApellido());
-        empleado.setDni(dto.getDni());
+        empleado.setNombre(empleado1.getNombre());
+        empleado.setApellido(empleado1.getApellido());
+        empleado.setDni(empleado1.getDni());
 
         return empleadoRepo.save(empleado);
     }
 
-    public Empleado editarEmpleado(Long idEmpleado, EmpleadoUpdateDTO dto) {
+    public Empleado editarEmpleado(Long idEmpleado, Empleado empleado1) {
 
         Empleado empleado = empleadoRepo.findById(idEmpleado)
                 .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 
         Usuario usuario = empleado.getUsuario();
 
-        if (!usuario.getUsuario().equals(dto.getUsuario())
-                && usuarioRepo.existsByUsuario(dto.getUsuario())) {
+        if (!usuario.getUsuario().equals(empleado1.getUsuario())
+                && usuarioRepo.existsByUsuario(empleado1.getUsuario().getUsuario())) {
             throw new RuntimeException("El nombre de usuario ya existe");
         }
 
 
-        if (!usuario.getEmail().equals(dto.getEmail())
-                && usuarioRepo.existsByEmail(dto.getEmail())) {
+        if (!usuario.getEmail().equals(empleado1.getUsuario().getEmail())
+                && usuarioRepo.existsByEmail(empleado1.getUsuario().getEmail())) {
             throw new RuntimeException("El email ya está registrado");
         }
 
-        Rol rol = rolRepo.findById(dto.getIdRol())
+        Rol rol = rolRepo.findById(empleado1.getUsuario().getRol().getIdrol())
                 .orElseThrow(() -> new RuntimeException("Rol no válido"));
 
-        usuario.setUsuario(dto.getUsuario());
-        usuario.setEmail(dto.getEmail());
-        usuario.setRol(rolRepo.findById(dto.getIdRol()).orElseThrow());
+        usuario.setUsuario(empleado1.getUsuario().getUsuario());
+        usuario.setEmail(empleado1.getUsuario().getEmail());
+        usuario.setRol(rolRepo.findById(empleado1.getUsuario().getRol().getIdrol()).orElseThrow());
 
-        if (dto.getContrasena() != null && !dto.getContrasena().isBlank()) {
+        if (empleado1.getUsuario().getContrasena() != null && !empleado1.getUsuario().getContrasena().isBlank()) {
             usuario.setContrasena(
-                    passwordEncoder.encode(dto.getContrasena())
+                    passwordEncoder.encode(empleado1.getUsuario().getContrasena())
             );
         }
 
 
-        empleado.setNombre(dto.getNombre());
-        empleado.setApellido(dto.getApellido());
+        empleado.setNombre(empleado1.getNombre());
+        empleado.setApellido(empleado1.getApellido());
 
 
         usuarioRepo.save(usuario);

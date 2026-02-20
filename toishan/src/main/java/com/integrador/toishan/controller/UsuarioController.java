@@ -1,6 +1,7 @@
 package com.integrador.toishan.controller;
 
-import com.integrador.toishan.dto.createDTO.UsuarioCreateDTO;
+
+import com.integrador.toishan.model.Usuario;
 import com.integrador.toishan.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,8 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody UsuarioCreateDTO dto) {
-        return ResponseEntity.ok(usuarioService.crearUsuario(dto));
+    public ResponseEntity<?> crear(@RequestBody Usuario usuario) {
+        return ResponseEntity.ok(usuarioService.crearUsuario(usuario));
     }
 
     @PutMapping("/desactivar/{id}")

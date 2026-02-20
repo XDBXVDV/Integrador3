@@ -1,8 +1,6 @@
 package com.integrador.toishan.service;
 
-import com.integrador.toishan.dto.createDTO.ClienteCreateDTO;
-import com.integrador.toishan.dto.createDTO.UsuarioCreateDTO;
-import com.integrador.toishan.dto.updateDTO.ClienteUpdateDTO;
+
 import com.integrador.toishan.model.Cliente;
 import com.integrador.toishan.model.Usuario;
 import com.integrador.toishan.repo.ClienteRepo;
@@ -25,9 +23,9 @@ public class ClienteService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Cliente crearCliente(ClienteCreateDTO dto) {
+    public Cliente crearCliente(Cliente dto) {
 
-        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
+        Usuario usuario = usuarioRepo.findById(dto.getUsuario().getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no existe"));
 
         // VALIDACIÓN: evitar duplicado
@@ -46,37 +44,37 @@ public class ClienteService {
         return clienteRepo.save(cliente);
     }
 
-    public Cliente editarCliente(Long idCliente, ClienteUpdateDTO dto) {
+    public Cliente editarCliente(Long idCliente, Cliente editar) {
 
         Cliente cliente = clienteRepo.findById(idCliente)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         Usuario usuario = cliente.getUsuario();
-        if (!usuario.getUsuario().equals(dto.getUsuario())
-                && usuarioRepo.existsByUsuario(dto.getUsuario())) {
+        if (!usuario.getUsuario().equals(editar.getUsuario())
+                && usuarioRepo.existsByUsuario(editar.getUsuario().getUsuario())) {
             throw new RuntimeException("El nombre de usuario ya existe");
         }
 
 
-        if (!usuario.getEmail().equals(dto.getEmail())
-                && usuarioRepo.existsByEmail(dto.getEmail())) {
+        if (!usuario.getEmail().equals(editar.getUsuario().getEmail())
+                && usuarioRepo.existsByEmail(editar.getUsuario().getEmail())) {
             throw new RuntimeException("El email ya está registrado");
         }
 
-        usuario.setUsuario(dto.getUsuario());
-        usuario.setEmail(dto.getEmail());
+        usuario.setUsuario(editar.getUsuario().getUsuario());
+        usuario.setEmail(editar.getUsuario().getEmail());
 
-        if (dto.getContrasena() != null && !dto.getContrasena().isBlank()) {
+        if (editar.getUsuario().getContrasena() != null && !editar.getUsuario().getContrasena().isBlank()) {
             usuario.setContrasena(
-                    passwordEncoder.encode(dto.getContrasena())
+                    passwordEncoder.encode(editar.getUsuario().getContrasena())
             );
         }
 
 
-        cliente.setNombre(dto.getNombre());
-        cliente.setApellido(dto.getApellido());
+        cliente.setNombre(editar.getNombre());
+        cliente.setApellido(editar.getApellido());
 
-        cliente.setTelefono(dto.getTelefono());
+        cliente.setTelefono(editar.getTelefono());
 
         usuarioRepo.save(usuario);
         return clienteRepo.save(cliente);

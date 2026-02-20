@@ -1,7 +1,6 @@
 package com.integrador.toishan.service;
 
-import com.integrador.toishan.dto.createDTO.DetalleVentaCreateDTO;
-import com.integrador.toishan.dto.createDTO.VentaCreateDTO;
+
 import com.integrador.toishan.model.DetalleVenta;
 import com.integrador.toishan.model.EstadoVenta;
 import com.integrador.toishan.model.Producto;
@@ -33,17 +32,17 @@ public class VentaService {
      private EmpleadoRepo empleadoRepo;
 
     @Transactional
-    public Venta crearVenta(VentaCreateDTO dto) {
+    public Venta crearVenta(Venta venta1) {
 
         Venta venta = new Venta();
 
         venta.setCliente(
-                clienteRepo.findById(dto.getIdCliente())
+                clienteRepo.findById(venta1.getCliente().getIdCliente())
                         .orElseThrow(() -> new RuntimeException("Cliente no encontrado"))
         );
 
         venta.setEmpleado(
-                empleadoRepo.findById(dto.getIdEmpleado())
+                empleadoRepo.findById(venta1.getEmpleado().getIdEmpleado())
                         .orElseThrow(() -> new RuntimeException("Empleado no encontrado"))
         );
 
@@ -51,9 +50,9 @@ public class VentaService {
 
         BigDecimal total = BigDecimal.ZERO;
 
-        for (DetalleVentaCreateDTO det : dto.getDetalles()) {
+        for (DetalleVenta det : venta1.getDetalles()) {
 
-            Producto p = productoRepo.findById(det.getIdProducto())
+            Producto p = productoRepo.findById(det.getProducto().getIdproducto())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
             if (p.getStock() < det.getCantidad()) {

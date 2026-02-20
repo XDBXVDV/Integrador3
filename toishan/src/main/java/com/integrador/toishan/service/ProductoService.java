@@ -1,7 +1,6 @@
 package com.integrador.toishan.service;
 
-import com.integrador.toishan.dto.createDTO.ProductoCreateDTO;
-import com.integrador.toishan.dto.updateDTO.ProductoUpdateDTO;
+
 import com.integrador.toishan.model.*;
 import com.integrador.toishan.repo.CategoriaRepo;
 import com.integrador.toishan.repo.MarcaRepo;
@@ -25,16 +24,33 @@ public class ProductoService {
     @Autowired
     private MarcaRepo marcaRepo;
 
-    public Producto crear(ProductoCreateDTO dto) {
+    public Producto crear(Producto producto1) {
 
         Producto p = new Producto();
-        p.setNombre(dto.getNombre());
-        p.setPrecio(dto.getPrecio());
-        p.setStock(dto.getStock());
-        p.setStockMinimo(dto.getStockMinimo());
-        p.setCategoria(categoriaRepo.findById(dto.getIdCategoria()).orElseThrow());
-        p.setMarca(marcaRepo.findById(dto.getIdMarca()).orElseThrow());
+        p.setNombre(producto1.getNombre());
+        p.setPrecio(producto1.getPrecio());
+        p.setStock(producto1.getStock());
+        p.setStockMinimo(producto1.getStockMinimo());
+        if (producto1.getCategoria() != null) {
+            p.setCategoria(categoriaRepo.findById(producto1.getCategoria().getIdCategoria())
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada")));
+        }
+
+        // Validación de seguridad para Marca
+        if (producto1.getMarca() != null) {
+            p.setMarca(marcaRepo.findById(producto1.getMarca().getIdMarca())
+                    .orElseThrow(() -> new RuntimeException("Marca no encontrada")));
+        }
         p.setEstado(Estado.Activo);
+
+        if (producto1.getStock()>producto1.getStockMinimo()) {
+            p.setCondicion(Condicion.En_stock);
+        } else if (producto1.getStock()==0) {
+            p.setCondicion(Condicion.Agotado);
+        }
+        else if (producto1.getStock()<producto1.getStockMinimo()) {
+            p.setCondicion(Condicion.Stock_bajo);
+        }
 
         return productoRepo.save(p);
     }
@@ -45,46 +61,46 @@ public class ProductoService {
         productoRepo.save(p);
     }
 
-    public Producto actualizarProducto(Long idProducto, ProductoUpdateDTO dto) {
+    public Producto actualizarProducto(Long idProducto, Producto producto1) {
 
         Producto producto = productoRepo.findById(idProducto)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        Categoria categoria = categoriaRepo.findById(dto.getIdCategoria())
+        Categoria categoria = categoriaRepo.findById(producto1.getCategoria().getIdCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 
-        Marca marca = marcaRepo.findById(dto.getIdMarca())
+        Marca marca = marcaRepo.findById(producto1.getMarca().getIdMarca())
                 .orElseThrow(() -> new RuntimeException("Marca no encontrada"));
 
-        if (dto.getPrecio() == null || dto.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
+        if (producto1.getPrecio() == null || producto1.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("El precio debe ser mayor a 0");
         }
 
-        if (dto.getStock() < 0) {
+        if (producto1.getStock() < 0) {
             throw new RuntimeException("El stock no puede ser negativo");
         }
 
-        if (dto.getStockMinimo() < 0) {
+        if (producto1.getStockMinimo() < 0) {
             throw new RuntimeException("El stock mínimo no puede ser negativo");
         }
 
-        if (dto.getNombre() == null || dto.getNombre().isBlank()) {
+        if (producto1.getNombre() == null || producto1.getNombre().isBlank()) {
             throw new RuntimeException("El nombre es obligatorio");
         }
 
 
         producto.setCategoria(categoria);
-        producto.setNombre(dto.getNombre());
+        producto.setNombre(producto1.getNombre());
         producto.setMarca(marca);
-        producto.setPrecio(dto.getPrecio());
-        producto.setStock(dto.getStock());
-        producto.setStockMinimo(dto.getStockMinimo());
-        producto.setEstado(dto.getEstado());
+        producto.setPrecio(producto1.getPrecio());
+        producto.setStock(producto1.getStock());
+        producto.setStockMinimo(producto1.getStockMinimo());
+        producto.setEstado(producto1.getEstado());
 
 
         producto.setCondicion(calcularCondicionStock(
-                dto.getStock(),
-                dto.getStockMinimo()
+                producto1.getStock(),
+                producto1.getStockMinimo()
         ));
 
         return productoRepo.save(producto);

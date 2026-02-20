@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ public class Venta {
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false)
     private Empleado empleado;
-    @Column(name = "fechaventa")
+    @Column(insertable = false,name = "fechaventa")
     private LocalDateTime fechaVenta;
 
     @Column(name = "total", nullable = false)
@@ -29,7 +30,7 @@ public class Venta {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
     private EstadoVenta estado;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleVenta> detalles = new ArrayList<>();
 

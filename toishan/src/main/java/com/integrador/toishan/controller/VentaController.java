@@ -1,6 +1,7 @@
 package com.integrador.toishan.controller;
 
-import com.integrador.toishan.dto.createDTO.VentaCreateDTO;
+
+import com.integrador.toishan.model.Venta;
 import com.integrador.toishan.service.VentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,8 @@ public class VentaController {
     private VentaService ventaService;
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody VentaCreateDTO dto) {
-        return ResponseEntity.ok(ventaService.crearVenta(dto));
+    public ResponseEntity<?> crear(@RequestBody Venta venta) {
+        return ResponseEntity.ok(ventaService.crearVenta(venta));
     }
 
     @PutMapping("/anular/{id_venta}")

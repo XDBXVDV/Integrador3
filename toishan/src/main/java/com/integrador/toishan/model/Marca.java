@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class Marca {
 
     @Enumerated(EnumType.STRING)
     private Estado estado;
-
+    @JsonIgnore
 @OneToMany(mappedBy = "marca")
 private List<Producto> productos;
     public Marca(Long idMarca, String nombre, Estado estado) {

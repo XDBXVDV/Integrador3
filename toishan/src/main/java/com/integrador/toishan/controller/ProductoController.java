@@ -1,7 +1,7 @@
 package com.integrador.toishan.controller;
 
-import com.integrador.toishan.dto.createDTO.ProductoCreateDTO;
-import com.integrador.toishan.dto.updateDTO.ProductoUpdateDTO;
+
+import com.integrador.toishan.model.Producto;
 import com.integrador.toishan.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ public class ProductoController {
     private ProductoService productoService;
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody ProductoCreateDTO dto) {
-        return ResponseEntity.ok(productoService.crear(dto));
+    public ResponseEntity<?> crear(@RequestBody Producto producto){
+        return ResponseEntity.ok(productoService.crear(producto));
     }
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @RequestBody ProductoUpdateDTO dto) {
+    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
 
-        return ResponseEntity.ok(productoService.actualizarProducto(id, dto));
+        return ResponseEntity.ok(productoService.actualizarProducto(id, producto));
     }
 }

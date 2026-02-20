@@ -1,7 +1,5 @@
 package com.integrador.toishan.service;
 
-import com.integrador.toishan.dto.createDTO.DetalleDevolucionCreateDTO;
-import com.integrador.toishan.dto.createDTO.DevolucionCreateDTO;
 import com.integrador.toishan.model.*;
 import com.integrador.toishan.repo.DevolucionRepo;
 import com.integrador.toishan.repo.ProductoRepo;
@@ -27,25 +25,25 @@ public class DevolucionService {
     private ProductoRepo productoRepo;
 
     @Transactional
-    public Devolucion crearDevolucion(DevolucionCreateDTO dto) {
+    public Devolucion crearDevolucion(Devolucion devolucion1) {
 
-        Venta venta = ventaRepo.findById(dto.getIdVenta())
+        Venta venta = ventaRepo.findById(devolucion1.getVenta().getIdVenta())
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
 
         Devolucion devolucion = new Devolucion();
         devolucion.setVenta(venta);
-        devolucion.setMotivo(dto.getMotivo());
+        devolucion.setMotivo(devolucion1.getMotivo());
         devolucion.setEstado(EstadoDevolucion.Registrada);
         devolucion.setDetalles(new ArrayList<>());
 
         BigDecimal totalDevuelto = BigDecimal.ZERO;
 
-        for (DetalleDevolucionCreateDTO det : dto.getDetalles()) {
+        for (DetalleDevolucion det : devolucion1.getDetalles()) {
 
-            Producto producto = productoRepo.findById(det.getIdProducto())
+            Producto producto = productoRepo.findById(det.getProducto().getIdproducto())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-            // 1️⃣ Buscar detalle original de la venta
+
             DetalleVenta detalleVenta = venta.getDetalles().stream()
                     .filter(dv -> dv.getProducto().getIdproducto()==producto.getIdproducto())
                     .findFirst()
@@ -55,7 +53,7 @@ public class DevolucionService {
 
             int cantidadVendida = detalleVenta.getCantidad();
 
-            // 2️⃣ Calcular lo ya devuelto
+
             int cantidadDevuelta = cantidadYaDevuelta(venta, producto);
 
             // 3️⃣ Validar
@@ -67,7 +65,7 @@ public class DevolucionService {
                 );
             }
 
-            // 👉 SI PASA, RECIÉN CREAS EL DETALLE
+
         }
 
         devolucion.setTotalDevuelto(totalDevuelto);

@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
         private String apellido;
 
         private String dni;
+    @JsonIgnore
     @OneToMany(mappedBy = "empleado")
     private List<Venta> ventas;
 

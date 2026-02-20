@@ -1,6 +1,7 @@
 package com.integrador.toishan.controller;
 
-import com.integrador.toishan.dto.createDTO.DevolucionCreateDTO;
+
+import com.integrador.toishan.model.Devolucion;
 import com.integrador.toishan.service.DevolucionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,8 @@ public class DevolucionController {
     private DevolucionService devolucionService;
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody DevolucionCreateDTO dto) {
-        return ResponseEntity.ok(devolucionService.crearDevolucion(dto));
+    public ResponseEntity<?> crear(@RequestBody Devolucion devolucion) {
+        return ResponseEntity.ok(devolucionService.crearDevolucion(devolucion));
     }
 
     @PutMapping("/anular/{id}")
