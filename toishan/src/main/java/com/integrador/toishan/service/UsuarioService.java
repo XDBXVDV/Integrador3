@@ -38,6 +38,17 @@ public class UsuarioService {
         return usuarioRepo.save(usuario);
     }
 
+    public void cambiarContrasena(Long idUsuario ,Usuario u ) {
+        Usuario usuario=usuarioRepo.findById(idUsuario).orElse(null);
+        if (usuario==null) {
+            throw  new RuntimeException("El usuario no existe");
+        } else{
+
+            usuario.setContrasena(passwordEncoder.encode(u.getContrasena()));
+        }
+
+    }
+
     public void desactivarUsuario(Long idUsuario) {
         Usuario usuario = usuarioRepo.findById(idUsuario).orElseThrow();
         usuario.setEstado(Estado.Inactivo);

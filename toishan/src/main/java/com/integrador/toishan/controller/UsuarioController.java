@@ -19,10 +19,16 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.crearUsuario(usuario));
     }
 
+
     @PutMapping("/desactivar/{id}")
     public ResponseEntity<?> desactivar(@PathVariable Long id) {
         usuarioService.desactivarUsuario(id);
         return ResponseEntity.ok("Usuario desactivado");
+    }
+    @PutMapping("/reactivar/{id}")
+    public ResponseEntity<?> reactivar(@PathVariable Long id) {
+        usuarioService.reactivarUsuario(id);
+        return ResponseEntity.ok("Usuario reactivado");
     }
 }
 

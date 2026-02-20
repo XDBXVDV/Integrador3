@@ -28,7 +28,7 @@ public class ClienteService {
         Usuario usuario = usuarioRepo.findById(dto.getUsuario().getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no existe"));
 
-        // VALIDACIÓN: evitar duplicado
+
         if (clienteRepo.existsByUsuario(usuario)) {
             throw new RuntimeException("Este usuario ya está asociado a un cliente");
         }
@@ -37,7 +37,7 @@ public class ClienteService {
         cliente.setUsuario(usuario);
         cliente.setNombre(dto.getNombre());
         cliente.setApellido(dto.getApellido());
-        cliente.setDni(dto.getDni());
+
         cliente.setTelefono(dto.getTelefono());
         cliente.setDireccion(dto.getDireccion());
 
@@ -46,38 +46,19 @@ public class ClienteService {
 
     public Cliente editarCliente(Long idCliente, Cliente editar) {
 
-        Cliente cliente = clienteRepo.findById(idCliente)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-
-        Usuario usuario = cliente.getUsuario();
-        if (!usuario.getUsuario().equals(editar.getUsuario())
-                && usuarioRepo.existsByUsuario(editar.getUsuario().getUsuario())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
-        }
+        return clienteRepo.findById(idCliente).map(cliente -> {
 
 
-        if (!usuario.getEmail().equals(editar.getUsuario().getEmail())
-                && usuarioRepo.existsByEmail(editar.getUsuario().getEmail())) {
-            throw new RuntimeException("El email ya está registrado");
-        }
-
-        usuario.setUsuario(editar.getUsuario().getUsuario());
-        usuario.setEmail(editar.getUsuario().getEmail());
-
-        if (editar.getUsuario().getContrasena() != null && !editar.getUsuario().getContrasena().isBlank()) {
-            usuario.setContrasena(
-                    passwordEncoder.encode(editar.getUsuario().getContrasena())
-            );
-        }
+            cliente.setNombre(editar.getNombre());
+            cliente.setApellido(editar.getApellido());
+            cliente.setDni(editar.getDni());
+            cliente.setTelefono(editar.getTelefono());
+            cliente.setDireccion(editar.getDireccion());
 
 
-        cliente.setNombre(editar.getNombre());
-        cliente.setApellido(editar.getApellido());
+            return clienteRepo.save(cliente);
 
-        cliente.setTelefono(editar.getTelefono());
-
-        usuarioRepo.save(usuario);
-        return clienteRepo.save(cliente);
+        }).orElseThrow(() -> new RuntimeException("Cliente con ID " + idCliente + " no encontrado"));
     }
 
 }

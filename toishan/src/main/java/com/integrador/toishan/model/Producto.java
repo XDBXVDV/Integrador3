@@ -11,7 +11,7 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
-    private long idproducto;
+    private Long idproducto;
 
     @ManyToOne
     @JoinColumn(name = "id_categoria")
@@ -36,7 +36,7 @@ public class Producto {
 @OneToMany(mappedBy = "producto")
 private List<DetalleVenta> detalleVentas;
 
-    public Producto(long idproducto, String nombre, BigDecimal precio, Integer stockMinimo, Integer stock, Estado estado, Condicion condicion, Categoria categoria, Marca marca) {
+    public Producto(Long idproducto, String nombre, BigDecimal precio, Integer stockMinimo, Integer stock, Estado estado, Condicion condicion, Categoria categoria, Marca marca) {
         this.idproducto = idproducto;
         this.nombre = nombre;
         this.precio = precio;
@@ -51,11 +51,11 @@ private List<DetalleVenta> detalleVentas;
     public Producto() {
     }
 
-    public long getIdproducto() {
+    public Long getIdproducto() {
         return idproducto;
     }
 
-    public void setIdproducto(long idproducto) {
+    public void setIdproducto(Long idproducto) {
         this.idproducto = idproducto;
     }
 

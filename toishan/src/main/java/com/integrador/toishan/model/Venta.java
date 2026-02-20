@@ -30,7 +30,7 @@ public class Venta {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
     private EstadoVenta estado;
-    @JsonIgnore
+
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleVenta> detalles = new ArrayList<>();
 

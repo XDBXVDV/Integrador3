@@ -55,42 +55,12 @@ public class EmpleadoService {
 
     public Empleado editarEmpleado(Long idEmpleado, Empleado empleado1) {
 
-        Empleado empleado = empleadoRepo.findById(idEmpleado)
-                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+        return empleadoRepo.findById(idEmpleado).map(empleado -> {
+            empleado.setNombre(empleado1.getNombre());
+            empleado.setApellido(empleado1.getApellido());
+            return  empleadoRepo.save(empleado);
+        }).orElseThrow(() -> new RuntimeException("Empleado no existe"));
 
-        Usuario usuario = empleado.getUsuario();
-
-        if (!usuario.getUsuario().equals(empleado1.getUsuario())
-                && usuarioRepo.existsByUsuario(empleado1.getUsuario().getUsuario())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
-        }
-
-
-        if (!usuario.getEmail().equals(empleado1.getUsuario().getEmail())
-                && usuarioRepo.existsByEmail(empleado1.getUsuario().getEmail())) {
-            throw new RuntimeException("El email ya está registrado");
-        }
-
-        Rol rol = rolRepo.findById(empleado1.getUsuario().getRol().getIdrol())
-                .orElseThrow(() -> new RuntimeException("Rol no válido"));
-
-        usuario.setUsuario(empleado1.getUsuario().getUsuario());
-        usuario.setEmail(empleado1.getUsuario().getEmail());
-        usuario.setRol(rolRepo.findById(empleado1.getUsuario().getRol().getIdrol()).orElseThrow());
-
-        if (empleado1.getUsuario().getContrasena() != null && !empleado1.getUsuario().getContrasena().isBlank()) {
-            usuario.setContrasena(
-                    passwordEncoder.encode(empleado1.getUsuario().getContrasena())
-            );
-        }
-
-
-        empleado.setNombre(empleado1.getNombre());
-        empleado.setApellido(empleado1.getApellido());
-
-
-        usuarioRepo.save(usuario);
-        return empleadoRepo.save(empleado);
     }
 
 }
