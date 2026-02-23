@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 @Transactional
 public class EmpleadoService {
@@ -30,6 +32,14 @@ public class EmpleadoService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public Empleado buscarEmpleado(Long id){
+        return empleadoRepo.findById(id).orElse(null);
+    }
+
+    public Collection<Empleado>  buscarEmpleados(){
+        return empleadoRepo.findAll();
+    }
 
     public Empleado crearEmpleado(Empleado empleado1) {
 

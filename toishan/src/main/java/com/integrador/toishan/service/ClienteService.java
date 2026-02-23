@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 @Transactional
 public class ClienteService {
@@ -22,6 +24,14 @@ public class ClienteService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public Cliente findById(Long id){
+        return clienteRepo.findById(id).orElse(null);
+    }
+
+    public Collection<Cliente> findAll(){
+        return clienteRepo.findAll();
+    }
 
     public Cliente crearCliente(Cliente dto) {
 

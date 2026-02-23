@@ -6,14 +6,32 @@ import java.util.List;
 
 public class VentaDTO {
     private Long idVenta;
+    private String nombreCliente;
+    private String nombreEmpleado;
     private LocalDateTime fechaVenta;
     private BigDecimal total;
     private String estado;
-
-    private Long idCliente;
-    private String cliente;
-
     private List<DetalleVentaDTO> detalles;
+
+
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
+    }
+
+
 
     public Long getIdVenta() {
         return idVenta;
@@ -47,21 +65,8 @@ public class VentaDTO {
         this.estado = estado;
     }
 
-    public Long getIdCliente() {
-        return idCliente;
-    }
 
-    public void setIdCliente(Long idCliente) {
-        this.idCliente = idCliente;
-    }
 
-    public String getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
-    }
 
     public List<DetalleVentaDTO> getDetalles() {
         return detalles;

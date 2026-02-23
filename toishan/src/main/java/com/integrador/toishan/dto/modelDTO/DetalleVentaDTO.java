@@ -1,20 +1,23 @@
 package com.integrador.toishan.dto.modelDTO;
 
+import com.integrador.toishan.model.DetalleVenta;
+
 import java.math.BigDecimal;
 
 public class DetalleVentaDTO {
-    private Long idProducto;
+    private Long idVenta;
+
     private String producto;
     private Integer cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal subtotal;
 
-    public Long getIdProducto() {
-        return idProducto;
+    public Long getIdVenta() {
+        return idVenta;
     }
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
+    public void setIdVenta(Long idVenta) {
+        this.idVenta = idVenta;
     }
 
     public String getProducto() {

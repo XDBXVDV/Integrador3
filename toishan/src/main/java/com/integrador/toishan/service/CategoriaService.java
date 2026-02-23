@@ -1,11 +1,12 @@
 package com.integrador.toishan.service;
 
-import com.integrador.toishan.dto.modelDTO.CategoriaDTO;
 import com.integrador.toishan.model.Categoria;
 import com.integrador.toishan.model.Estado;
 import com.integrador.toishan.repo.CategoriaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class CategoriaService {
@@ -13,9 +14,18 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepo categoriaRepo;
 
-    public Categoria crear(CategoriaDTO dto) {
+    public Categoria findById(Long id)
+    {
+        return categoriaRepo.findById(id).orElse(null);
+    }
+
+    public Collection<Categoria> findAll(){
+        return categoriaRepo.findAll();
+    }
+
+    public Categoria crear(Categoria categoria) {
         Categoria c = new Categoria();
-        c.setNombre(dto.getNombre());
+        c.setNombre(categoria.getNombre());
         c.setEstado(Estado.Activo);
         return categoriaRepo.save(c);
     }

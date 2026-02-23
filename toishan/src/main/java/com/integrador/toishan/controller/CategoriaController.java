@@ -1,10 +1,14 @@
 package com.integrador.toishan.controller;
 
-import com.integrador.toishan.dto.modelDTO.CategoriaDTO;
+
+import com.integrador.toishan.model.Categoria;
 import com.integrador.toishan.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/categoria")
@@ -13,9 +17,25 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
+    @GetMapping("/listar")
+    public ResponseEntity<?> findAll(){
+        return  ResponseEntity.ok().body(categoriaService.findAll());
+    }
+
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<?> buscar(@PathVariable Long id){
+        Categoria categoria = categoriaService.findById(id);
+        if(categoria!=null){
+            return ResponseEntity.ok().body(categoria);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody CategoriaDTO dto) {
-        return ResponseEntity.ok(categoriaService.crear(dto));
+    public ResponseEntity<?> crear(@RequestBody Categoria  categoria) {
+        return ResponseEntity.ok(categoriaService.crear(categoria));
     }
 
     @PutMapping("/desactivar/{id_categoria}")

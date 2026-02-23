@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Service
 @Transactional
@@ -32,8 +33,16 @@ public class VentaService {
      @Autowired
      private EmpleadoRepo empleadoRepo;
 
+     public Venta findbyid(Long id){
+        return ventaRepo.findById(id).orElse(null);
+     }
+     public Collection<Venta> findAll(){
+         return ventaRepo.findAll();
+     }
+
     @Transactional
     public Venta crearVenta(Venta venta1) {
+
         if (venta1.getDetalles() == null || venta1.getDetalles().isEmpty()) {
             throw new RuntimeException("La venta debe tener al menos un detalle");
         }
@@ -53,8 +62,7 @@ public class VentaService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (DetalleVenta det : venta1.getDetalles()) {
-            // OJO: Asegúrate que el JSON mande el nombre que Java espera (idproducto)
-            Producto p = productoRepo.findById(det.getProducto().getIdproducto())
+                    Producto p = productoRepo.findById(det.getProducto().getIdproducto())
                     .orElseThrow(() -> new RuntimeException("Producto con ID " + det.getProducto().getIdproducto() + " no encontrado"));
 
             if (p.getStock() < det.getCantidad()) {

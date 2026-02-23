@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Service
 @Transactional
@@ -23,6 +24,14 @@ public class DevolucionService {
 
     @Autowired
     private ProductoRepo productoRepo;
+
+    public Devolucion findById(Long id){
+        return devolucionRepo.findById(id).orElse(null);
+    }
+
+    public Collection<Devolucion> findAll(){
+        return devolucionRepo.findAll();
+    }
 
     @Transactional
     public Devolucion crearDevolucion(Devolucion devolucion1) {
@@ -56,7 +65,7 @@ public class DevolucionService {
 
             int cantidadDevuelta = cantidadYaDevuelta(venta, producto);
 
-            // 3️⃣ Validar
+
             if (cantidadDevuelta + det.getCantidad() > cantidadVendida) {
                 throw new RuntimeException(
                         "Cantidad a devolver supera lo vendido. " +

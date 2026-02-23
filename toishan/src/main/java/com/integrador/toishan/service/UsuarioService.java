@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class UsuarioService {
     @Autowired
@@ -38,13 +40,27 @@ public class UsuarioService {
         return usuarioRepo.save(usuario);
     }
 
-    public void cambiarContrasena(Long idUsuario ,Usuario u ) {
+    public Collection<Usuario> obtenerUsuarios() {
+        return usuarioRepo.findAll();
+    }
+
+    public Usuario buscarUsuario(Long id) {
+        return usuarioRepo.findById(id).orElse(null);
+    }
+
+    public void actualizar(Long idUsuario ,Usuario u ) {
         Usuario usuario=usuarioRepo.findById(idUsuario).orElse(null);
         if (usuario==null) {
             throw  new RuntimeException("El usuario no existe");
         } else{
-
-            usuario.setContrasena(passwordEncoder.encode(u.getContrasena()));
+            usuario.setUsuario(u.getUsuario());
+            if(u.getContrasena()!=null){
+                usuario.setContrasena(passwordEncoder.encode(u.getContrasena()));
+            }
+            if(u.getRol()!=null){
+                usuario.setRol(rolRepo.findById(u.getRol().getIdrol()).orElse(null));
+            }
+            usuarioRepo.save(usuario);
         }
 
     }

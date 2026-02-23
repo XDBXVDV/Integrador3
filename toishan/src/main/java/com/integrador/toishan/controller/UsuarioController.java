@@ -14,11 +14,30 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GetMapping("/listar")
+    public ResponseEntity<?> listar(){
+        return ResponseEntity.ok(usuarioService.obtenerUsuarios());
+    }
+
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<?> buscar(@PathVariable Long id){
+        Usuario buscar= usuarioService.buscarUsuario(id);
+        if (buscar!=null){
+            return ResponseEntity.ok(buscar);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody Usuario usuario) {
         return ResponseEntity.ok(usuarioService.crearUsuario(usuario));
     }
 
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Usuario usuario) {
+        return null;
+    }
 
     @PutMapping("/desactivar/{id}")
     public ResponseEntity<?> desactivar(@PathVariable Long id) {

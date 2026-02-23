@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 @Service
 @Transactional
@@ -24,6 +25,14 @@ public class ProductoService {
     @Autowired
     private MarcaRepo marcaRepo;
 
+    public Producto findById(Long id){
+        return productoRepo.findById(id).orElse(null);
+    }
+
+    public Collection<Marca> findAll(){
+        return marcaRepo.findAll();
+    }
+
     public Producto crear(Producto producto1) {
 
         Producto p = new Producto();
@@ -31,12 +40,12 @@ public class ProductoService {
         p.setPrecio(producto1.getPrecio());
         p.setStock(producto1.getStock());
         p.setStockMinimo(producto1.getStockMinimo());
+
         if (producto1.getCategoria() != null) {
             p.setCategoria(categoriaRepo.findById(producto1.getCategoria().getIdCategoria())
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada")));
         }
 
-        // Validación de seguridad para Marca
         if (producto1.getMarca() != null) {
             p.setMarca(marcaRepo.findById(producto1.getMarca().getIdMarca())
                     .orElseThrow(() -> new RuntimeException("Marca no encontrada")));
@@ -53,12 +62,6 @@ public class ProductoService {
         }
 
         return productoRepo.save(p);
-    }
-
-    public void actualizarStock(Long idProducto, int cantidad) {
-        Producto p = productoRepo.findById(idProducto).orElseThrow();
-        p.setStock(p.getStock() + cantidad);
-        productoRepo.save(p);
     }
 
     public Producto actualizarProducto(Long idProducto, Producto producto1) {
