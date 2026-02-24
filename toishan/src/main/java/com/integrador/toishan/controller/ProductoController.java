@@ -20,7 +20,7 @@ public class ProductoController {
 
     @GetMapping("/listar")
     public ResponseEntity<?> listarProductos() {
-        return ResponseEntity.ok(productoDtoService.listaProducto());
+        return ResponseEntity.ok(productoService.findAll());
     }
 
     @GetMapping("/buscar/{id}")

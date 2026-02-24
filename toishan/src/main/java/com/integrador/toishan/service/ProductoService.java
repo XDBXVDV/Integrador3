@@ -29,8 +29,8 @@ public class ProductoService {
         return productoRepo.findById(id).orElse(null);
     }
 
-    public Collection<Marca> findAll(){
-        return marcaRepo.findAll();
+    public Collection<Producto> findAll(){
+        return productoRepo.findAll();
     }
 
     public Producto crear(Producto producto1) {
