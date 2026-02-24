@@ -2,8 +2,10 @@ const API_URL = "http://localhost:8080/producto";
 const modalProducto = new bootstrap.Modal(document.getElementById('modalProducto'));
 const form = document.getElementById('formProducto');
 
-document.addEventListener("DOMContentLoaded", listarProductos);
-
+document.addEventListener("DOMContentLoaded", () => {
+    listarProductos();
+    cargarCombos(); 
+});
 
 async function listarProductos() {
     try {
@@ -147,4 +149,40 @@ function reactivarProducto(id) {
         listarProductos();
     })
     .catch(err => alert(err.message));
+}
+async function cargarCombos() {
+    try {
+        // 1. Cargar Categorías
+        const respCat = await fetch(`http://localhost:8080/categoria/listar/activos`);
+        const categorias = await respCat.json();
+        console.log("Categorías recibidas:", categorias); // Revisa esto en F12
+
+        const selectCat = document.getElementById("idCategoria");
+        selectCat.innerHTML = '<option value="">Seleccione Categoría...</option>'; // Limpiar
+        
+        categorias.forEach(c => {
+            const option = document.createElement('option');
+            option.value = c.idCategoria; // Asegúrate que sea idCategoria (con C mayúscula)
+            option.textContent = c.nombre;
+            selectCat.appendChild(option);
+        });
+
+        // 2. Cargar Marcas
+        const respMarca = await fetch(`http://localhost:8080/marca/listar/activos`);
+        const marcas = await respMarca.json();
+        console.log("Marcas recibidas:", marcas); // Revisa esto en F12
+
+        const selectMarca = document.getElementById("idMarca");
+        selectMarca.innerHTML = '<option value="">Seleccione Marca...</option>'; // Limpiar
+
+        marcas.forEach(m => {
+            const option = document.createElement('option');
+            option.value = m.idMarca; // Asegúrate que sea idMarca (con M mayúscula)
+            option.textContent = m.nombre;
+            selectMarca.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Error cargando combos:", error);
+    }
 }
