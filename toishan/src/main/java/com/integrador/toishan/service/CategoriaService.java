@@ -2,6 +2,7 @@ package com.integrador.toishan.service;
 
 import com.integrador.toishan.model.Categoria;
 import com.integrador.toishan.model.Estado;
+import com.integrador.toishan.model.Marca;
 import com.integrador.toishan.repo.CategoriaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,13 @@ public class CategoriaService {
         Categoria c = categoriaRepo.findById(id).orElseThrow();
         c.setEstado(Estado.Activo);
         categoriaRepo.save(c);
+    }
+
+    public Categoria editar(Long idCategoria, Categoria categoria) {
+        return categoriaRepo.findById(idCategoria).map(categoria1 ->  {
+            categoria1.setNombre(categoria.getNombre());
+            return categoriaRepo.save(categoria1);
+        }).orElseThrow(() -> new RuntimeException("Categoria no existe"));
     }
 }
 

@@ -43,5 +43,15 @@ public class MarcaController {
         marcaService.activar(id_marca);
         return ResponseEntity.ok("Marca reactivada");
     }
+
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizar(@RequestBody Marca marca, @PathVariable Long id){
+        Marca marca1 = marcaService.findMarcaById(id);
+        if(marca1!=null){
+            marca1.setNombre(marca.getNombre());
+            return ResponseEntity.ok(marcaService.editar(id, marca1));
+        } else return ResponseEntity.notFound().build();
+    }
+
 }
 

@@ -1,7 +1,11 @@
 package com.integrador.toishan.controller;
 
 
+
+import com.integrador.toishan.dto.createDTO.ClienteCreateDto;
+import com.integrador.toishan.dto.updateDTO.ClienteUpdateDto;
 import com.integrador.toishan.model.Cliente;
+import com.integrador.toishan.service.ClienteDetalleDtoService;
 import com.integrador.toishan.service.ClienteDtoService;
 import com.integrador.toishan.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,9 @@ public class ClienteController {
     private ClienteService clienteService;
     @Autowired
     private ClienteDtoService clienteDtoService;
+    @Autowired
+    private ClienteDetalleDtoService detalleService;
+
 
     @GetMapping("/listar")
     public ResponseEntity<?> listar(){
@@ -24,21 +31,19 @@ public class ClienteController {
 
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscar(@PathVariable Long id){
-        Cliente cliente = clienteService.findById(id);
-        if(cliente!=null){
-            return ResponseEntity.ok(cliente);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(detalleService.obtenerDetalle(id));
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody Cliente cliente) {
-        return ResponseEntity.ok(clienteService.crearCliente(cliente));
+    public ResponseEntity<Cliente> crear(@RequestBody ClienteCreateDto dto) {
+        return ResponseEntity.ok(clienteService.crearCliente(dto));
     }
-    @PutMapping("/editar/{id}")
-    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Cliente cliente) {
-        return ResponseEntity.ok(clienteService.editarCliente(id, cliente));
+
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizarCliente(
+            @PathVariable Long id,
+            @RequestBody ClienteUpdateDto dto) {
+        return ResponseEntity.ok(clienteService.actualizarCliente(id, dto));
     }
 }
 

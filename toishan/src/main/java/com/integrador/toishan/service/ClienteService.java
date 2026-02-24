@@ -1,9 +1,15 @@
 package com.integrador.toishan.service;
 
 
+
+import com.integrador.toishan.dto.createDTO.ClienteCreateDto;
+import com.integrador.toishan.dto.createDTO.UsuarioCreateDto;
+import com.integrador.toishan.dto.updateDTO.ClienteUpdateDto;
 import com.integrador.toishan.model.Cliente;
+
 import com.integrador.toishan.model.Usuario;
 import com.integrador.toishan.repo.ClienteRepo;
+import com.integrador.toishan.repo.RolRepo;
 import com.integrador.toishan.repo.UsuarioRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +29,8 @@ public class ClienteService {
     private UsuarioService usuarioService;
 
     @Autowired
+    private RolRepo rolRepo;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public Cliente findById(Long id){
@@ -33,42 +41,41 @@ public class ClienteService {
         return clienteRepo.findAll();
     }
 
-    public Cliente crearCliente(Cliente dto) {
 
-        Usuario usuario = usuarioRepo.findById(dto.getUsuario().getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
+    public Cliente crearCliente(ClienteCreateDto dto) {
 
 
-        if (clienteRepo.existsByUsuario(usuario)) {
-            throw new RuntimeException("Este usuario ya está asociado a un cliente");
-        }
+        UsuarioCreateDto userDto = new UsuarioCreateDto();
+        userDto.setUsuario(dto.getUsuario());
+        userDto.setEmail(dto.getEmail());
+        userDto.setContrasena(dto.getContrasena());
+        userDto.setIdRol(dto.getIdRol());
+
+        Usuario usuario = usuarioService.crearUsuario(userDto);
 
         Cliente cliente = new Cliente();
         cliente.setUsuario(usuario);
         cliente.setNombre(dto.getNombre());
         cliente.setApellido(dto.getApellido());
-
+        cliente.setDni(dto.getDni());
         cliente.setTelefono(dto.getTelefono());
         cliente.setDireccion(dto.getDireccion());
 
         return clienteRepo.save(cliente);
     }
 
-    public Cliente editarCliente(Long idCliente, Cliente editar) {
 
-        return clienteRepo.findById(idCliente).map(cliente -> {
+    public Cliente actualizarCliente(Long id, ClienteUpdateDto dto) {
+        Cliente c = clienteRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no existe"));
 
+        c.setNombre(dto.getNombre());
+        c.setApellido(dto.getApellido());
+        c.setDni(dto.getDni());
+        c.setTelefono(dto.getTelefono());
+        c.setDireccion(dto.getDireccion());
 
-            cliente.setNombre(editar.getNombre());
-            cliente.setApellido(editar.getApellido());
-            cliente.setDni(editar.getDni());
-            cliente.setTelefono(editar.getTelefono());
-            cliente.setDireccion(editar.getDireccion());
-
-
-            return clienteRepo.save(cliente);
-
-        }).orElseThrow(() -> new RuntimeException("Cliente con ID " + idCliente + " no encontrado"));
+        return clienteRepo.save(c);
     }
 
 }

@@ -65,6 +65,24 @@ public class ProveedorService {
         }  else  throw new RuntimeException("Proveedor no encontrado");
     }
 
-
+public Proveedor actualizarProveedor(Long id,Proveedor proveedor) {
+    Proveedor proveedor1 = findbyid(id);
+    if (proveedor1 != null) {
+        if (proveedor.getRazonSocial() != null || !(proveedor.getRazonSocial().isBlank())) {
+            proveedor1.setRazonSocial(proveedor.getRazonSocial());
+        }
+        if (proveedor.getTelefono() != null || !(proveedor.getTelefono().isBlank())) {
+            proveedor1.setTelefono(proveedor.getTelefono());
+        }
+        if (proveedor.getDireccion() != null || !(proveedor.getDireccion().isBlank())) {
+            proveedor1.setDireccion(proveedor.getDireccion());
+        }
+        if (proveedor.getEmail() != null || !(proveedor.getEmail().isBlank())) {
+            proveedor1.setEmail(proveedor.getEmail());
+        }
+        proveedorRepo.save(proveedor1);
+        return proveedor;
+    } else   throw new RuntimeException("Proveedor no encontrado");
+}
 
 }

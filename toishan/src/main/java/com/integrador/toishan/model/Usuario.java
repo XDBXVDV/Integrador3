@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,16 +27,41 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
+    @OneToOne(mappedBy = "usuario")
+    @JsonIgnore
+    private Cliente cliente;
 
+    @OneToOne(mappedBy = "usuario")
+    @JsonIgnore
+    private Empleado empleado;
 
-    public Usuario(Long idUsuario, String usuario, String email, String contrasena, Estado estado, Rol rol) {
+    public Usuario(Long idUsuario, String usuario, String email, String contrasena, Rol rol, Cliente cliente, Empleado empleado, Estado estado) {
         this.idUsuario = idUsuario;
         this.usuario = usuario;
         this.email = email;
         this.contrasena = contrasena;
-        this.estado = estado;
         this.rol = rol;
+        this.cliente = cliente;
+        this.empleado = empleado;
+        this.estado = estado;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
     public Usuario() {}
 
     public Long getIdUsuario() {

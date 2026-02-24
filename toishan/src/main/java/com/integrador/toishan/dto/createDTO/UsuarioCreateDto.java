@@ -1,4 +1,4 @@
-package com.integrador.toishan.dto.modelDTO;
+package com.integrador.toishan.dto.createDTO;
 
 public class UsuarioCreateDto {
 

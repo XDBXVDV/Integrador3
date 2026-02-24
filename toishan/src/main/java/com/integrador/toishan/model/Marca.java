@@ -16,6 +16,7 @@ public class Marca {
     private String nombre;
 
     @Enumerated(EnumType.STRING)
+   @Column(nullable = true)
     private Estado estado;
     @JsonIgnore
 @OneToMany(mappedBy = "marca")

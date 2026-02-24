@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class Proveedor {
     @Column(name = "id_proveedor")
     private Long idProveedor;
 
-    @Column(nullable = false)
+    @Column(name = "razon_social",nullable = false)
     private String razonSocial;
 
     @Column(nullable = false, unique = true)
@@ -22,9 +23,12 @@ public class Proveedor {
     private String telefono;
     private String direccion;
     private String email;
+    @Column(insertable = false)
+    @Enumerated(EnumType.STRING)
     private Estado estado;
 
     @OneToMany(mappedBy = "proveedor")
+    @JsonIgnore
     private List<PedidoCompra> pedidos;
 
     public Proveedor(Long idProveedor, String razonSocial, String ruc, String telefono, String direccion, String email, Estado estado, List<PedidoCompra> pedidos) {

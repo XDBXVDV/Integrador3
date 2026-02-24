@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ public class Devolucion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_devolucion")
     private Long idDevolucion;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_venta", nullable = false)
     private Venta venta;

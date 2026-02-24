@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -33,8 +34,9 @@ public class Producto {
     @Column(name = "condicion")
     private Condicion condicion;
 
-@OneToMany(mappedBy = "producto")
-private List<DetalleVenta> detalleVentas;
+    @OneToMany(mappedBy = "producto")
+    @JsonIgnore
+    private List<DetalleVenta> detalleVentas;
 
     public Producto(Long idproducto, String nombre, BigDecimal precio, Integer stockMinimo, Integer stock, Estado estado, Condicion condicion, Categoria categoria, Marca marca) {
         this.idproducto = idproducto;

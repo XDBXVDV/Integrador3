@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -14,11 +15,11 @@ public class PedidoCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pedido_compra")
     private Long idPedidoCompra;
-
+@JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_proveedor", nullable = false)
     private Proveedor proveedor;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false)
     private Empleado empleado;
@@ -33,7 +34,7 @@ public class PedidoCompra {
     @Column(nullable = false, updatable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime fecha;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "pedidoCompra", cascade = CascadeType.ALL)
     private List<DetallePedidoCompra> detalles;
 

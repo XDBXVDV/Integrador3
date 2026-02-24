@@ -1,6 +1,9 @@
 package com.integrador.toishan.controller;
 
 
+import com.integrador.toishan.dto.createDTO.UsuarioCreateDto;
+import com.integrador.toishan.dto.updateDTO.PasswordUpdateDto;
+import com.integrador.toishan.dto.updateDTO.UsuarioUpdateDto;
 import com.integrador.toishan.model.Usuario;
 import com.integrador.toishan.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +33,25 @@ public class UsuarioController {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody Usuario usuario) {
-        return ResponseEntity.ok(usuarioService.crearUsuario(usuario));
+    public ResponseEntity<Usuario> crear(@RequestBody UsuarioCreateDto dto) {
+        return ResponseEntity.ok(usuarioService.crearUsuario(dto));
     }
 
     @PutMapping("/editar/{id}")
-    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return null;
+    public ResponseEntity<?> actualizarUsuario(
+            @PathVariable Long id,
+            @RequestBody UsuarioUpdateDto dto) {
+
+        Usuario usuario = usuarioService.actualizarUsuario(id, dto);
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PutMapping("/password/{id}")
+    public ResponseEntity<?> cambiarPassword(
+            @PathVariable Long id,
+            @RequestBody PasswordUpdateDto dto) {
+        usuarioService.cambiarPassword(id, dto);
+        return ResponseEntity.ok("Contraseña actualizada");
     }
 
     @PutMapping("/desactivar/{id}")

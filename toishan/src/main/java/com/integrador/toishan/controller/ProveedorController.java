@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/proveedor")
 public class ProveedorController {
 
     @Autowired
@@ -39,14 +40,22 @@ public class ProveedorController {
         } else return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/Reactivar/{id}")
+    @PutMapping("/reactivar/{id}")
     public ResponseEntity<?> reactivar(@PathVariable Long id){
         Proveedor proveedor = proveedorService.findbyid(id);
         if(proveedor!=null){
-            proveedorService.DesactivarProveedor(id);
+            proveedorService.ReactivarProveedor(id);
             return ResponseEntity.ok(proveedor);
         } else return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Proveedor proveedor){
+        Proveedor proveedor1 = proveedorService.findbyid(id);
+        if(proveedor!=null){
+            proveedorService.actualizarProveedor(id, proveedor);
+            return ResponseEntity.ok(proveedor);
+        }  else return ResponseEntity.notFound().build();
+    }
 
 }

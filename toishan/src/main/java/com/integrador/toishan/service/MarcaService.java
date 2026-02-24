@@ -39,6 +39,13 @@ import java.util.Collection;
             marca.setEstado(Estado.Activo);
             marcaRepo.save(marca);
         }
+
+        public Marca editar(Long id, Marca marca) {
+            return marcaRepo.findById(id).map(marca1 ->  {
+                marca1.setNombre(marca.getNombre());
+                return marcaRepo.save(marca1);
+            }).orElseThrow(() -> new RuntimeException("Marca no existe"));
+        }
     }
 
 

@@ -11,7 +11,7 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria")
-    private long idCategoria;
+    private Long idCategoria;
     @Column( nullable = false)
     private String nombre;
     @Column(name = "estado")
@@ -23,7 +23,7 @@ public class Categoria {
     public Categoria() {
     }
 
-    public Categoria(long idCategoria, String nombre, Estado estado) {
+    public Categoria(Long idCategoria, String nombre, Estado estado) {
         this.idCategoria = idCategoria;
         this.nombre = nombre;
         this.estado = Estado.Activo;
@@ -31,11 +31,11 @@ public class Categoria {
 
 
 
-    public long getIdCategoria() {
+    public Long getIdCategoria() {
         return idCategoria;
     }
 
-    public void setIdCategoria(long idCategoria) {
+    public void setIdCategoria(Long idCategoria) {
         this.idCategoria = idCategoria;
     }
 

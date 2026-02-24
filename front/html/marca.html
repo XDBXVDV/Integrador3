@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marcas</title>
+    <link rel="stylesheet" href="../css/marca.css">
+</head>
+<body>
+    <h1>Lisa de marcas</h1>
+    <button onclick="abrirModalCrear()">+ Nueva marca</button>
+    <table id="tablaMarcas" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Estado</th>   
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="../js/marca.js"></script>
+</body>
+</html>
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <h3>Editar marca</h3>
+        <input type="hidden" id="editIdMarca">
+        <label >Nombre</label>
+        <input type="text"  id="editNombre">  
+        <button onclick="guardarEdicion()">Guardar</button>
+        <button onclick="cerrarModal()">Cancelar</button>
+    </div>
+</div>
+
+<div id="modalCrear" class="modal">
+    <div class="modal-content">
+        <h3>Agregar marca</h3>
+        <input type="hidden" id="createIdMarca">
+        <label >Nombre</label>
+        <input type="text"  id="createNombre">  
+        <button onclick="guardarMarca()">Guardar</button>
+        <button onclick="cerrarModalCrear()">Cancelar</button>
+    </div>
+</div>

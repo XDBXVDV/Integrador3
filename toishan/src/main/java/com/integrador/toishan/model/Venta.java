@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -15,9 +16,11 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_venta")
     private Long idVenta;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false)
     private Empleado empleado;
@@ -35,6 +38,7 @@ public class Venta {
     private List<DetalleVenta> detalles = new ArrayList<>();
 
     @OneToMany(mappedBy = "venta")
+    @JsonIgnore
     private List<Devolucion> devoluciones;
 
     public Empleado getEmpleado() {

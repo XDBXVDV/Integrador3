@@ -3,17 +3,17 @@ http://localhost:8080/usuario/crear
   "usuario": "cliente01",
   "email": "cliente01@gmail.com",
   "contrasena": "123456",
-  "rol": {
+  
     "idrol": 1
-  }
+  
 }
 http://localhost:8080/cliente/crear
 
 {
-    "usuario":{
-        "idUsuario": 1
-    }
-  ,
+  "usuario": "cliente02",
+  "email": "cliente02@gmail.com",
+  "contrasena": "123456",
+  "idRol": 1,
   "nombre": "Juan",
   "apellido": "Perez",
   "dni": "12345678",
@@ -128,4 +128,15 @@ http://localhost:8080/devolucione/crear
     }
 
   ]
+}
+
+http://localhost:8080/proveedor/crear
+{
+  "razonSocial":"ahsddgaksdg",
+"ruc":"asidasfasaSD",
+"telefono":"111111111",
+"direccion":"miksa",
+"email":"sus@gmail.com"
+
+
 }
