@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class CategoriaService {
@@ -49,5 +50,10 @@ public class CategoriaService {
             return categoriaRepo.save(categoria1);
         }).orElseThrow(() -> new RuntimeException("Categoria no existe"));
     }
+    public List<Categoria> findActivos() {
+        return categoriaRepo.findByEstado(Estado.Activo);
+    }
+
+
 }
 

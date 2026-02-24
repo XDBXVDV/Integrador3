@@ -52,6 +52,10 @@ public class MarcaController {
             return ResponseEntity.ok(marcaService.editar(id, marca1));
         } else return ResponseEntity.notFound().build();
     }
+    @GetMapping("/listar/activos")
+    public ResponseEntity<?> listarActivos(){
+        return ResponseEntity.ok(marcaService.findActivos());
+    }
 
 }
 

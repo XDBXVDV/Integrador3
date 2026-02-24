@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @Service
@@ -46,6 +47,11 @@ import java.util.Collection;
                 return marcaRepo.save(marca1);
             }).orElseThrow(() -> new RuntimeException("Marca no existe"));
         }
+
+        public List<Marca> findActivos() {
+            return marcaRepo.findByEstado(Estado.Activo);
+        }
+
     }
 
 

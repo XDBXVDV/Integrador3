@@ -12,8 +12,24 @@ async function listarProductos() {
         
         const tabla = document.getElementById("tablaProductos");
         tabla.innerHTML = "";
+let botonEstado = "";
+
 
         productos.forEach(p => {
+
+            if (p.estado === "Activo") {
+    botonEstado = `
+        <button class="btn btn-danger btn-sm" onclick="desactivarProducto(${p.idProducto})">
+            Desactivar
+        </button>
+    `;
+} else {
+    botonEstado = `
+        <button class="btn btn-succes btn-sm" onclick="reactivarProducto(${p.idProducto})">
+            Reactivar
+        </button>
+    `;
+}
             tabla.innerHTML += `
                 <tr>
                     <td>${p.idProducto}</td>
@@ -25,6 +41,7 @@ async function listarProductos() {
                     <td><span class="badge bg-secondary">${p.estado}</span></td>
                     <td><span class="badge badge-${p.condicion}">${p.condicion.replace('_', ' ')}</span></td>
                     <td>
+                         ${botonEstado}
                         <button class="btn btn-warning btn-sm" onclick="prepararEdicion(${p.idProducto})">Editar</button>
                     </td>
                 </tr>
@@ -102,3 +119,32 @@ form.onsubmit = async (e) => {
         console.error("Error en la petición:", error);
     }
 };
+
+
+function desactivarProducto(id) {
+
+    if (!confirm("¿Desea desactivar este producto?")) return;
+
+    fetch(`${API_URL}/desactivar/${id}`, {
+        method: "PUT"
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Error al desactivar");
+        listarProductos();
+    })
+    .catch(err => alert(err.message));
+}
+
+function reactivarProducto(id) {
+
+    if (!confirm("¿Desea reactivar este producto?")) return;
+
+    fetch(`${API_URL}/activar/${id}`, {
+        method: "PUT"
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Error al reactivar");
+        listarProductos();
+    })
+    .catch(err => alert(err.message));
+}

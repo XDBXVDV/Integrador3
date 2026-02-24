@@ -109,6 +109,19 @@ public class ProductoService {
         return productoRepo.save(producto);
     }
 
+    public void desactivar(Long idProducto) {
+        Producto producto = findById(idProducto);
+        if (producto.getEstado().equals(Estado.Activo)) {
+            producto.setEstado(Estado.Inactivo);
+        } else throw new RuntimeException("El producto ya esta inactivo");
+    }
+
+    public void reactivar(Long idProducto) {
+        Producto producto = findById(idProducto);
+        if (producto.getEstado().equals(Estado.Inactivo)) {
+            producto.setEstado(Estado.Activo);
+        } else throw new RuntimeException("El producto ya esta activo");
+    }
 
     private Condicion calcularCondicionStock(int stock, int stockMinimo) {
         if (stock == 0) {

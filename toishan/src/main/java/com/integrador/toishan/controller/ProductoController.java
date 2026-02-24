@@ -20,7 +20,7 @@ public class ProductoController {
 
     @GetMapping("/listar")
     public ResponseEntity<?> listarProductos() {
-        return ResponseEntity.ok(productoService.findAll());
+        return ResponseEntity.ok(productoDtoService.listaProducto());
     }
 
     @GetMapping("/buscar/{id}")
@@ -44,4 +44,24 @@ public class ProductoController {
         } else return ResponseEntity.notFound().build();
 
     }
+
+    @PutMapping("/desactivar/{id}")
+    public ResponseEntity<?> desactivarProducto(@PathVariable Long id){
+        Producto productoDesactivar = productoService.findById(id);
+        if(productoDesactivar!=null){
+            productoService.desactivar(id);
+            return ResponseEntity.ok().build();
+        } else return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/activar/{id}")
+    public ResponseEntity<?> activarProducto(@PathVariable Long id){
+        Producto productoDesactivar = productoService.findById(id);
+        if(productoDesactivar!=null){
+            productoService.reactivar(id);
+            return ResponseEntity.ok().build();
+        } else return ResponseEntity.notFound().build();
+    }
+
+
 }

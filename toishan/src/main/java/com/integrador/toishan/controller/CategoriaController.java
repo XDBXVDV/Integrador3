@@ -60,4 +60,8 @@ public class CategoriaController {
         } else return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/listar/activos")
+    public ResponseEntity<?> listarActivos(){
+        return ResponseEntity.ok(categoriaService.findActivos());
+    }
 }
