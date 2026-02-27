@@ -1,33 +1,99 @@
-const API_CLIENTES = "http://localhost:8080/cliente";
+const API_CLIENTE = "http://localhost:8080/cliente";
+
 
 const params = new URLSearchParams(window.location.search);
 const idCliente = params.get("id");
 
+let idUsuarioGlobal = null;
+let estadoUsuarioGlobal = null;
+
+if (!idCliente) {
+    alert("ID de cliente no encontrado");
+}
+
+// Cargar datos al abrir la página
 document.addEventListener("DOMContentLoaded", () => {
-    cargarDetalle();
+    cargarCliente();
 });
 
-function cargarDetalle() {
-    fetch(`${API_CLIENTES}/buscar/${idCliente}`)
-        .then(res => {
-            if (!res.ok) throw new Error("Error al cargar detalle");
-            return res.json();
-        })
-        .then(c => {
-            document.getElementById("nombre").textContent = c.nombre;
-            document.getElementById("apellido").textContent = c.apellido;
-            document.getElementById("dni").textContent = c.dni ?? "";
-            document.getElementById("telefono").textContent = c.telefono ?? "";
-            document.getElementById("direccion").textContent = c.direccion ?? "";
+async function cargarCliente() {
+    try {
+        const response = await fetch(`${API_CLIENTE}/buscar/${idCliente}`);
+        if (!response.ok) throw new Error("No se pudo cargar el cliente");
 
-            document.getElementById("usuario").textContent = c.usuario;
-            document.getElementById("email").textContent = c.email;
-            document.getElementById("rol").textContent = c.rol;
-            document.getElementById("estado").textContent = c.estadoUsuario;
-        })
-        .catch(err => alert(err.message));
+        const cliente = await response.json();
+
+        document.getElementById("idCliente").value = cliente.idCliente;
+        document.getElementById("nombre").value = cliente.nombre;
+        document.getElementById("apellido").value = cliente.apellido;
+        document.getElementById("dni").value = cliente.dni;
+        document.getElementById("telefono").value = cliente.telefono ?? "";
+        document.getElementById("direccion").value = cliente.direccion ?? "";
+        document.getElementById("usuario").value = cliente.usuario;
+        document.getElementById("email").value = cliente.email;
+
+        idUsuarioGlobal = cliente.idUsuario;
+        estadoUsuarioGlobal = cliente.estadoUsuario;
+
+        // Mostrar u ocultar botón
+        if (estadoUsuarioGlobal !== "Activo") {
+            document.getElementById("btnDesactivar").style.display = "none";
+        }
+
+    } catch (error) {
+        alert(error.message);
+    }
 }
 
-function volver() {
-    window.history.back();
-}
+
+document.getElementById("formEditarCliente").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const body = {
+        nombre: document.getElementById("nombre").value,
+        apellido: document.getElementById("apellido").value,
+        dni: document.getElementById("dni").value,
+        telefono: document.getElementById("telefono").value,
+        direccion: document.getElementById("direccion").value,
+        usuario: document.getElementById("usuario").value,
+        email: document.getElementById("email").value
+    };
+
+    try {
+        const response = await fetch(`${API_CLIENTE}/actualizar/${idCliente}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al actualizar los datos");
+        }
+
+        alert("Cliente actualizado correctamente");
+
+    } catch (error) {
+        alert(error.message);
+    }
+});
+
+document.getElementById("btnDesactivar").addEventListener("click", async () => {
+    if (!confirm("¿Seguro que deseas desactivar este cliente?")) return;
+
+    try {
+        const response = await fetch(
+            `${API_USUARIO}/desactivar/${idUsuarioGlobal}`,
+            { method: "PUT" }
+        );
+
+        if (!response.ok) throw new Error("Error al desactivar");
+
+        alert("Cliente desactivado");
+        location.reload();
+
+    } catch (error) {
+        alert(error.message);
+    }
+});

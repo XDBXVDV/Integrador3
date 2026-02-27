@@ -2,11 +2,20 @@ package com.integrador.toishan.dto.modelDTO;
 
 public class ClienteDTO {
     private Long idCliente;
+    private Long idUsuario;
     private String nombre;
     private String apellido;
     private String dni;
     private String telefono;
     private String estadoUsuario;
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     public Long getIdCliente() {
         return idCliente;

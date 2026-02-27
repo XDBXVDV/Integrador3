@@ -3,25 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalle del Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2, h3 {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Información del usuario</h2>
+<h2>Detalle del Cliente</h2>
 
-<h3>Datos del Cliente</h3>
-<p><b>Nombre:</b> <span id="nombre"></span></p>
-<p><b>Apellido:</b> <span id="apellido"></span></p>
-<p><b>DNI:</b> <span id="dni"></span></p>
-<p><b>Teléfono:</b> <span id="telefono"></span></p>
-<p><b>Dirección:</b> <span id="direccion"></span></p>
+<form id="formEditarCliente">
 
-<p><b>Usuario:</b> <span id="usuario"></span></p>
-<p><b>Email:</b> <span id="email"></span></p>
-<p><b>Rol:</b> <span id="rol"></span></p>
-<p><b>Estado:</b> <span id="estado"></span></p>
+    <!-- ID oculto -->
+    <input type="hidden" id="idCliente">
 
-<button onclick="volver()">Volver</button>
+    <h3>Datos del Cliente</h3>
 
+    <label>Nombre</label>
+    <input type="text" id="nombre" required>
+
+    <label>Apellido</label>
+    <input type="text" id="apellido" required>
+
+    <label>DNI</label>
+    <input type="text" id="dni" required>
+
+    <label>Teléfono</label>
+    <input type="text" id="telefono">
+
+    <label>Dirección</label>
+    <input type="text" id="direccion">
+
+    <h3>Datos del Usuario</h3>
+
+    <label>Usuario</label>
+    <input type="text" id="usuario" required>
+
+    <label>Email</label>
+    <input type="email" id="email" required>
+
+    <button type="submit">Guardar cambios</button>
+    <button type="button" id="btnDesactivar" style="background:red;color:white">
+    Desactivar cliente
+</button>
+
+<button onclick="abrirModalPassword(cliente.usuario.idUsuario)">
+  Cambiar contraseña
+</button>
+
+    <a href="../html/tablacliente.html">Volver</a>
+</form>
+<script src="../js/usuario.js"></script>
 <script src="../js/cliente-detalle.js"></script>
+
 </body>
 </html>
+<div id="modalPassword" class="modal">
+  <div class="modal-content">
+    <h3>Cambiar contraseña</h3>
+
+    <input type="password" id="passActual" placeholder="Contraseña actual">
+    <input type="password" id="passNueva" placeholder="Nueva contraseña">
+
+    <button onclick="guardarPassword()">Guardar</button>
+    <button onclick="cerrarModalPassword()">Cancelar</button>
+  </div>
+</div>

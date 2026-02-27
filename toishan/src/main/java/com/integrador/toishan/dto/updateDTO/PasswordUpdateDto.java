@@ -1,6 +1,7 @@
 package com.integrador.toishan.dto.updateDTO;
 
 public class PasswordUpdateDto {
+    private Long idUsuario;
     private String passwordActual;
     private String passwordNueva;
 
@@ -19,4 +20,9 @@ public class PasswordUpdateDto {
     public void setPasswordNueva(String passwordNueva) {
         this.passwordNueva = passwordNueva;
     }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+    public void setIdUsuario(Long idUsuario) {}
 }

@@ -20,6 +20,7 @@ public class ClienteDtoService {
     private ClienteDTO mapToDTO(Cliente cliente){
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setIdCliente(cliente.getIdCliente());
+        clienteDTO.setIdUsuario(cliente.getUsuario().getIdUsuario());
         clienteDTO.setNombre(cliente.getNombre());
         clienteDTO.setApellido(cliente.getApellido());
         clienteDTO.setDni(cliente.getDni());

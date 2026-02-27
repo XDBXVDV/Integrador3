@@ -155,29 +155,27 @@ async function cargarCombos() {
         // 1. Cargar Categorías
         const respCat = await fetch(`http://localhost:8080/categoria/listar/activos`);
         const categorias = await respCat.json();
-        console.log("Categorías recibidas:", categorias); // Revisa esto en F12
 
         const selectCat = document.getElementById("idCategoria");
-        selectCat.innerHTML = '<option value="">Seleccione Categoría...</option>'; // Limpiar
+        selectCat.innerHTML = '<option value="">Seleccione Categoría...</option>';
         
         categorias.forEach(c => {
             const option = document.createElement('option');
-            option.value = c.idCategoria; // Asegúrate que sea idCategoria (con C mayúscula)
+            option.value = c.idCategoria;
             option.textContent = c.nombre;
             selectCat.appendChild(option);
         });
 
-        // 2. Cargar Marcas
+        
         const respMarca = await fetch(`http://localhost:8080/marca/listar/activos`);
         const marcas = await respMarca.json();
-        console.log("Marcas recibidas:", marcas); // Revisa esto en F12
-
+        
         const selectMarca = document.getElementById("idMarca");
-        selectMarca.innerHTML = '<option value="">Seleccione Marca...</option>'; // Limpiar
+        selectMarca.innerHTML = '<option value="">Seleccione Marca...</option>'; 
 
         marcas.forEach(m => {
             const option = document.createElement('option');
-            option.value = m.idMarca; // Asegúrate que sea idMarca (con M mayúscula)
+            option.value = m.idMarca; 
             option.textContent = m.nombre;
             selectMarca.appendChild(option);
         });

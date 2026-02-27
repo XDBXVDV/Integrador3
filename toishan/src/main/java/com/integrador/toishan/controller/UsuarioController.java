@@ -46,12 +46,10 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PutMapping("/password/{id}")
-    public ResponseEntity<?> cambiarPassword(
-            @PathVariable Long id,
-            @RequestBody PasswordUpdateDto dto) {
-        usuarioService.cambiarPassword(id, dto);
-        return ResponseEntity.ok("Contraseña actualizada");
+    @PutMapping("/actualizar-contrasena")
+    public ResponseEntity<?> actualizarContrasena(@RequestBody PasswordUpdateDto dto) {
+        usuarioService.actualizarContrasena(dto);
+        return ResponseEntity.ok("Contraseña actualizada correctamente");
     }
 
     @PutMapping("/desactivar/{id}")

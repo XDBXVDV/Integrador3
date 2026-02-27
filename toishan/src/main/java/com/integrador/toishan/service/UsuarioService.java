@@ -93,16 +93,17 @@ public class UsuarioService {
         usuarioRepo.save(usuario);
     }
 
-    public void cambiarPassword(Long idUsuario, PasswordUpdateDto dto) {
-
-        Usuario u = usuarioRepo.findById(idUsuario)
+    public void actualizarContrasena(PasswordUpdateDto dto) {
+        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no existe"));
-
-        if (!passwordEncoder.matches(dto.getPasswordActual(), u.getContrasena())) {
-            throw new RuntimeException("Contraseña actual incorrecta");
+        if (!passwordEncoder.matches(dto.getPasswordActual(), usuario.getContrasena())) {
+            throw new RuntimeException("La contraseña actual es incorrecta");
+        }
+        if (dto.getPasswordNueva().length() < 6) {
+            throw new RuntimeException("La nueva contraseña debe tener al menos 6 caracteres");
         }
 
-        u.setContrasena(passwordEncoder.encode(dto.getPasswordNueva()));
-        usuarioRepo.save(u);
+        usuario.setContrasena(passwordEncoder.encode(dto.getPasswordNueva()));
+        usuarioRepo.save(usuario);
     }
 }
