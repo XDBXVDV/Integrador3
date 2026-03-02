@@ -59,26 +59,19 @@ public class UsuarioService {
         return usuarioRepo.findById(id).orElse(null);
     }
 
-    public Usuario actualizarUsuario(Long idUsuario, UsuarioUpdateDto dto) {
+    public void actualizarUsuario(UsuarioUpdateDto dto) {
 
-        Usuario u = usuarioRepo.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
-
-        if (!u.getUsuario().equals(dto.getUsuario())
-                && usuarioRepo.existsByUsuario(dto.getUsuario())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
+        if (dto.getIdUsuario() == null) {
+            throw new IllegalArgumentException("ID de usuario obligatorio");
         }
 
-        if (!u.getEmail().equals(dto.getEmail())
-                && usuarioRepo.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("El email ya está registrado");
-        }
+        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        u.setUsuario(dto.getUsuario());
-        u.setEmail(dto.getEmail());
-        u.setEstado(dto.getEstado());
+        usuario.setUsuario(dto.getUsuario());
+        usuario.setEmail(dto.getEmail());
 
-        return usuarioRepo.save(u);
+        usuarioRepo.save(usuario);
     }
 
     public void desactivarUsuario(Long idUsuario) {
@@ -93,14 +86,17 @@ public class UsuarioService {
         usuarioRepo.save(usuario);
     }
 
-    public void actualizarContrasena(PasswordUpdateDto dto) {
-        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
-        if (!passwordEncoder.matches(dto.getPasswordActual(), usuario.getContrasena())) {
-            throw new RuntimeException("La contraseña actual es incorrecta");
+    public void actualizarPassword(PasswordUpdateDto dto) {
+
+        if (dto.getIdUsuario() == null) {
+            throw new IllegalArgumentException("ID de usuario es obligatorio");
         }
-        if (dto.getPasswordNueva().length() < 6) {
-            throw new RuntimeException("La nueva contraseña debe tener al menos 6 caracteres");
+
+        Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (!passwordEncoder.matches(dto.getPasswordActual(), usuario.getContrasena())) {
+            throw new RuntimeException("Contraseña actual incorrecta");
         }
 
         usuario.setContrasena(passwordEncoder.encode(dto.getPasswordNueva()));

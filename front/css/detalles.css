@@ -1,0 +1,30 @@
+.modal{
+    display: none; 
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+}
+body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2, h3 {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }

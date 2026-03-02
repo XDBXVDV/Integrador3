@@ -3,9 +3,17 @@ package com.integrador.toishan.dto.updateDTO;
 import com.integrador.toishan.model.Estado;
 
 public class UsuarioUpdateDto {
+    private Long idUsuario;
     private String usuario;
     private String email;
-    private Estado estado;
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     public String getUsuario() {
         return usuario;
@@ -15,13 +23,6 @@ public class UsuarioUpdateDto {
         this.usuario = usuario;
     }
 
-    public Estado getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
 
     public String getEmail() {
         return email;

@@ -10,10 +10,11 @@ async function listarClientes() {
         if (!response.ok) throw new Error("Error al listar clientes");
 
         const clientes = await response.json();
-        const tbody = document.getElementById("tablaClientes");
+        const tbody = document.querySelector("#tablaClientes tbody");
         tbody.innerHTML = "";
 
         clientes.forEach(c => {
+            
 
             let botonesAccion = `
                 <button onclick="verDetalle(${c.idCliente})">

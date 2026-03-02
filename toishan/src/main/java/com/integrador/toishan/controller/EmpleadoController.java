@@ -1,7 +1,9 @@
 package com.integrador.toishan.controller;
 
 
+import com.integrador.toishan.dto.updateDTO.EmpleadoUpdateDto;
 import com.integrador.toishan.model.Empleado;
+import com.integrador.toishan.service.EmpleadoDetalleDtoService;
 import com.integrador.toishan.service.EmpleadoDtoService;
 import com.integrador.toishan.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class EmpleadoController {
     @Autowired
     private EmpleadoDtoService empleadoDtoService;
 
+    @Autowired
+    private EmpleadoDetalleDtoService detalleDtoService;
+
     @GetMapping("/listar")
     public ResponseEntity<?> listarEmpleados(){
         return ResponseEntity.ok(empleadoDtoService.getEmpleados());
@@ -27,22 +32,16 @@ public class EmpleadoController {
 
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscarEmpleado(@PathVariable Long id){
-        Empleado empleado = empleadoService.buscarEmpleado(id);
-        if(empleado!=null){
-            return ResponseEntity.ok(empleado);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
-
+return ResponseEntity.ok(detalleDtoService.obtenerDetalle(id));
     }
 
     @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody Empleado empleado) {
         return ResponseEntity.ok(empleadoService.crearEmpleado(empleado));
     }
-    @PutMapping("/editar/{id}")
-    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Empleado empleado)
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizarEmpleado(@PathVariable Long id, @RequestBody EmpleadoUpdateDto dto)
     {
-        return ResponseEntity.ok(empleadoService.editarEmpleado(id, empleado));
+        return ResponseEntity.ok(empleadoService.actualizarEmpleado(id,dto));
     }
 }

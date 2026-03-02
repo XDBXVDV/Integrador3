@@ -3,32 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalle del Cliente</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 700px;
-            margin: auto;
-        }
-
-        h2, h3 {
-            margin-top: 20px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 6px;
-            margin-bottom: 12px;
-        }
-
-        button {
-            padding: 10px 15px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/detalles.css">
 </head>
 <body>
 
@@ -36,7 +11,7 @@
 
 <form id="formEditarCliente">
 
-    <!-- ID oculto -->
+  
     <input type="hidden" id="idCliente">
 
     <h3>Datos del Cliente</h3>
@@ -69,8 +44,8 @@
     Desactivar cliente
 </button>
 
-<button onclick="abrirModalPassword(cliente.usuario.idUsuario)">
-  Cambiar contraseña
+<button type="button" onclick="abrirCambioPassword()">
+    Cambiar contraseña
 </button>
 
     <a href="../html/tablacliente.html">Volver</a>

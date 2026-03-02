@@ -1,6 +1,8 @@
 package com.integrador.toishan.service;
 
 
+import com.integrador.toishan.dto.modelDTO.EmpleadoDTO;
+import com.integrador.toishan.dto.updateDTO.EmpleadoUpdateDto;
 import com.integrador.toishan.model.Empleado;
 import com.integrador.toishan.model.Rol;
 import com.integrador.toishan.model.Usuario;
@@ -63,14 +65,12 @@ public class EmpleadoService {
         return empleadoRepo.save(empleado);
     }
 
-    public Empleado editarEmpleado(Long idEmpleado, Empleado empleado1) {
-
-        return empleadoRepo.findById(idEmpleado).map(empleado -> {
-            empleado.setNombre(empleado1.getNombre());
-            empleado.setApellido(empleado1.getApellido());
-            return  empleadoRepo.save(empleado);
-        }).orElseThrow(() -> new RuntimeException("Empleado no existe"));
-
-    }
+   public Empleado actualizarEmpleado(Long id, EmpleadoUpdateDto dto) {
+        Empleado e=empleadoRepo.findById(id).orElseThrow(() -> new RuntimeException("Empleado no existe"));
+        e.setNombre(dto.getNombre());
+        e.setApellido(dto.getApellido());
+        e.setDni(dto.getDni());
+        return empleadoRepo.save(e);
+   }
 
 }

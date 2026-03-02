@@ -2,6 +2,11 @@ const API_USUARIO = "http://localhost:8080/usuario";
 let usuarioIdActual = null;
 
 function abrirModalPassword(idUsuario) {
+    if (!idUsuario) {
+        alert("ID de usuario no disponible");
+        return;
+    }
+
     usuarioIdActual = idUsuario;
     document.getElementById("modalPassword").style.display = "block";
 }
@@ -11,22 +16,23 @@ function cerrarModalPassword() {
 }
 
 async function guardarPassword() {
+    const passwordActual = document.getElementById("passActual").value;
+    const passwordNueva = document.getElementById("passNueva").value;
 
-    const contrasenaActual = document.getElementById("passActual").value;
-    const nuevaContrasena = document.getElementById("passNueva").value;
-
-    if (!contrasenaActual || !nuevaContrasena) {
+    if (!passwordActual || !passwordNueva) {
         alert("Complete todos los campos");
         return;
     }
 
-    const res = await fetch(`${API_USUARIO}/actualizar-contrasena`, {
+    console.log("ID enviado:", usuarioIdActual);
+
+    const res = await fetch("http://localhost:8080/usuario/actualizar-password", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            idUsuario: usuarioIdActual,
-            contrasenaActual,
-            nuevaContrasena
+            idUsuario: Number(usuarioIdActual),
+            passwordActual: passwordActual,
+            passwordNueva: passwordNueva
         })
     });
 

@@ -7,6 +7,7 @@ import com.integrador.toishan.dto.updateDTO.UsuarioUpdateDto;
 import com.integrador.toishan.model.Usuario;
 import com.integrador.toishan.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,19 +38,28 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.crearUsuario(dto));
     }
 
-    @PutMapping("/editar/{id}")
-    public ResponseEntity<?> actualizarUsuario(
-            @PathVariable Long id,
-            @RequestBody UsuarioUpdateDto dto) {
-
-        Usuario usuario = usuarioService.actualizarUsuario(id, dto);
-        return ResponseEntity.ok(usuario);
+    @PutMapping("/actualizar")
+    public ResponseEntity<?> actualizarUsuario(@RequestBody UsuarioUpdateDto dto) {
+        try {
+            usuarioService.actualizarUsuario(dto);
+            return ResponseEntity.ok("Usuario actualizado correctamente");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    @PutMapping("/actualizar-contrasena")
+    @PutMapping("/actualizar-password")
     public ResponseEntity<?> actualizarContrasena(@RequestBody PasswordUpdateDto dto) {
-        usuarioService.actualizarContrasena(dto);
-        return ResponseEntity.ok("Contraseña actualizada correctamente");
+        try {
+            usuarioService.actualizarPassword(dto);
+            return ResponseEntity.ok("Contraseña actualizada correctamente");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     @PutMapping("/desactivar/{id}")

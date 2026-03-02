@@ -35,11 +35,11 @@ async function cargarCliente() {
         idUsuarioGlobal = cliente.idUsuario;
         estadoUsuarioGlobal = cliente.estadoUsuario;
 
-        // Mostrar u ocultar botón
+        
         if (estadoUsuarioGlobal !== "Activo") {
             document.getElementById("btnDesactivar").style.display = "none";
         }
-
+console.log("ID USUARIO:", cliente.idUsuario);
     } catch (error) {
         alert(error.message);
     }
@@ -49,30 +49,48 @@ async function cargarCliente() {
 document.getElementById("formEditarCliente").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const body = {
-        nombre: document.getElementById("nombre").value,
-        apellido: document.getElementById("apellido").value,
-        dni: document.getElementById("dni").value,
-        telefono: document.getElementById("telefono").value,
-        direccion: document.getElementById("direccion").value,
-        usuario: document.getElementById("usuario").value,
-        email: document.getElementById("email").value
-    };
-
     try {
-        const response = await fetch(`${API_CLIENTE}/actualizar/${idCliente}`, {
+        // =========================
+        // 1️⃣ ACTUALIZAR CLIENTE
+        // =========================
+        const clienteBody = {
+            nombre: document.getElementById("nombre").value,
+            apellido: document.getElementById("apellido").value,
+            dni: document.getElementById("dni").value,
+            telefono: document.getElementById("telefono").value,
+            direccion: document.getElementById("direccion").value
+        };
+
+        const clienteRes = await fetch(`${API_CLIENTE}/actualizar/${idCliente}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body)
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(clienteBody)
         });
 
-        if (!response.ok) {
-            throw new Error("Error al actualizar los datos");
+        if (!clienteRes.ok) {
+            throw new Error("Error al actualizar datos del cliente");
         }
 
-        alert("Cliente actualizado correctamente");
+        // =========================
+        // 2️⃣ ACTUALIZAR USUARIO
+        // =========================
+        const usuarioBody = {
+            idUsuario: idUsuarioGlobal,
+            usuario: document.getElementById("usuario").value,
+            email: document.getElementById("email").value
+        };
+
+        const usuarioRes = await fetch(`${API_USUARIO}/actualizar`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(usuarioBody)
+        });
+
+        if (!usuarioRes.ok) {
+            throw new Error("Error al actualizar datos del usuario");
+        }
+
+        alert("Cliente y usuario actualizados correctamente");
 
     } catch (error) {
         alert(error.message);
@@ -97,3 +115,11 @@ document.getElementById("btnDesactivar").addEventListener("click", async () => {
         alert(error.message);
     }
 });
+
+function abrirCambioPassword() {
+    if (!idUsuarioGlobal) {
+        alert("ID de usuario no disponible");
+        return;
+    }
+    abrirModalPassword(idUsuarioGlobal);
+}

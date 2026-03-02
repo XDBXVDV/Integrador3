@@ -23,15 +23,9 @@ import java.util.Collection;
 public class ClienteService {
     @Autowired
     private ClienteRepo clienteRepo;
-    @Autowired
-    private UsuarioRepo usuarioRepo;
-    @Autowired
-    private UsuarioService usuarioService;
 
     @Autowired
-    private RolRepo rolRepo;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UsuarioService usuarioService;
 
     public Cliente findById(Long id){
         return clienteRepo.findById(id).orElse(null);

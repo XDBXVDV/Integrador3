@@ -19,6 +19,7 @@ public class EmpleadoDtoService {
 
     private EmpleadoDTO mapToDTO(Empleado empleado){
         EmpleadoDTO dto = new EmpleadoDTO();
+        dto.setIdUsuario(empleado.getUsuario().getIdUsuario());
         dto.setIdEmpleado(empleado.getIdEmpleado());
         dto.setNombre(empleado.getNombre());
         dto.setApellido(empleado.getApellido());

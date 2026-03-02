@@ -1,9 +1,28 @@
 package com.integrador.toishan.dto.updateDTO;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PasswordUpdateDto {
+    @JsonProperty("idUsuario")
     private Long idUsuario;
+
+    @JsonProperty("passwordActual")
     private String passwordActual;
+
+    @JsonProperty("passwordNueva")
     private String passwordNueva;
+
+    @JsonCreator
+    public PasswordUpdateDto(
+            @JsonProperty("idUsuario") Long idUsuario,
+            @JsonProperty("passwordActual") String passwordActual,
+            @JsonProperty("passwordNueva") String passwordNueva
+    ) {
+        this.idUsuario = idUsuario;
+        this.passwordActual = passwordActual;
+        this.passwordNueva = passwordNueva;
+    }
 
     public String getPasswordActual() {
         return passwordActual;
