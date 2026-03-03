@@ -1,6 +1,7 @@
 package com.integrador.toishan.controller;
 
 
+import com.integrador.toishan.dto.createDTO.EmpleadoCreateDto;
 import com.integrador.toishan.dto.updateDTO.EmpleadoUpdateDto;
 import com.integrador.toishan.model.Empleado;
 import com.integrador.toishan.service.EmpleadoDetalleDtoService;
@@ -36,8 +37,8 @@ return ResponseEntity.ok(detalleDtoService.obtenerDetalle(id));
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody Empleado empleado) {
-        return ResponseEntity.ok(empleadoService.crearEmpleado(empleado));
+    public ResponseEntity<?> crear(@RequestBody EmpleadoCreateDto dto) {
+        return ResponseEntity.ok(empleadoService.crearEmpleado(dto));
     }
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizarEmpleado(@PathVariable Long id, @RequestBody EmpleadoUpdateDto dto)

@@ -1,6 +1,8 @@
 package com.integrador.toishan.service;
 
 
+import com.integrador.toishan.dto.createDTO.EmpleadoCreateDto;
+import com.integrador.toishan.dto.createDTO.UsuarioCreateDto;
 import com.integrador.toishan.dto.modelDTO.EmpleadoDTO;
 import com.integrador.toishan.dto.updateDTO.EmpleadoUpdateDto;
 import com.integrador.toishan.model.Empleado;
@@ -43,25 +45,19 @@ public class EmpleadoService {
         return empleadoRepo.findAll();
     }
 
-    public Empleado crearEmpleado(Empleado empleado1) {
+    public Empleado crearEmpleado(EmpleadoCreateDto dto) {
+        UsuarioCreateDto userDto = new UsuarioCreateDto();
+        userDto.setUsuario(dto.getUsuario());
+        userDto.setEmail(dto.getEmail());
+        userDto.setContrasena(dto.getContrasena());
+        userDto.setIdRol(dto.getIdRol());
 
-        if (empleado1.getUsuario().getIdUsuario() == null) {
-            throw new RuntimeException("El idUsuario es obligatorio");
-        }
-
-        Usuario usuario = usuarioRepo.findById(empleado1.getUsuario().getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
-
-        if (empleadoRepo.existsByUsuario(usuario)) {
-            throw new RuntimeException("Este usuario ya está asociado a un empleado");
-        }
+        Usuario usuario = usuarioService.crearUsuario(userDto);
 
         Empleado empleado = new Empleado();
-        empleado.setUsuario(usuario);
-        empleado.setNombre(empleado1.getNombre());
-        empleado.setApellido(empleado1.getApellido());
-        empleado.setDni(empleado1.getDni());
-
+        empleado.setNombre(dto.getNombre());
+        empleado.setApellido(dto.getApellido());
+        empleado.setDni(dto.getDni());
         return empleadoRepo.save(empleado);
     }
 

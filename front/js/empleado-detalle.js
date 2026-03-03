@@ -41,7 +41,7 @@ document.getElementById("formEditarEmpleado").addEventListener("submit", async (
     e.preventDefault();
 
     try {
-        // 1️⃣ Empleado
+        
         const empleadoBody = {
             nombre: document.getElementById("nombre").value,
             apellido: document.getElementById("apellido").value,
@@ -56,7 +56,7 @@ document.getElementById("formEditarEmpleado").addEventListener("submit", async (
 
         if (!empRes.ok) throw new Error("Error al actualizar empleado");
 
-        // 2️⃣ Usuario
+        
         const usuarioBody = {
             idUsuario: idUsuarioGlobal,
             usuario: document.getElementById("usuario").value,
@@ -77,3 +77,11 @@ document.getElementById("formEditarEmpleado").addEventListener("submit", async (
         alert(err.message);
     }
 });
+
+function abrirCambioPassword() {
+    if (!idUsuarioGlobal) {
+        alert("ID de usuario no disponible");
+        return;
+    }
+    abrirModalPassword(idUsuarioGlobal);
+}

@@ -50,9 +50,7 @@ document.getElementById("formEditarCliente").addEventListener("submit", async (e
     e.preventDefault();
 
     try {
-        // =========================
-        // 1️⃣ ACTUALIZAR CLIENTE
-        // =========================
+        
         const clienteBody = {
             nombre: document.getElementById("nombre").value,
             apellido: document.getElementById("apellido").value,
@@ -71,9 +69,6 @@ document.getElementById("formEditarCliente").addEventListener("submit", async (e
             throw new Error("Error al actualizar datos del cliente");
         }
 
-        // =========================
-        // 2️⃣ ACTUALIZAR USUARIO
-        // =========================
         const usuarioBody = {
             idUsuario: idUsuarioGlobal,
             usuario: document.getElementById("usuario").value,
