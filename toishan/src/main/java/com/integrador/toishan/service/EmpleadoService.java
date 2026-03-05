@@ -55,9 +55,11 @@ public class EmpleadoService {
         Usuario usuario = usuarioService.crearUsuario(userDto);
 
         Empleado empleado = new Empleado();
+        empleado.setUsuario(usuario);
         empleado.setNombre(dto.getNombre());
         empleado.setApellido(dto.getApellido());
         empleado.setDni(dto.getDni());
+
         return empleadoRepo.save(empleado);
     }
 
