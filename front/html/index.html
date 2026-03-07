@@ -1,12 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<title>Toishan</title>
+
+<link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/index.css">
+
 </head>
+
 <body>
-    <a href="login_clientes.html">Iniciar sesión</a>
-    <a href="area_empleados.html">Solo empleados</a>
+
+<nav class="navbar">
+
+    <div class="nav-left">
+        <a href="index.html" class="logo">TOISHAN</a>
+        <a href="producto.html">Productos</a>
+    </div>
+
+    <div class="nav-center">
+        <input type="text" placeholder="Buscar productos..." class="search">
+    </div>
+
+    <div class="nav-right">
+
+        <a id="areaEmpleado" href="area_empleados.html" class="empleados-link" style="display:none">
+            Área empleados
+        </a>
+
+        <div class="usuario-menu">
+
+            <button id="btnUsuario" class="usuario-btn">
+                👤 <span id="usuarioInfo">Invitado</span>
+            </button>
+
+            <div id="dropdownUsuario" class="dropdown">
+
+                <a id="btnLogin" href="login.html">Iniciar sesión</a>
+
+                <a href="perfil.html" id="perfilLink">Mi perfil</a>
+
+                <button id="btnLogout" onclick="logout()">Cerrar sesión</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<div class="filtros">
+
+    <select id="filtroCategoria">
+        <option value="">Todas las categorías</option>
+    </select>
+
+    <select id="filtroMarca">
+        <option value="">Todas las marcas</option>
+    </select>
+
+</div>
+
+
+<div id="contenedorProductos" class="grid-productos"></div>
+
+
+<script src="../js/navbar.js"></script>
+<script src="../js/index.js"></script>
+
 </body>
 </html>

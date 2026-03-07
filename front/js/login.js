@@ -30,19 +30,19 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
 
         console.log("LOGIN OK:", data);
 
-        // guardar sesión
+        
         localStorage.setItem("usuario", JSON.stringify(data));
 
-        // redirigir según rol
+        
         const rol = data.rol.rolName;
 
         if (rol === "CLIENTE") {
 
-            window.location.href = "cliente_dashboard.html";
+            window.location.href = "index.html";
 
         } else {
 
-            window.location.href = "empleado_dashboard.html";
+            window.location.href = "index.html";
 
         }
 

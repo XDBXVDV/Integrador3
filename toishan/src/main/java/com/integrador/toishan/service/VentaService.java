@@ -62,8 +62,8 @@ public class VentaService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (DetalleVenta det : venta1.getDetalles()) {
-                    Producto p = productoRepo.findById(det.getProducto().getIdproducto())
-                    .orElseThrow(() -> new RuntimeException("Producto con ID " + det.getProducto().getIdproducto() + " no encontrado"));
+                    Producto p = productoRepo.findById(det.getProducto().getIdProducto())
+                    .orElseThrow(() -> new RuntimeException("Producto con ID " + det.getProducto().getIdProducto() + " no encontrado"));
 
             if (p.getStock() < det.getCantidad()) {
                 throw new RuntimeException("Stock insuficiente para: " + p.getNombre());

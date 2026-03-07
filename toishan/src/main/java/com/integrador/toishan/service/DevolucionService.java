@@ -49,12 +49,12 @@ public class DevolucionService {
 
         for (DetalleDevolucion det : devolucion1.getDetalles()) {
 
-            Producto producto = productoRepo.findById(det.getProducto().getIdproducto())
+            Producto producto = productoRepo.findById(det.getProducto().getIdProducto())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
 
             DetalleVenta detalleVenta = venta.getDetalles().stream()
-                    .filter(dv -> dv.getProducto().getIdproducto()==producto.getIdproducto())
+                    .filter(dv -> dv.getProducto().getIdProducto()==producto.getIdProducto())
                     .findFirst()
                     .orElseThrow(() ->
                             new RuntimeException("El producto no pertenece a esta venta")
@@ -99,7 +99,7 @@ public class DevolucionService {
         return venta.getDevoluciones().stream()
                 .filter(d -> d.getEstado() != EstadoDevolucion.Anulada)
                 .flatMap(d -> d.getDetalles().stream())
-                .filter(dd -> dd.getProducto().getIdproducto()==producto.getIdproducto())
+                .filter(dd -> dd.getProducto().getIdProducto()==producto.getIdProducto())
                 .mapToInt(DetalleDevolucion::getCantidad)
                 .sum();
     }

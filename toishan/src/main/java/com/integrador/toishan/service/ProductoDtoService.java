@@ -21,16 +21,20 @@ public class ProductoDtoService {
     }
 
     private ProductoDTO mapToDTO(Producto producto){
-        ProductoDTO productoDTO = new ProductoDTO();
-        productoDTO.setIdProducto(producto.getIdproducto());
-        productoDTO.setNombre(producto.getNombre());
-        productoDTO.setPrecio(producto.getPrecio());
-        productoDTO.setStock(producto.getStock());
-        productoDTO.setCondicion(producto.getCondicion().toString());
-        productoDTO.setCategoria(producto.getCategoria().getNombre());
-        productoDTO.setMarca(producto.getMarca().getNombre());
-        productoDTO.setEstado(producto.getEstado().toString());
-        return productoDTO;
+
+        ProductoDTO dto = new ProductoDTO();
+
+        dto.setIdProducto(producto.getIdProducto());
+        dto.setNombre(producto.getNombre());
+        dto.setDescripcion(producto.getDescripcion());
+        dto.setPrecio(producto.getPrecio());
+        dto.setStock(producto.getStock());
+        dto.setImagen(producto.getImagen());
+        dto.setCategoria(producto.getCategoria().getNombre());
+        dto.setMarca(producto.getMarca().getNombre());
+        dto.setCondicion(producto.getCondicion().name());
+        dto.setEstado(producto.getEstado().name());
+        return dto;
     }
 
 

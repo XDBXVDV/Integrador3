@@ -25,44 +25,58 @@ public class ProductoService {
     @Autowired
     private MarcaRepo marcaRepo;
 
+
     public Producto findById(Long id){
         return productoRepo.findById(id).orElse(null);
     }
+
 
     public Collection<Producto> findAll(){
         return productoRepo.findAll();
     }
 
+
     public Producto crear(Producto producto1) {
 
         Producto p = new Producto();
+
+
         p.setNombre(producto1.getNombre());
+        p.setDescripcion(producto1.getDescripcion());
         p.setPrecio(producto1.getPrecio());
         p.setStock(producto1.getStock());
         p.setStockMinimo(producto1.getStockMinimo());
+        p.setImagen(producto1.getImagen());
+
 
         if (producto1.getCategoria() != null) {
-            p.setCategoria(categoriaRepo.findById(producto1.getCategoria().getIdCategoria())
-                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada")));
+            p.setCategoria(
+                    categoriaRepo.findById(producto1.getCategoria().getIdCategoria())
+                            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"))
+            );
         }
+
 
         if (producto1.getMarca() != null) {
-            p.setMarca(marcaRepo.findById(producto1.getMarca().getIdMarca())
-                    .orElseThrow(() -> new RuntimeException("Marca no encontrada")));
+            p.setMarca(
+                    marcaRepo.findById(producto1.getMarca().getIdMarca())
+                            .orElseThrow(() -> new RuntimeException("Marca no encontrada"))
+            );
         }
+
+
         p.setEstado(Estado.Activo);
 
-        if (producto1.getStock()>producto1.getStockMinimo()) {
-            p.setCondicion(Condicion.En_stock);
-        } else if (producto1.getStock()==0) {
-            p.setCondicion(Condicion.Agotado);
-        }
-        else if (producto1.getStock()<producto1.getStockMinimo()) {
-            p.setCondicion(Condicion.Stock_bajo);
-        }
+
+        p.setCondicion(calcularCondicionStock(
+                producto1.getStock(),
+                producto1.getStockMinimo()
+        ));
 
         return productoRepo.save(p);
     }
+
+
 
     public Producto actualizarProducto(Long idProducto, Producto producto1) {
 
@@ -74,6 +88,8 @@ public class ProductoService {
 
         Marca marca = marcaRepo.findById(producto1.getMarca().getIdMarca())
                 .orElseThrow(() -> new RuntimeException("Marca no encontrada"));
+
+
 
         if (producto1.getPrecio() == null || producto1.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("El precio debe ser mayor a 0");
@@ -92,46 +108,78 @@ public class ProductoService {
         }
 
 
+
         producto.setCategoria(categoria);
-        producto.setNombre(producto1.getNombre());
         producto.setMarca(marca);
+        producto.setNombre(producto1.getNombre());
+        producto.setDescripcion(producto1.getDescripcion());
         producto.setPrecio(producto1.getPrecio());
         producto.setStock(producto1.getStock());
         producto.setStockMinimo(producto1.getStockMinimo());
+        producto.setImagen(producto1.getImagen());
         producto.setEstado(producto1.getEstado());
 
 
-        producto.setCondicion(calcularCondicionStock(
-                producto1.getStock(),
-                producto1.getStockMinimo()
-        ));
+
+        producto.setCondicion(
+                calcularCondicionStock(
+                        producto1.getStock(),
+                        producto1.getStockMinimo()
+                )
+        );
 
         return productoRepo.save(producto);
     }
 
+
+
     public void desactivar(Long idProducto) {
+
         Producto producto = findById(idProducto);
+
+        if (producto == null) {
+            throw new RuntimeException("Producto no encontrado");
+        }
+
         if (producto.getEstado().equals(Estado.Activo)) {
             producto.setEstado(Estado.Inactivo);
-        } else throw new RuntimeException("El producto ya esta inactivo");
+            productoRepo.save(producto);
+        } else {
+            throw new RuntimeException("El producto ya está inactivo");
+        }
     }
+
+
 
     public void reactivar(Long idProducto) {
+
         Producto producto = findById(idProducto);
+
+        if (producto == null) {
+            throw new RuntimeException("Producto no encontrado");
+        }
+
         if (producto.getEstado().equals(Estado.Inactivo)) {
             producto.setEstado(Estado.Activo);
-        } else throw new RuntimeException("El producto ya esta activo");
+            productoRepo.save(producto);
+        } else {
+            throw new RuntimeException("El producto ya está activo");
+        }
     }
 
+
+
     private Condicion calcularCondicionStock(int stock, int stockMinimo) {
+
         if (stock == 0) {
             return Condicion.Agotado;
         }
+
         if (stock <= stockMinimo) {
             return Condicion.Stock_bajo;
         }
+
         return Condicion.En_stock;
     }
 
 }
-

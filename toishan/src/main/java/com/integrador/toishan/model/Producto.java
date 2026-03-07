@@ -9,27 +9,41 @@ import java.util.List;
 @Entity
 @Table(name = "productos")
 public class Producto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
-    private Long idproducto;
+    private Long idProducto;
 
     @ManyToOne
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;
+
     @ManyToOne
     @JoinColumn(name = "id_marca")
     private Marca marca;
+
     @Column(nullable = false)
     private String nombre;
+
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
+
     @Column(nullable = false)
     private BigDecimal precio;
+
     @Column(name = "stock_minimo", nullable = false)
     private Integer stockMinimo;
+
     @Column(nullable = false)
     private Integer stock;
+
+    @Column(length = 255)
+    private String imagen;
+
     @Enumerated(EnumType.STRING)
     private Estado estado;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "condicion")
     private Condicion condicion;
@@ -38,27 +52,30 @@ public class Producto {
     @JsonIgnore
     private List<DetalleVenta> detalleVentas;
 
-    public Producto(Long idproducto, String nombre, BigDecimal precio, Integer stockMinimo, Integer stock, Estado estado, Condicion condicion, Categoria categoria, Marca marca) {
-        this.idproducto = idproducto;
-        this.nombre = nombre;
-        this.precio = precio;
-        this.stockMinimo = stockMinimo;
-        this.stock = stock;
-        this.estado = Estado.Activo;
-        this.condicion = condicion;
+    // GETTERS Y SETTERS
+
+    public Long getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
         this.marca = marca;
-    }
-
-    public Producto() {
-    }
-
-    public Long getIdproducto() {
-        return idproducto;
-    }
-
-    public void setIdproducto(Long idproducto) {
-        this.idproducto = idproducto;
     }
 
     public String getNombre() {
@@ -67,6 +84,14 @@ public class Producto {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public BigDecimal getPrecio() {
@@ -93,6 +118,14 @@ public class Producto {
         this.stock = stock;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
     public Estado getEstado() {
         return estado;
     }
@@ -109,19 +142,11 @@ public class Producto {
         this.condicion = condicion;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public List<DetalleVenta> getDetalleVentas() {
+        return detalleVentas;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public Marca getMarca() {
-        return marca;
-    }
-
-    public void setMarca(Marca marca) {
-        this.marca = marca;
+    public void setDetalleVentas(List<DetalleVenta> detalleVentas) {
+        this.detalleVentas = detalleVentas;
     }
 }
