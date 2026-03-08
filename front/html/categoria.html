@@ -1,44 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Categorias</title>
-    <link rel="stylesheet" href="../css/categoria.css">
+
+<meta charset="UTF-8">
+
+<title>Gestión de Categorías</title>
+
+<link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/panel.css">
+<link rel="stylesheet" href="../css/modal.css">
+
 </head>
+
 <body>
-    <h1>Lisa de categorias</h1>
-    <button onclick="abrirModalCrear()">+ Nueva categoria</button>
-    <table id="tablaCategorias" border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Estado</th>   
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <script src="../js/caetgoria.js"></script>
-</body>
-</html>
-<div id="modalEditar" class="modal">
-    <div class="modal-content">
-        <h3>Editar categoria</h3>
-        <input type="hidden" id="editIdCategoria">
-        <label >Nombre</label>
-        <input type="text"  id="editNombre">  
-        <button onclick="guardarEdicion()">Guardar</button>
-        <button onclick="cerrarModal()">Cancelar</button>
-    </div>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+<div class="nav-left">
+<h2>Panel</h2>
 </div>
 
-<div id="modalCrear" class="modal">
-    <div class="modal-content">
-        <h3>Agregar categoria</h3>
-        <input type="hidden" id="createIdCategoria">
-        <label >Nombre</label>
-        <input type="text"  id="createNombre">  
-        <button onclick="guardarCategoria()">Guardar</button>
-        <button onclick="cerrarModalCrear()">Cancelar</button>
-    </div>
+<div class="nav-right">
+
+<span id="usuarioInfo"></span>
+
+<a href="productos.html">Productos</a>
+
+<a href="categorias.html">Categorias</a>
+
+<a href="marcas.html">Marcas</a>
+
+<button onclick="logout()">Salir</button>
+
 </div>
+
+</nav>
+
+
+<div class="panel-container">
+
+<div class="panel-header">
+
+<h1>Gestión de Categorías</h1>
+
+<button class="btn-crear" onclick="document.getElementById('modalCrear').style.display='flex'">
++ Nueva categoría
+</button>
+
+</div>
+
+
+
+<div class="panel-tools">
+
+<input 
+type="text"
+id="buscadorTabla"
+placeholder="Buscar categoría..."
+onkeyup="filtrarTabla()"
+/>
+
+</div>
+
+
+
+
+
+<table id="tablaCategorias" class="tabla-panel">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Nombre</th>
+<th>Estado</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</div>
+
+
+
+
+
+<div id="modalEditar" class="modal">
+
+<div class="modal-content">
+
+<h3>Editar categoría</h3>
+
+<input type="hidden" id="editId">
+
+<label>Nombre</label>
+
+<input type="text" id="editNombre">
+
+<div class="modal-buttons">
+
+<button onclick="CrudPanel.guardarEdicion()">Guardar</button>
+
+<button onclick="document.getElementById('modalEditar').style.display='none'">
+Cancelar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+
+<div id="modalCrear" class="modal">
+
+<div class="modal-content">
+
+<h3>Nueva categoría</h3>
+
+<label>Nombre</label>
+
+<input type="text" id="createNombre">
+
+<div class="modal-buttons">
+
+<button onclick="CrudPanel.guardarNuevo()">Guardar</button>
+
+<button onclick="document.getElementById('modalCrear').style.display='none'">
+Cancelar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+
+<script src="../js/crud-panel.js"></script>
+
+<script src="../js/auth.js"></script>
+
+<script>
+
+verificarEmpleado()
+
+
+CrudPanel.init({
+
+api:"http://localhost:8080/categoria",
+
+tabla:"#tablaCategorias",
+
+idCampo:"idCategoria",
+
+nombreCampo:"nombre"
+
+})
+
+</script>
+
+</body>
+</html>

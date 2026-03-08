@@ -1,0 +1,266 @@
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+
+.panel-container{
+
+    width: 90%;
+    margin: 40px auto;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+}
+
+
+/* =========================
+   HEADER DEL PANEL
+========================= */
+
+.panel-header{
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+.panel-header h1{
+
+    margin: 0;
+
+}
+
+
+/* =========================
+   BOTON CREAR
+========================= */
+
+.btn-crear{
+
+    background-color: #2ecc71;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+.btn-crear:hover{
+
+    background-color: #27ae60;
+
+}
+
+
+/* =========================
+   TABLA PANEL
+========================= */
+
+.tabla-panel{
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 14px;
+
+}
+
+
+/* HEADER TABLA */
+
+.tabla-panel thead{
+
+    background-color: #f4f6f8;
+
+}
+
+.tabla-panel th{
+
+    text-align: left;
+
+    padding: 12px;
+
+    border-bottom: 2px solid #ddd;
+
+}
+
+
+/* FILAS */
+
+.tabla-panel td{
+
+    padding: 12px;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+
+/* HOVER FILA */
+
+.tabla-panel tbody tr:hover{
+
+    background-color: #f9f9f9;
+
+}
+
+
+/* =========================
+   BOTONES DE ACCIONES
+========================= */
+
+.tabla-panel button{
+
+    padding: 6px 10px;
+
+    margin-right: 5px;
+
+    border: none;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+}
+
+
+/* EDITAR */
+
+.tabla-panel button:first-child{
+
+    background-color: #3498db;
+
+    color: white;
+
+}
+
+.tabla-panel button:first-child:hover{
+
+    background-color: #2980b9;
+
+}
+
+
+/* DESACTIVAR */
+
+.tabla-panel button:nth-child(2){
+
+    background-color: #e74c3c;
+
+    color: white;
+
+}
+
+.tabla-panel button:nth-child(2):hover{
+
+    background-color: #c0392b;
+
+}
+
+
+/* REACTIVAR */
+
+.tabla-panel button:nth-child(3){
+
+    background-color: #2ecc71;
+
+    color: white;
+
+}
+
+.tabla-panel button:nth-child(3):hover{
+
+    background-color: #27ae60;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .panel-container{
+
+        width: 95%;
+
+        padding: 20px;
+
+    }
+
+    .panel-header{
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+
+    }
+
+}
+
+/* =========================
+   HERRAMIENTAS DEL PANEL
+========================= */
+
+.panel-tools{
+
+margin-bottom:15px;
+
+display:flex;
+
+justify-content:flex-end;
+
+}
+
+
+/* BUSCADOR */
+
+#buscadorTabla{
+
+padding:8px 10px;
+
+border-radius:5px;
+
+border:1px solid #ccc;
+
+width:220px;
+
+font-size:14px;
+
+}
+
+#buscadorTabla:focus{
+
+outline:none;
+
+border-color:#3498db;
+
+box-shadow:0 0 4px rgba(52,152,219,0.4);
+
+}

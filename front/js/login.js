@@ -28,7 +28,7 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
 
         const data = await res.json();
 
-        console.log("LOGIN OK:", data);
+        
 
         
         localStorage.setItem("usuario", JSON.stringify(data));

@@ -53,6 +53,7 @@ id_producto int auto_increment primary key,
 id_categoria int not null,
 id_marca int not null,
 nombre varchar(100) not null,
+descripcion text,
 precio DECIMAL(10,2) not null,
 stock_minimo int not null,
 stock int not null,
@@ -143,7 +144,8 @@ foreign key(id_producto) references productos(id_producto)
 
 
 insert into roles (nombre) values ('Cliente'),('Administrador'),('Area de ventas'),('Area de compras'),('Area de almacén');
-
+insert into usuario(usuario,email,contrasena,id_rol) values('ADMIN','ADMIN@ADMIN.ADMIN','$2a$10$V7KQnrDxYWXyir/G7m96Ue4ThrLoH6DyLOrCZQW6S2smdopCCSHu2',2);
+insert into empleados (id_usuario,nombre,apellido,dni) values(1,'ADMIN','ADMIN','15984267');
 
 select * from roles;
 select * from clientes;

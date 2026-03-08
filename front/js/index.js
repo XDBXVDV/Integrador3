@@ -108,34 +108,26 @@ function mostrarProductos(lista){
 
         card.classList.add("producto-card")
 
-        const imagen = p.imagen ? p.imagen : "/img/productos/default.png"
-
+        const imagen = p.imagen
+        ? "http://localhost:8080" + p.imagen
+        : "http://localhost:8080/img/productos/default.png"
         card.innerHTML = `
-            <img src="${imagen}" class="img-producto">
 
-            <h3>${p.nombre}</h3>
+        <img src="${imagen}" class="img-producto">
 
-            <p class="precio">S/ ${p.precio}</p>
+<h3>${p.nombre}</h3>
 
-            <p class="stock">Stock: ${p.stock}</p>
+<p class="precio">S/ ${p.precio}</p>
 
-            <p class="categoria">${p.categoria}</p>
+<p>${p.categoria}</p>
 
-            <p class="marca">${p.marca}</p>
+<p>${p.marca}</p>
 
-            <input
-                type="number"
-                min="1"
-                max="${p.stock}"
-                value="1"
-                id="cant-${p.idProducto}"
-                onchange="validarCantidad(${p.idProducto}, ${p.stock})"
-            >
+<button onclick="verDetalle(${p.idProducto})">
+Ver producto
+</button>
 
-            <button onclick="agregarCarrito(${p.idProducto})">
-                Agregar al carrito
-            </button>
-        `
+`
 
         contenedor.appendChild(card)
 
@@ -222,5 +214,11 @@ function agregarCarrito(id){
     const cantidad = document.getElementById("cant-" + id).value
 
     alert("Producto agregado al carrito\nID: " + id + "\nCantidad: " + cantidad)
+
+}
+
+function verDetalle(id){
+
+    window.location.href = "detalle_producto.html?id=" + id
 
 }
