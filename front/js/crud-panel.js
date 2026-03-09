@@ -1,70 +1,113 @@
-const CrudPanel = {
+const CrudPanel={
 
-api: "",
-tabla: "",
-idCampo: "",
-nombreCampo: "",
+api:"",
+tabla:"",
+idCampo:"",
+nombreCampo:"",
+datos:[],
+paginaActual:1,
+filasPorPagina:5,
+ordenAsc:true,
 
 init(config){
 
-this.api = config.api
-this.tabla = config.tabla
-this.idCampo = config.idCampo
-this.nombreCampo = config.nombreCampo
+this.api=config.api
+this.tabla=config.tabla
+this.idCampo=config.idCampo
+this.nombreCampo=config.nombreCampo
 
 this.listar()
 
 },
 
+/* =========================
+   LOADER
+========================= */
+
+mostrarLoader(){
+
+document.getElementById("loader").style.display="flex"
+
+},
+
+ocultarLoader(){
+
+document.getElementById("loader").style.display="none"
+
+},
+
+/* =========================
+   LISTAR
+========================= */
+
 listar(){
 
-fetch(this.api + "/listar")
+this.mostrarLoader()
 
-.then(res=>{
-if(!res.ok) throw new Error("Error al obtener datos")
-return res.json()
-})
+fetch(this.api+"/listar")
+
+.then(res=>res.json())
 
 .then(data=>{
+
+this.datos=data
+
+this.renderTabla()
+
+this.renderPaginacion()
+
+this.ocultarLoader()
+
+})
+
+},
+
+/* =========================
+   TABLA
+========================= */
+
+renderTabla(){
 
 const tbody=document.querySelector(this.tabla+" tbody")
 
 tbody.innerHTML=""
 
-data.forEach(item=>{
+const inicio=(this.paginaActual-1)*this.filasPorPagina
 
-let botonEstado=""
+const fin=inicio+this.filasPorPagina
 
-if(item.estado==="Activo"){
+const datosPagina=this.datos.slice(inicio,fin)
 
-botonEstado=`
-<button onclick="CrudPanel.desactivar(${item[this.idCampo]})">
-Desactivar
-</button>
-`
+datosPagina.forEach(item=>{
 
-}else{
+let badge=item.estado==="Activo"
+? `<span class="badge badge-activo">Activo</span>`
+: `<span class="badge badge-inactivo">Inactivo</span>`
 
-botonEstado=`
-<button onclick="CrudPanel.activar(${item[this.idCampo]})">
-Reactivar
-</button>
-`
+let botonEstado=item.estado==="Activo"
 
-}
+? `<button class="btn-desactivar" onclick="CrudPanel.confirmar('desactivar',${item[this.idCampo]})">
+<i class="fa fa-ban"></i>
+</button>`
+
+: `<button class="btn-activar" onclick="CrudPanel.confirmar('activar',${item[this.idCampo]})">
+<i class="fa fa-check"></i>
+</button>`
 
 const fila=document.createElement("tr")
 
 fila.innerHTML=`
 
 <td>${item[this.idCampo]}</td>
+
 <td>${item[this.nombreCampo]}</td>
-<td>${item.estado}</td>
+
+<td>${badge}</td>
 
 <td>
 
-<button onclick="CrudPanel.abrirEditar(${item[this.idCampo]})">
-Editar
+<button class="btn-editar" onclick="CrudPanel.abrirEditar(${item[this.idCampo]})">
+<i class="fa fa-pen"></i>
 </button>
 
 ${botonEstado}
@@ -77,25 +120,143 @@ tbody.appendChild(fila)
 
 })
 
-})
+},
 
-.catch(err=>alert(err.message))
+/* =========================
+   PAGINACION
+========================= */
+
+renderPaginacion(){
+
+const totalPaginas=Math.ceil(this.datos.length/this.filasPorPagina)
+
+const cont=document.getElementById("paginacion")
+
+cont.innerHTML=""
+
+for(let i=1;i<=totalPaginas;i++){
+
+const btn=document.createElement("button")
+
+btn.textContent=i
+
+btn.onclick=()=>{
+
+this.paginaActual=i
+
+this.renderTabla()
+
+}
+
+cont.appendChild(btn)
+
+}
 
 },
+
+/* =========================
+   ORDENAR
+========================= */
+
+ordenar(campo){
+
+this.ordenAsc=!this.ordenAsc
+
+this.datos.sort((a,b)=>{
+
+if(a[campo]>b[campo]) return this.ordenAsc?1:-1
+
+if(a[campo]<b[campo]) return this.ordenAsc?-1:1
+
+return 0
+
+})
+
+this.renderTabla()
+
+},
+
+/* =========================
+   BUSCAR
+========================= */
+
+filtrar(valor){
+
+valor=valor.toLowerCase()
+
+this.datos=this.datos.filter(d=>
+
+d[this.nombreCampo].toLowerCase().includes(valor)
+
+)
+
+this.paginaActual=1
+
+this.renderTabla()
+
+this.renderPaginacion()
+
+},
+
+/* =========================
+   CONFIRMACION BONITA
+========================= */
+
+confirmar(tipo,id){
+
+const texto=tipo==="desactivar"
+?"¿Desea desactivar este registro?"
+:"¿Desea activar este registro?"
+
+if(!confirm(texto)) return
+
+tipo==="activar"
+?this.activar(id)
+:this.desactivar(id)
+
+},
+
+/* =========================
+   ACTIVAR
+========================= */
 
 activar(id){
 
+this.mostrarLoader()
+
 fetch(`${this.api}/activar/${id}`,{method:"PUT"})
-.then(()=>this.listar())
+.then(()=>{
+
+this.toast("Registro activado")
+
+this.listar()
+
+})
 
 },
+
+/* =========================
+   DESACTIVAR
+========================= */
 
 desactivar(id){
 
+this.mostrarLoader()
+
 fetch(`${this.api}/desactivar/${id}`,{method:"PUT"})
-.then(()=>this.listar())
+.then(()=>{
+
+this.toast("Registro desactivado")
+
+this.listar()
+
+})
 
 },
+
+/* =========================
+   EDITAR
+========================= */
 
 abrirEditar(id){
 
@@ -121,13 +282,13 @@ const id=document.getElementById("editId").value
 
 const nombre=document.getElementById("editNombre").value
 
+this.mostrarLoader()
+
 fetch(`${this.api}/actualizar/${id}`,{
 
 method:"PUT",
 
-headers:{
-"Content-Type":"application/json"
-},
+headers:{"Content-Type":"application/json"},
 
 body:JSON.stringify({nombre})
 
@@ -137,23 +298,29 @@ body:JSON.stringify({nombre})
 
 document.getElementById("modalEditar").style.display="none"
 
+this.toast("Registro actualizado")
+
 this.listar()
 
 })
 
 },
 
+/* =========================
+   CREAR
+========================= */
+
 guardarNuevo(){
 
 const nombre=document.getElementById("createNombre").value
+
+this.mostrarLoader()
 
 fetch(`${this.api}/crear`,{
 
 method:"POST",
 
-headers:{
-"Content-Type":"application/json"
-},
+headers:{"Content-Type":"application/json"},
 
 body:JSON.stringify({nombre})
 
@@ -163,9 +330,37 @@ body:JSON.stringify({nombre})
 
 document.getElementById("modalCrear").style.display="none"
 
+this.toast("Registro creado")
+
 this.listar()
 
 })
+
+},
+
+/* =========================
+   TOAST
+========================= */
+
+toast(msg){
+
+let t=document.createElement("div")
+
+t.className="toast"
+
+t.innerText=msg
+
+document.body.appendChild(t)
+
+setTimeout(()=>t.classList.add("show"),100)
+
+setTimeout(()=>{
+
+t.classList.remove("show")
+
+setTimeout(()=>t.remove(),300)
+
+},2000)
 
 }
 

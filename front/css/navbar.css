@@ -137,3 +137,19 @@ body{
     font-weight:bold;
 
 }
+
+.navbar a{
+
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:500;
+
+}
+
+.navbar a:hover{
+
+text-decoration:underline;
+
+}
+

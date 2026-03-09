@@ -3,6 +3,8 @@ const API_URL = "http://localhost:8080/producto";
 const modalProducto = new bootstrap.Modal(document.getElementById('modalProducto'));
 const form = document.getElementById('formProducto');
 
+let tablaData;
+
 document.addEventListener("DOMContentLoaded", () => {
 
     listarProductos();
@@ -17,20 +19,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("imagen").addEventListener("change", function(){
 
-    const file = this.files[0];
-    const preview = document.getElementById("imagenPreview");
+const file=this.files[0];
+const preview=document.getElementById("imagenPreview");
 
-    if(file){
+if(file){
 
-        const reader = new FileReader();
+const reader=new FileReader();
 
-        reader.onload = function(e){
-            preview.src = e.target.result;
-            preview.style.display = "block";
-        }
+reader.onload=function(e){
 
-        reader.readAsDataURL(file);
-    }
+preview.src=e.target.result;
+preview.style.display="block";
+
+}
+
+reader.readAsDataURL(file);
+
+}
 
 });
 
@@ -43,10 +48,11 @@ async function listarProductos(){
 
 try{
 
-const resp = await fetch(`${API_URL}/listar`);
-const productos = await resp.json();
+const resp=await fetch(`${API_URL}/listar`);
+const productos=await resp.json();
 
-const tabla = document.getElementById("tablaProductos");
+const tabla=document.getElementById("tablaProductos");
+
 tabla.innerHTML="";
 
 productos.forEach(p=>{
@@ -122,6 +128,25 @@ Editar
 </tr>
 
 `;
+
+});
+
+
+/* =========================
+   ACTIVAR DATATABLE
+========================= */
+
+if(tablaData){
+tablaData.destroy();
+}
+
+tablaData=new DataTable('#tablaProductosData',{
+
+pageLength:10,
+
+language:{
+url:'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+}
 
 });
 
@@ -209,7 +234,7 @@ e.preventDefault();
 
 const id=document.getElementById("idProducto").value;
 
-const formData = new FormData();
+const formData=new FormData();
 
 formData.append("nombre",document.getElementById("nombre").value);
 formData.append("descripcion",document.getElementById("descripcion").value);
@@ -221,13 +246,14 @@ formData.append("estado",document.getElementById("estado").value);
 formData.append("categoriaId",document.getElementById("idCategoria").value);
 formData.append("marcaId",document.getElementById("idMarca").value);
 
-const imagenFile = document.getElementById("imagen").files[0];
+const imagenFile=document.getElementById("imagen").files[0];
 
 if(imagenFile){
 formData.append("imagen",imagenFile);
 }
 
 const url=id?`${API_URL}/actualizar/${id}`:`${API_URL}/crear`;
+
 const method=id?'PUT':'POST';
 
 try{
@@ -242,11 +268,13 @@ if(resp.ok){
 alert(id?"Actualizado correctamente":"Creado correctamente");
 
 modalProducto.hide();
+
 listarProductos();
 
 }else{
 
 const err=await resp.text();
+
 alert("Error: "+err);
 
 }
@@ -258,7 +286,6 @@ console.error("Error en petición:",error);
 }
 
 };
-
 
 
 /* =========================
@@ -281,7 +308,6 @@ listarProductos();
 }
 
 
-
 /* =========================
    REACTIVAR PRODUCTO
 ========================= */
@@ -302,7 +328,6 @@ listarProductos();
 }
 
 
-
 /* =========================
    CARGAR COMBOS
 ========================= */
@@ -315,11 +340,13 @@ const respCat=await fetch(`http://localhost:8080/categoria/listar/activos`);
 const categorias=await respCat.json();
 
 const selectCat=document.getElementById("idCategoria");
+
 selectCat.innerHTML='<option value="">Seleccione Categoría...</option>';
 
 categorias.forEach(c=>{
 
 const option=document.createElement("option");
+
 option.value=c.idCategoria;
 option.textContent=c.nombre;
 
@@ -332,11 +359,13 @@ const respMarca=await fetch(`http://localhost:8080/marca/listar/activos`);
 const marcas=await respMarca.json();
 
 const selectMarca=document.getElementById("idMarca");
+
 selectMarca.innerHTML='<option value="">Seleccione Marca...</option>';
 
 marcas.forEach(m=>{
 
 const option=document.createElement("option");
+
 option.value=m.idMarca;
 option.textContent=m.nombre;
 

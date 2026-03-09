@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+
+<div id="navbarContainer"></div>
+
+
+<!-- DASHBOARD -->
+
+<div class="dashboard-container">
+
+<h1>Resumen del sistema</h1>
+
+<div class="cards">
+
+<div class="card">
+
+<i class="fa fa-box"></i>
+
+<h3>Productos</h3>
+
+<p id="totalProductos">0</p>
+
+</div>
+
+
+<div class="card">
+
+<i class="fa fa-tags"></i>
+
+<h3>Categorías</h3>
+
+<p id="totalCategorias">0</p>
+
+</div>
+
+
+<div class="card">
+
+<i class="fa fa-tag"></i>
+
+<h3>Marcas</h3>
+
+<p id="totalMarcas">0</p>
+
+</div>
+
+
+<div class="card">
+
+<i class="fa fa-truck"></i>
+
+<h3>Proveedores</h3>
+
+<p id="totalProveedores">0</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script src="../js/dashboard.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/navbarempleados.js"></script>
+<script>
+
+verificarEmpleado()
+
+</script>
+
+</body>
+</html>

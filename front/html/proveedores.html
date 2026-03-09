@@ -1,86 +1,219 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Proveedores</title>
-    <link rel="stylesheet" href="../css/proveedores.css">
+
+<meta charset="UTF-8">
+
+<title>Gestión de Proveedores</title>
+
+<link rel="stylesheet" href="../css/navbar.css">
+<link rel="stylesheet" href="../css/panel.css">
+<link rel="stylesheet" href="../css/modal.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
+
 <body>
-    <H1>Lista de proveedores</H1>
-<button onclick="abrirModalCrear()">+ Nuevo Proveedor</button>
-<table id="tablaProveedores" border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Razón Social</th>
-            <th>RUC</th>
-            <th>Teléfono</th>
-            <th>Dirección</th>
-            <th>Email</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
+
+<!-- NAVBAR -->
+
+<div id="navbarContainer"></div>
+
+
+<!-- PANEL -->
+
+<div class="panel-container">
+
+<div class="panel-header">
+
+<h1>Gestión de Proveedores</h1>
+
+<button class="btn-crear" onclick="document.getElementById('modalCrear').style.display='flex'">
+<i class="fa fa-plus"></i> Nuevo proveedor
+</button>
+
+</div>
+
+
+
+<!-- BUSCADOR -->
+
+<div class="panel-tools">
+
+<input 
+type="text"
+placeholder="Buscar proveedor..."
+onkeyup="buscarProveedor(this.value)"
+>
+
+</div>
+
+
+
+<!-- TABLA -->
+
+<table id="tablaProveedores" class="tabla-panel">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Razón Social</th>
+<th>RUC</th>
+<th>Teléfono</th>
+<th>Dirección</th>
+<th>Email</th>
+<th>Estado</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody></tbody>
+
 </table>
 
+</div>
 
-<script src="../js/proveedores.js"></script>
+
+
+<!-- MODAL EDITAR -->
+
+<div id="modalEditar" class="modal">
+
+<div class="modal-content">
+
+<h3>Editar proveedor</h3>
+
+<input type="hidden" id="editidProveedor">
+
+<label>Razón Social</label>
+<input type="text" id="editrazonSocial">
+
+<label>Teléfono</label>
+<input type="text" id="edittelefono">
+
+<label>Dirección</label>
+<input type="text" id="editdireccion">
+
+<label>Email</label>
+<input type="email" id="editemail">
+
+<div class="modal-buttons">
+
+<button onclick="CrudDinamico.guardarEdicion()">
+<i class="fa fa-save"></i> Guardar
+</button>
+
+<button onclick="document.getElementById('modalEditar').style.display='none'">
+Cancelar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- MODAL CREAR -->
+
+<div id="modalCrear" class="modal">
+
+<div class="modal-content">
+
+<h3>Nuevo proveedor</h3>
+
+<label>Razón Social</label>
+<input type="text" id="createrazonSocial">
+
+<label>RUC</label>
+<input type="text" id="createruc">
+
+<label>Teléfono</label>
+<input type="text" id="createtelefono">
+
+<label>Email</label>
+<input type="email" id="createemail">
+
+<label>Dirección</label>
+<input type="text" id="createdireccion">
+
+<div class="modal-buttons">
+
+<button onclick="CrudDinamico.guardarNuevo()">
+<i class="fa fa-plus"></i> Guardar
+</button>
+
+<button onclick="document.getElementById('modalCrear').style.display='none'">
+Cancelar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- LOADER -->
+
+<div id="loader" class="loader" style="display:none;"></div>
+
+
+
+<!-- SCRIPTS -->
+
+<script src="../js/crud-dinamico.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/navbarempleados.js"></script>
 <script>
-verificarEmpleado();
+
+verificarEmpleado()
+
+CrudDinamico.init({
+
+api:"http://localhost:8080/proveedor",
+
+tabla:"#tablaProveedores",
+
+idCampo:"idProveedor",
+
+columnas:[
+"idProveedor",
+"razonSocial",
+"ruc",
+"telefono",
+"direccion",
+"email",
+"estado"
+],
+
+formCrear:[
+"razonSocial",
+"ruc",
+"telefono",
+"email",
+"direccion"
+],
+
+formEditar:[
+"idProveedor",
+"razonSocial",
+"telefono",
+"direccion",
+"email"
+]
+
+})
+
 </script>
 
 </body>
 </html>
-<div id="modalEditar" class="modal">
-    <div class="modal-content">
-        <h3>Editar proveedor</h3>
-
-        <input type="hidden" id="editIdProveedor">
-
-        <label>Razón social</label>
-        <input type="text" id="editRazonSocial">
-
-        <label>Teléfono</label>
-        <input type="text" id="editTelefono">
-
-        <label >Dirección</label>
-        <input type="text" id="editDireccion">
-
-        <label>Email</label>
-        <input type="email" id="editEmail">
-
-
-        <div class="modal-actions">
-            <button onclick="guardarEdicion()">Guardar</button>
-            <button onclick="cerrarModal()">Cancelar</button>
-        </div>
-    </div>
-</div>
-
-<div id="modalCrear" class="modal">
-    <div class="modal-content">
-        <h3>Nuevo Proveedor</h3>
-
-        <label>Razón Social</label>
-        <input type="text" id="createRazonSocial">
-
-        <label>RUC</label>
-        <input type="text" id="createRuc">
-
-        <label>Teléfono</label>
-        <input type="text" id="createTelefono">
-
-        <label>Email</label>
-        <input type="email" id="createEmail">
-
-        <label>Dirección</label>
-        <input type="text" id="createDireccion">
-
-        <div class="acciones">
-            <button onclick="guardarProveedor()">Guardar</button>
-            <button onclick="cerrarModalCrear()">Cancelar</button>
-        </div>
-    </div>
-</div>

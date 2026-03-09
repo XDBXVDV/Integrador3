@@ -5,11 +5,13 @@
 
 <meta charset="UTF-8">
 
-<title>Gestión de Marcas</title>
+<title>Gestión de Categorías</title>
 
 <link rel="stylesheet" href="../css/navbar.css">
 <link rel="stylesheet" href="../css/panel.css">
 <link rel="stylesheet" href="../css/modal.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 
@@ -17,29 +19,7 @@
 
 <!-- NAVBAR -->
 
-<nav class="navbar">
-
-<div class="nav-left">
-<h2>Panel</h2>
-</div>
-
-<div class="nav-right">
-
-<span id="usuarioInfo"></span>
-
-<a href="productos.html">Productos</a>
-
-<a href="categorias.html">Categorias</a>
-
-<a href="marcas.html">Marcas</a>
-
-<button onclick="logout()">Salir</button>
-
-</div>
-
-</nav>
-
-
+<div id="navbarContainer"></div>
 
 <!-- PANEL -->
 
@@ -47,10 +27,10 @@
 
 <div class="panel-header">
 
-<h1>Gestión de Categorías</h1>
+<h1>Gestión de Marcas</h1>
 
 <button class="btn-crear" onclick="document.getElementById('modalCrear').style.display='flex'">
-+ Nueva categoría
++ Nueva marca
 </button>
 
 </div>
@@ -63,10 +43,9 @@
 
 <input 
 type="text"
-id="buscadorTabla"
 placeholder="Buscar marca..."
-onkeyup="filtrarTabla()"
-/>
+onkeyup="CrudPanel.filtrar(this.value)"
+>
 
 </div>
 
@@ -80,9 +59,12 @@ onkeyup="filtrarTabla()"
 
 <tr>
 
-<th>ID</th>
-<th>Nombre</th>
+<th class="sortable" onclick="CrudPanel.ordenar('idCategoria')">ID</th>
+
+<th class="sortable" onclick="CrudPanel.ordenar('nombre')">Nombre</th>
+
 <th>Estado</th>
+
 <th>Acciones</th>
 
 </tr>
@@ -92,6 +74,11 @@ onkeyup="filtrarTabla()"
 <tbody></tbody>
 
 </table>
+
+
+<!-- PAGINACION -->
+
+<div id="paginacion" class="paginacion"></div>
 
 </div>
 
@@ -103,7 +90,7 @@ onkeyup="filtrarTabla()"
 
 <div class="modal-content">
 
-<h3>Editar categoría</h3>
+<h3>Editar marca</h3>
 
 <input type="hidden" id="editId">
 
@@ -113,7 +100,9 @@ onkeyup="filtrarTabla()"
 
 <div class="modal-buttons">
 
-<button onclick="CrudPanel.guardarEdicion()">Guardar</button>
+<button onclick="CrudPanel.guardarEdicion()">
+<i class="fa fa-save"></i> Guardar
+</button>
 
 <button onclick="document.getElementById('modalEditar').style.display='none'">
 Cancelar
@@ -133,7 +122,7 @@ Cancelar
 
 <div class="modal-content">
 
-<h3>Nueva categoría</h3>
+<h3>Nueva marca</h3>
 
 <label>Nombre</label>
 
@@ -141,7 +130,9 @@ Cancelar
 
 <div class="modal-buttons">
 
-<button onclick="CrudPanel.guardarNuevo()">Guardar</button>
+<button onclick="CrudPanel.guardarNuevo()">
+<i class="fa fa-plus"></i> Guardar
+</button>
 
 <button onclick="document.getElementById('modalCrear').style.display='none'">
 Cancelar
@@ -155,16 +146,21 @@ Cancelar
 
 
 
+<!-- LOADER -->
+
+<div id="loader" class="loader" style="display:none;"></div>
+
+
+
 <!-- SCRIPTS -->
 
 <script src="../js/crud-panel.js"></script>
 
 <script src="../js/auth.js"></script>
-
+<script src="../js/navbarempleados.js"></script>
 <script>
 
 verificarEmpleado()
-
 
 CrudPanel.init({
 
