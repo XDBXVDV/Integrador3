@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClienteRepo extends JpaRepository<Cliente,Long> {
     boolean existsByUsuario(Usuario usuario);
+    Cliente findByUsuarioIdUsuario(Long idUsuario);
 }

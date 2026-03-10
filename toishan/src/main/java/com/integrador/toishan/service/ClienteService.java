@@ -4,6 +4,7 @@ package com.integrador.toishan.service;
 
 import com.integrador.toishan.dto.createDTO.ClienteCreateDto;
 import com.integrador.toishan.dto.createDTO.UsuarioCreateDto;
+import com.integrador.toishan.dto.modelDTO.ClienteDTO;
 import com.integrador.toishan.dto.updateDTO.ClienteUpdateDto;
 import com.integrador.toishan.model.Cliente;
 
@@ -70,6 +71,10 @@ public class ClienteService {
         c.setDireccion(dto.getDireccion());
 
         return clienteRepo.save(c);
+    }
+
+    public Cliente buscarPorUsuario(Long idUsuario){
+        return clienteRepo.findByUsuarioIdUsuario(idUsuario);
     }
 
 

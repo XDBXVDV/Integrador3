@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
 <meta charset="UTF-8">
 <title>Toishan</title>
 
@@ -12,58 +13,37 @@
 
 <body>
 
-<nav class="navbar">
+<!-- NAVBAR COMPONENTE -->
+<div id="navbarContainer"></div>
 
-    <div class="nav-left">
-        <a href="index.html" class="logo">TOISHAN</a>
-       
-    </div>
+<br>
+<!-- BUSCADOR -->
 
-    <div class="nav-center">
-        <input type="text" placeholder="Buscar productos..." class="search">
-    </div>
+<div class="nav-center">
 
-    <div class="nav-right">
+<input type="text"
+placeholder="Buscar productos..."
+class="search">
 
-        <a id="areaEmpleado" href="area_empleados.html" class="empleados-link" style="display:none">
-            Área empleados
-        </a>
+</div>
+<br>
 
-        <div class="usuario-menu">
-
-            <button id="btnUsuario" class="usuario-btn">
-                👤 <span id="usuarioInfo">Invitado</span>
-            </button>
-
-            <div id="dropdownUsuario" class="dropdown">
-
-                <a id="btnLogin" href="login.html">Iniciar sesión</a>
-
-                <a href="perfil.html" id="perfilLink">Mi perfil</a>
-
-                <button id="btnLogout" onclick="logout()">Cerrar sesión</button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</nav>
-
+<!-- FILTROS -->
 
 <div class="filtros">
 
-    <select id="filtroCategoria">
-        <option value="">Todas las categorías</option>
-    </select>
+<select id="filtroCategoria">
+<option value="">Todas las categorías</option>
+</select>
 
-    <select id="filtroMarca">
-        <option value="">Todas las marcas</option>
-    </select>
+<select id="filtroMarca">
+<option value="">Todas las marcas</option>
+</select>
 
 </div>
 
+<br>
+<!-- PRODUCTOS -->
 
 <div id="contenedorProductos" class="grid-productos"></div>
 

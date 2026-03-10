@@ -1,87 +1,71 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    cargarNavbar();
-    activarDropdown();
+    const container = document.getElementById("navbarContainer")
 
-});
+    if(!container) return
+
+    const res = await fetch("../components/navbarclientes.html")
+
+    const html = await res.text()
+
+    container.innerHTML = html
+
+    iniciarNavbar()
+
+})
+
 
 function getUsuarioSesion(){
 
-    const usuario = localStorage.getItem("usuario");
+    const usuario = localStorage.getItem("usuario")
 
-    if(!usuario) return null;
+    if(!usuario) return null
 
-    return JSON.parse(usuario);
+    return JSON.parse(usuario)
 
 }
 
-function cargarNavbar(){
 
-    const usuario = getUsuarioSesion();
+function iniciarNavbar(){
 
-    const usuarioInfo = document.getElementById("usuarioInfo");
-    const btnLogin = document.getElementById("btnLogin");
-    const btnLogout = document.getElementById("btnLogout");
-    const areaEmpleado = document.getElementById("areaEmpleado");
-    const perfilLink = document.getElementById("perfilLink");
+    const usuario = getUsuarioSesion()
+
+    const usuarioInfo = document.getElementById("usuarioInfo")
+    const btnLogin = document.getElementById("btnLogin")
+    const btnLogout = document.getElementById("btnLogout")
+    const areaEmpleado = document.getElementById("areaEmpleado")
 
     if(!usuario){
 
-        usuarioInfo.innerText="Invitado";
+        usuarioInfo.innerText = "Invitado"
 
-        btnLogin.style.display="block";
-        btnLogout.style.display="none";
-        perfilLink.style.display="none";
-        areaEmpleado.style.display="none";
+        btnLogin.style.display = "inline"
+        btnLogout.style.display = "none"
+        areaEmpleado.style.display = "none"
 
-        return;
+        return
     }
 
-    usuarioInfo.innerText = usuario.usuario + " (" + usuario.rol.rolName + ")";
+    usuarioInfo.innerText = usuario.usuario + " (" + usuario.rol.rolName + ")"
 
-    btnLogin.style.display="none";
-    btnLogout.style.display="block";
-    perfilLink.style.display="block";
+    btnLogin.style.display = "none"
+    btnLogout.style.display = "inline"
 
-    const rol = usuario.rol.rolName.toUpperCase();
+    const rol = usuario.rol.rolName.toUpperCase()
 
     if(rol !== "CLIENTE"){
-
-        areaEmpleado.style.display="inline";
-
+        areaEmpleado.style.display = "inline"
     }else{
-
-        areaEmpleado.style.display="none";
-
+        areaEmpleado.style.display = "none"
     }
 
 }
 
-function activarDropdown(){
-
-    const btn = document.getElementById("btnUsuario");
-    const dropdown = document.getElementById("dropdownUsuario");
-
-    btn.addEventListener("click", ()=>{
-
-        if(dropdown.style.display === "block"){
-
-            dropdown.style.display="none";
-
-        }else{
-
-            dropdown.style.display="block";
-
-        }
-
-    });
-
-}
 
 function logout(){
 
-    localStorage.removeItem("usuario");
+    localStorage.removeItem("usuario")
 
-    window.location.href="index.html";
+    window.location.href = "login.html"
 
 }

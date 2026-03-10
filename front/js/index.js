@@ -10,64 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     filtroCategoria = document.getElementById("filtroCategoria")
     filtroMarca = document.getElementById("filtroMarca")
 
-    cargarNavbar()
     cargarProductos()
 
 })
-
-
-/* ---------------- NAVBAR ---------------- */
-
-function getUsuarioSesion(){
-
-    const usuario = localStorage.getItem("usuario")
-
-    if(!usuario) return null
-
-    return JSON.parse(usuario)
-}
-
-function cargarNavbar(){
-
-    const usuario = getUsuarioSesion()
-
-    const usuarioInfo = document.getElementById("usuarioInfo")
-    const btnLogin = document.getElementById("btnLogin")
-    const btnLogout = document.getElementById("btnLogout")
-    const areaEmpleado = document.getElementById("areaEmpleado")
-
-    if(!usuario){
-
-        usuarioInfo.innerText = "Invitado"
-
-        btnLogin.style.display = "inline"
-        btnLogout.style.display = "none"
-        areaEmpleado.style.display = "none"
-
-        return
-    }
-
-    usuarioInfo.innerText = usuario.usuario + " (" + usuario.rol.rolName + ")"
-
-    btnLogin.style.display = "none"
-    btnLogout.style.display = "inline"
-
-    const rol = usuario.rol.rolName.toUpperCase()
-
-    if(rol !== "CLIENTE"){
-        areaEmpleado.style.display = "inline"
-    }else{
-        areaEmpleado.style.display = "none"
-    }
-
-}
-
-function logout(){
-
-    localStorage.removeItem("usuario")
-    window.location.href = "login.html"
-
-}
 
 
 /* ---------------- PRODUCTOS ---------------- */
@@ -111,9 +56,10 @@ function mostrarProductos(lista){
         const imagen = p.imagen
         ? "http://localhost:8080" + p.imagen
         : "http://localhost:8080/img/productos/default.png"
+
         card.innerHTML = `
 
-        <img src="${imagen}" class="img-producto">
+<img src="${imagen}" class="img-producto">
 
 <h3>${p.nombre}</h3>
 
@@ -170,6 +116,7 @@ function llenarFiltros(){
 
 }
 
+
 function aplicarFiltros(){
 
     let lista = productos
@@ -190,32 +137,7 @@ function aplicarFiltros(){
 }
 
 
-/* ---------------- VALIDAR CANTIDAD ---------------- */
-
-function validarCantidad(id, stock){
-
-    const input = document.getElementById("cant-" + id)
-
-    if(input.value > stock){
-        input.value = stock
-    }
-
-    if(input.value < 1){
-        input.value = 1
-    }
-
-}
-
-
-/* ---------------- CARRITO (TEMPORAL) ---------------- */
-
-function agregarCarrito(id){
-
-    const cantidad = document.getElementById("cant-" + id).value
-
-    alert("Producto agregado al carrito\nID: " + id + "\nCantidad: " + cantidad)
-
-}
+/* ---------------- DETALLE ---------------- */
 
 function verDetalle(id){
 

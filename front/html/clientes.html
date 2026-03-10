@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Clientes</title>
+
+<link rel="stylesheet" href="../css/navbar.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+</head>
+
+<body>
+
+<div id="navbarContainer"></div>
+
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<h2>Clientes</h2>
+
+<button class="btn btn-primary" onclick="abrirModalCrear()">
+Nuevo Cliente
+</button>
+
+</div>
+
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<table id="tablaClientesData" class="table table-hover">
+
+<thead class="table-dark">
+
+<tr>
+<th>Nombre</th>
+<th>DNI</th>
+<th>Teléfono</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaClientes"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- MODAL CLIENTE -->
+
+<div class="modal fade" id="modalCliente">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h5 id="modalTitulo">Cliente</h5>
+
+<button class="btn-close" data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+<form id="formCliente">
+
+<input type="hidden" id="idCliente">
+
+<h5>Datos Cliente</h5>
+
+<input type="text" id="nombre" class="form-control mb-2" placeholder="Nombre" required>
+
+<input type="text" id="apellido" class="form-control mb-2" placeholder="Apellido" required>
+
+<input type="text" id="dni" class="form-control mb-2" placeholder="DNI">
+
+<input type="text" id="telefono" class="form-control mb-2" placeholder="Teléfono">
+
+<input type="text" id="direccion" class="form-control mb-3" placeholder="Dirección">
+
+
+<h5>Datos Usuario</h5>
+
+<input type="text" id="usuario" class="form-control mb-2" placeholder="Usuario" required>
+
+<input type="email" id="email" class="form-control mb-2" placeholder="Email" required>
+
+<input type="password" id="contrasena" class="form-control mb-3" placeholder="Contraseña">
+
+
+<div class="d-flex gap-2">
+
+<button class="btn btn-success w-100">Guardar</button>
+
+<button type="button" class="btn btn-danger w-100"
+onclick="desactivarUsuario()"
+id="btnDesactivar">
+Desactivar
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../js/navbarempleados.js"></script>
+<script src="../js/clientes.js"></script>
+
+</body>
+
+</html>

@@ -3,8 +3,10 @@ package com.integrador.toishan.controller;
 
 
 import com.integrador.toishan.dto.createDTO.ClienteCreateDto;
+import com.integrador.toishan.dto.modelDTO.ClienteDTO;
 import com.integrador.toishan.dto.updateDTO.ClienteUpdateDto;
 import com.integrador.toishan.model.Cliente;
+import com.integrador.toishan.repo.ClienteRepo;
 import com.integrador.toishan.service.ClienteDetalleDtoService;
 import com.integrador.toishan.service.ClienteDtoService;
 import com.integrador.toishan.service.ClienteService;
@@ -23,6 +25,8 @@ public class ClienteController {
     @Autowired
     private ClienteDetalleDtoService detalleService;
 
+    @Autowired
+    private ClienteRepo repo;
 
     @GetMapping("/listar")
     public ResponseEntity<?> listar(){
@@ -45,5 +49,11 @@ public class ClienteController {
             @RequestBody ClienteUpdateDto dto) {
         return ResponseEntity.ok(clienteService.actualizarCliente(id, dto));
     }
+
+    @GetMapping("/usuario/{idUsuario}")
+    public Cliente buscarPorUsuario(@PathVariable Long idUsuario){
+        return clienteService.buscarPorUsuario(idUsuario);
+    }
+
 }
 
