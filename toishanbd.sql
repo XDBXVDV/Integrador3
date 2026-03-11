@@ -65,15 +65,14 @@ foreign key (id_marca) references marcas(id_marca),
 check (stock>=0)
 );
 
-create table ventas(
-id_venta int auto_increment primary key,
-id_cliente int not null,
-id_empleado int not null,
-fechaventa timestamp default current_timestamp,
-total decimal (10,2) not null,
-estado ENUM('Registrada','Anulada') DEFAULT 'Registrada',
-    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
-    FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado)
+CREATE TABLE ventas (
+    id_venta INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    fechaventa TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10,2) NOT NULL,
+    metodo_pago ENUM('TARJETA', 'YAPE', 'PLIN', 'PAYPAL', 'TRANSFERENCIA') DEFAULT 'TARJETA',
+    estado ENUM('Registrada', 'Anulada', 'Completada') DEFAULT 'Registrada',
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
 );
 
 CREATE TABLE detalle_ventas (
@@ -83,32 +82,11 @@ CREATE TABLE detalle_ventas (
     cantidad INT NOT NULL,
     precio_unitario DECIMAL(10,2) NOT NULL,
     subtotal DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id_venta) REFERENCES ventas(id_venta),
+    FOREIGN KEY (id_venta) REFERENCES ventas(id_venta) ON DELETE CASCADE,
     FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
     CHECK (cantidad > 0)
 );
 
-CREATE TABLE devoluciones (
-    id_devolucion INT AUTO_INCREMENT PRIMARY KEY,
-    id_venta INT NOT NULL,
-    fecha_devolucion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    motivo VARCHAR(150),
-    total_devuelto DECIMAL(10,2) NOT NULL,
-    estado ENUM('Registrada','Anulada') DEFAULT 'Registrada',
-    FOREIGN KEY (id_venta) REFERENCES ventas(id_venta)
-);
-
-CREATE TABLE detalle_devoluciones (
-    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
-    id_devolucion INT NOT NULL,
-    id_producto INT NOT NULL,
-    cantidad INT NOT NULL,
-    precio_unitario DECIMAL(10,2) NOT NULL,
-    subtotal DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id_devolucion) REFERENCES devoluciones(id_devolucion),
-    FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
-    CHECK (cantidad > 0)
-);
 
 CREATE TABLE proveedores(
 	id_proveedor int auto_increment primary key,
@@ -160,3 +138,4 @@ select * from devoluciones;
 select * from proveedores;
 select * from pedidos_compra;
 select * from detalle_pedidos_compra
+

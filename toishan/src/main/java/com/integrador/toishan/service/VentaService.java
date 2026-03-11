@@ -1,14 +1,10 @@
 package com.integrador.toishan.service;
 
 
-import com.integrador.toishan.model.DetalleVenta;
-import com.integrador.toishan.model.EstadoVenta;
-import com.integrador.toishan.model.Producto;
-import com.integrador.toishan.model.Venta;
-import com.integrador.toishan.repo.ClienteRepo;
-import com.integrador.toishan.repo.EmpleadoRepo;
-import com.integrador.toishan.repo.ProductoRepo;
-import com.integrador.toishan.repo.VentaRepo;
+import com.integrador.toishan.dto.createDTO.DetalleVentaDTO;
+import com.integrador.toishan.dto.createDTO.VentaRequestDTO;
+import com.integrador.toishan.model.*;
+import com.integrador.toishan.repo.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +14,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-@Transactional
 public class VentaService {
 
     @Autowired
     private VentaRepo ventaRepo;
+
+    @Autowired
+    private DetalleVentaRepo detalleRepo;
 
     @Autowired
     private ProductoRepo productoRepo;
@@ -30,74 +28,61 @@ public class VentaService {
     @Autowired
     private ClienteRepo clienteRepo;
 
-     @Autowired
-     private EmpleadoRepo empleadoRepo;
-
-     public Venta findbyid(Long id){
-        return ventaRepo.findById(id).orElse(null);
-     }
-     public Collection<Venta> findAll(){
-         return ventaRepo.findAll();
-     }
-
     @Transactional
-    public Venta crearVenta(Venta venta1) {
+    public Venta registrarVenta(VentaRequestDTO dto) {
+        // 1. Buscar al cliente
+        Cliente cliente = clienteRepo.findById(dto.getIdCliente())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + dto.getIdCliente()));
 
-        if (venta1.getDetalles() == null || venta1.getDetalles().isEmpty()) {
-            throw new RuntimeException("La venta debe tener al menos un detalle");
-        }
+        // 2. Crear y configurar la cabecera de la Venta
         Venta venta = new Venta();
-
-
-        venta.setCliente(clienteRepo.findById(venta1.getCliente().getIdCliente())
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado")));
-        venta.setEmpleado(empleadoRepo.findById(venta1.getEmpleado().getIdEmpleado())
-                .orElseThrow(() -> new RuntimeException("Empleado no encontrado")));
+        venta.setCliente(cliente);
+        venta.setTotal(dto.getTotal());
         venta.setEstado(EstadoVenta.Registrada);
 
-        if (venta.getDetalles() == null) {
-            venta.setDetalles(new ArrayList<>());
+        // Convertir el String del DTO al Enum de Java
+        try {
+            venta.setMetodoPago(MetodoPago.valueOf(dto.getMetodoPago().toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            venta.setMetodoPago(MetodoPago.TARJETA); // Valor por defecto si hay error
         }
 
-        BigDecimal total = BigDecimal.ZERO;
+        // Guardamos la venta primero para generar el ID
+        Venta ventaGuardada = ventaRepo.save(venta);
 
-        for (DetalleVenta det : venta1.getDetalles()) {
-                    Producto p = productoRepo.findById(det.getProducto().getIdProducto())
-                    .orElseThrow(() -> new RuntimeException("Producto con ID " + det.getProducto().getIdProducto() + " no encontrado"));
+        // 3. Procesar cada detalle y actualizar Stock
+        for (DetalleVentaDTO item : dto.getDetalles()) {
+            Producto producto = productoRepo.findById(item.getIdProducto())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + item.getIdProducto()));
 
-            if (p.getStock() < det.getCantidad()) {
-                throw new RuntimeException("Stock insuficiente para: " + p.getNombre());
+            // VALIDACIÓN DE STOCK REAL EN BD
+            if (producto.getStock() < item.getCantidad()) {
+                throw new RuntimeException("Stock insuficiente para: " + producto.getNombre() +
+                        " (Disponible: " + producto.getStock() + ")");
             }
 
+            // Descontar stock y actualizar condición
+            producto.setStock(producto.getStock() - item.getCantidad());
 
-            p.setStock(p.getStock() - det.getCantidad());
-            productoRepo.save(p);
+            if (producto.getStock() == 0) {
+                producto.setCondicion(Condicion.Agotado);
+            } else if (producto.getStock() <= producto.getStockMinimo()) {
+                producto.setCondicion(Condicion.Stock_bajo);
+            }
 
-            DetalleVenta dv = new DetalleVenta();
-            dv.setVenta(venta);
-            dv.setProducto(p);
-            dv.setCantidad(det.getCantidad());
-            dv.setPrecioUnitario(p.getPrecio());
+            productoRepo.save(producto);
 
-            BigDecimal subtotal = p.getPrecio().multiply(BigDecimal.valueOf(det.getCantidad()));
-            dv.setSubtotal(subtotal);
+            // Crear el objeto detalle
+            DetalleVenta detalle = new DetalleVenta();
+            detalle.setVenta(ventaGuardada);
+            detalle.setProducto(producto);
+            detalle.setCantidad(item.getCantidad());
+            detalle.setPrecioUnitario(item.getPrecioUnitario());
+            detalle.setSubtotal(item.getSubtotal());
 
-            venta.getDetalles().add(dv);
-            total = total.add(subtotal);
+            detalleRepo.save(detalle);
         }
 
-        venta.setTotal(total);
-        return ventaRepo.save(venta);
-    }
-
-    public void anularVenta(Long idVenta) {
-        Venta v = ventaRepo.findById(idVenta).orElseThrow();
-        v.setEstado(EstadoVenta.Anulada);
-
-        for (DetalleVenta d : v.getDetalles()) {
-            Producto p = d.getProducto();
-            p.setStock(p.getStock() + d.getCantidad());
-        }
+        return ventaGuardada;
     }
 }
-

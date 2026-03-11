@@ -12,70 +12,37 @@ import java.util.List;
 @Entity
 @Table(name = "ventas")
 public class Venta {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_venta")
-    private Long idVenta;
-    @JsonIgnore
+    private Integer idVenta;
+
+    // Relación con Cliente (Muchos pedidos pertenecen a un cliente)
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_empleado", nullable = false)
-    private Empleado empleado;
-    @Column(insertable = false,name = "fechaventa")
-    private LocalDateTime fechaVenta;
 
-    @Column(name = "total", nullable = false)
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime fechaventa = LocalDateTime.now();
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
-    private EstadoVenta estado;
+    private EstadoVenta estado = EstadoVenta.Registrada;
 
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleVenta> detalles = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private MetodoPago metodoPago = MetodoPago.TARJETA;
 
-    @OneToMany(mappedBy = "venta")
-    @JsonIgnore
-    private List<Devolucion> devoluciones;
 
-    public Empleado getEmpleado() {
-        return empleado;
-    }
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    private List<DetalleVenta> detalles;
 
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
-    }
-
-    public List<Devolucion> getDevoluciones() {
-        return devoluciones;
-    }
-
-    public void setDevoluciones(List<Devolucion> devoluciones) {
-        this.devoluciones = devoluciones;
-    }
-
-    public Venta(Long idVenta, Cliente cliente, LocalDateTime fechaVenta, Empleado empleado, BigDecimal total, EstadoVenta estado, List<Devolucion> devoluciones, List<DetalleVenta> detalles) {
-        this.idVenta = idVenta;
-        this.cliente = cliente;
-        this.fechaVenta = fechaVenta;
-        this.empleado = empleado;
-        this.total = total;
-        this.estado = estado;
-        this.devoluciones = devoluciones;
-        this.detalles = detalles;
-    }
-
-    public Venta() {
-    }
-
-    public Long getIdVenta() {
+    public Integer getIdVenta() {
         return idVenta;
     }
 
-    public void setIdVenta(Long idVenta) {
+    public void setIdVenta(Integer idVenta) {
         this.idVenta = idVenta;
     }
 
@@ -87,12 +54,12 @@ public class Venta {
         this.cliente = cliente;
     }
 
-    public LocalDateTime getFechaVenta() {
-        return fechaVenta;
+    public LocalDateTime getFechaventa() {
+        return fechaventa;
     }
 
-    public void setFechaVenta(LocalDateTime fechaVenta) {
-        this.fechaVenta = fechaVenta;
+    public void setFechaventa(LocalDateTime fechaventa) {
+        this.fechaventa = fechaventa;
     }
 
     public BigDecimal getTotal() {
@@ -109,6 +76,14 @@ public class Venta {
 
     public void setEstado(EstadoVenta estado) {
         this.estado = estado;
+    }
+
+    public MetodoPago getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(MetodoPago metodoPago) {
+        this.metodoPago = metodoPago;
     }
 
     public List<DetalleVenta> getDetalles() {

@@ -1,6 +1,7 @@
 let contenedor
 let filtroCategoria
 let filtroMarca
+let buscador
 
 let productos = []
 
@@ -9,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     contenedor = document.getElementById("contenedorProductos")
     filtroCategoria = document.getElementById("filtroCategoria")
     filtroMarca = document.getElementById("filtroMarca")
+    buscador = document.getElementById("buscador")
 
     cargarProductos()
 
@@ -30,6 +32,8 @@ async function cargarProductos(){
         llenarFiltros()
 
         mostrarProductos(productos)
+
+        activarBuscador()
 
     }catch(error){
 
@@ -82,6 +86,25 @@ Ver producto
 }
 
 
+/* ---------------- BUSCADOR ---------------- */
+
+function activarBuscador(){
+
+    buscador.addEventListener("input", () => {
+
+        const texto = buscador.value.toLowerCase()
+
+        let lista = productos.filter(p =>
+            p.nombre.toLowerCase().includes(texto)
+        )
+
+        aplicarFiltros(lista)
+
+    })
+
+}
+
+
 /* ---------------- FILTROS ---------------- */
 
 function llenarFiltros(){
@@ -111,15 +134,15 @@ function llenarFiltros(){
 
     })
 
-    filtroCategoria.addEventListener("change", aplicarFiltros)
-    filtroMarca.addEventListener("change", aplicarFiltros)
+    filtroCategoria.addEventListener("change", () => aplicarFiltros(productos))
+    filtroMarca.addEventListener("change", () => aplicarFiltros(productos))
 
 }
 
 
-function aplicarFiltros(){
+function aplicarFiltros(listaBase){
 
-    let lista = productos
+    let lista = listaBase
 
     const cat = filtroCategoria.value
     const marca = filtroMarca.value

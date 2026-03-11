@@ -25,9 +25,7 @@ import java.util.List;
         private String apellido;
 
         private String dni;
-    @JsonIgnore
-    @OneToMany(mappedBy = "empleado")
-    private List<Venta> ventas;
+
 
         public Empleado(Long idEmpleado, Usuario usuario, String nombre, String apellido, String dni) {
             this.idEmpleado = idEmpleado;

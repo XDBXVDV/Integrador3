@@ -52,7 +52,6 @@ public class Producto {
     @JsonIgnore
     private List<DetalleVenta> detalleVentas;
 
-    // GETTERS Y SETTERS
 
     public Long getIdProducto() {
         return idProducto;

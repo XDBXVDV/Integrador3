@@ -1,47 +1,37 @@
 package com.integrador.toishan.controller;
 
 
+import com.integrador.toishan.dto.createDTO.VentaRequestDTO;
 import com.integrador.toishan.model.Venta;
-import com.integrador.toishan.service.VentaDtoService;
 import com.integrador.toishan.service.VentaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/venta")
+@RequestMapping("/producto/ventas")
+@CrossOrigin(origins = "*")
 public class VentaController {
 
     @Autowired
     private VentaService ventaService;
 
-    @Autowired
-    private VentaDtoService ventaDtoService;
+    @PostMapping("/registrar")
+    public ResponseEntity<?> registrar(@RequestBody VentaRequestDTO request) {
+        try {
 
-    @GetMapping("/listar")
-    public ResponseEntity<?> listar(){
-        return ResponseEntity.ok(ventaDtoService.ListarVentas() );
-    }
+            Venta nuevaVenta = ventaService.registrarVenta(request);
 
-    @GetMapping("/buscar/{id}")
-    public ResponseEntity<?> buscar(@PathVariable Long id_venta){
-        Venta venta= ventaService.findbyid(id_venta);
-        if(venta!=null){
-            return ResponseEntity.ok(venta);
-        } else return ResponseEntity.notFound().build();
-    }
 
-    @PostMapping("/crear")
-    public ResponseEntity<?> crear(@RequestBody Venta venta) {
-        return ResponseEntity.ok(ventaService.crearVenta(venta));
-    }
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaVenta);
 
-    @PutMapping("/anular/{id_venta}")
-    public ResponseEntity<?> anular(@PathVariable Long id_venta) {
-        ventaService.anularVenta(id_venta);
-        return ResponseEntity.ok("Venta anulada");
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error inesperado en el servidor");
+        }
     }
 }
-
