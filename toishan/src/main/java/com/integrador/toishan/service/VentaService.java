@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,61 +30,56 @@ public class VentaService {
     private ClienteRepo clienteRepo;
 
     @Transactional
-    public Venta registrarVenta(VentaRequestDTO dto) {
-        // 1. Buscar al cliente
-        Cliente cliente = clienteRepo.findById(dto.getIdCliente())
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + dto.getIdCliente()));
-
-        // 2. Crear y configurar la cabecera de la Venta
+    public Venta registrarVenta(VentaRequestDTO request) {
         Venta venta = new Venta();
+
+        // 1. Buscar Cliente
+        Cliente cliente = clienteRepo.findById(request.getIdCliente())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
         venta.setCliente(cliente);
-        venta.setTotal(dto.getTotal());
-        venta.setEstado(EstadoVenta.Registrada);
 
-        // Convertir el String del DTO al Enum de Java
-        try {
-            venta.setMetodoPago(MetodoPago.valueOf(dto.getMetodoPago().toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            venta.setMetodoPago(MetodoPago.TARJETA); // Valor por defecto si hay error
+        // 2. Lógica de montos (Boleta/Factura)
+        BigDecimal subtotal = request.getSubtotal();
+        BigDecimal igv = BigDecimal.ZERO;
+        if ("FACTURA".equalsIgnoreCase(request.getTipoComprobante())) {
+            igv = subtotal.multiply(new BigDecimal("0.18"));
+            venta.setTotal(subtotal.add(igv));
+        } else {
+            venta.setTotal(subtotal);
         }
+        venta.setIgv(igv);
+        venta.setTipoComprobante(TipoComprobante.valueOf(request.getTipoComprobante()).toString().toUpperCase());
+        venta.setNroDocumento(request.getNroDocumento());
+        venta.setMetodoPago(MetodoPago.valueOf(request.getMetodoPago().toString().toUpperCase()).toString().toUpperCase());
 
-        // Guardamos la venta primero para generar el ID
-        Venta ventaGuardada = ventaRepo.save(venta);
+        // 3. MAPEAR DETALLES (Aquí estaba el error)
+        List<DetalleVenta> detalles = new ArrayList<>();
 
-        // 3. Procesar cada detalle y actualizar Stock
-        for (DetalleVentaDTO item : dto.getDetalles()) {
-            Producto producto = productoRepo.findById(item.getIdProducto())
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + item.getIdProducto()));
+        for (DetalleVentaDTO dDto : request.getDetalles()) {
+            DetalleVenta dv = new DetalleVenta();
 
-            // VALIDACIÓN DE STOCK REAL EN BD
-            if (producto.getStock() < item.getCantidad()) {
-                throw new RuntimeException("Stock insuficiente para: " + producto.getNombre() +
-                        " (Disponible: " + producto.getStock() + ")");
+            Producto producto = productoRepo.findById(dDto.getIdProducto())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + dDto.getIdProducto()));
+
+            if (producto.getStock() < dDto.getCantidad()) {
+                throw new RuntimeException("Stock insuficiente para: " + producto.getNombre());
             }
 
-            // Descontar stock y actualizar condición
-            producto.setStock(producto.getStock() - item.getCantidad());
+            dv.setProducto(producto);
+            dv.setCantidad(dDto.getCantidad());
+            dv.setPrecioUnitario(dDto.getPrecioUnitario());
+            dv.setSubtotal(dDto.getPrecioUnitario().multiply(new BigDecimal(dDto.getCantidad())));
+            dv.setVenta(venta);
 
-            if (producto.getStock() == 0) {
-                producto.setCondicion(Condicion.Agotado);
-            } else if (producto.getStock() <= producto.getStockMinimo()) {
-                producto.setCondicion(Condicion.Stock_bajo);
-            }
-
+            // Descontar stock
+            producto.setStock(producto.getStock() - dDto.getCantidad());
             productoRepo.save(producto);
 
-            // Crear el objeto detalle
-            DetalleVenta detalle = new DetalleVenta();
-            detalle.setVenta(ventaGuardada);
-            detalle.setProducto(producto);
-            detalle.setCantidad(item.getCantidad());
-            detalle.setPrecioUnitario(item.getPrecioUnitario());
-            detalle.setSubtotal(item.getSubtotal());
-
-            detalleRepo.save(detalle);
+            detalles.add(dv);
         }
 
-        return ventaGuardada;
+        venta.setDetalles(detalles);
+        return ventaRepo.save(venta);
     }
 
     public List<Venta> listarVentasPorCliente(Long idCliente) {
@@ -129,8 +123,13 @@ public class VentaService {
 
             productoRepo.save(producto);
         }
-        venta.setEstado(EstadoVenta.Anulada);
+        venta.setEstado(EstadoVenta.Anulada.toString().toUpperCase());
         ventaRepo.save(venta);
+    }
+
+    @Transactional
+    public Venta getVenta(Long idVenta) {
+        return ventaRepo.findById(idVenta).orElseThrow(() -> new RuntimeException("Venta no encontrada con ID: " + idVenta));
     }
 
 }

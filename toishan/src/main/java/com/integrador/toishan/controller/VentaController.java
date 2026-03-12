@@ -3,7 +3,9 @@ package com.integrador.toishan.controller;
 
 import com.integrador.toishan.dto.createDTO.DetalleVentaDTO;
 import com.integrador.toishan.dto.createDTO.VentaRequestDTO;
+import com.integrador.toishan.dto.modelDTO.ReporteDTO;
 import com.integrador.toishan.model.Venta;
+import com.integrador.toishan.repo.VentaRepo;
 import com.integrador.toishan.service.VentaDtoService;
 import com.integrador.toishan.service.VentaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +26,17 @@ public class VentaController {
     @Autowired
     private VentaDtoService ventaDtoService;
 
+    @Autowired
+    private VentaRepo ventaRepo;
+
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody VentaRequestDTO request) {
         try {
-
+            System.out.println("Datos recibidos: " + request);
             Venta nuevaVenta = ventaService.registrarVenta(request);
-
-
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevaVenta);
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error inesperado en el servidor");
+            return ResponseEntity.badRequest().body("Error al procesar la venta: " + e.getMessage());
         }
     }
 
@@ -70,6 +68,25 @@ public class VentaController {
     @GetMapping("/listar")
     public ResponseEntity<?> listarVentas() {
         return ResponseEntity.ok(ventaDtoService.getListVenta());
+    }
+
+    @GetMapping("/reporte/diario")
+    public ResponseEntity<List<ReporteDTO>> reporteDiario() {
+        return ResponseEntity.ok(ventaRepo.obtenerVentasPorDia());
+    }
+
+    @GetMapping("/reporte/top-productos")
+    public ResponseEntity<List<ReporteDTO>> reporteTop() {
+        return ResponseEntity.ok(ventaRepo.obtenerTopProductos());
+    }
+
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<?> obtenerVenta(@PathVariable Long id) {
+        Venta venta = ventaService.getVenta(id);
+        if (venta != null) {
+            return ResponseEntity.ok(venta);
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

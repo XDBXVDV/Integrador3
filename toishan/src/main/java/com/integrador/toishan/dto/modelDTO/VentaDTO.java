@@ -13,6 +13,8 @@ public class VentaDTO {
     private String estado;
     private String metodoPago;
 
+
+
     public String getMetodoPago() {
         return metodoPago;
     }

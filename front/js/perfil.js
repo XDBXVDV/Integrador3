@@ -1,48 +1,41 @@
 const API_CLIENTE = "http://localhost:8080/cliente";
 const API_EMPLEADO = "http://localhost:8080/empleado";
 const API_USUARIO = "http://localhost:8080/usuario";
-const API_VENTAS = "http://localhost:8080/producto/ventas";
 
 let datosCargados = {};
-let modalEditar = null;
-let modalDetalle = null;
+let modalEditar, modalPassword;
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // Inicializar modales
     modalEditar = new bootstrap.Modal(document.getElementById('modalEditarPerfil'));
-    modalDetalle = new bootstrap.Modal(document.getElementById('modalDetallePedido'));
+    modalPassword = new bootstrap.Modal(document.getElementById('modalPassword'));
 
     const sesion = JSON.parse(localStorage.getItem("usuario"));
     if (!sesion) { window.location.href = "login.html"; return; }
 
-    // 1. Cargar UI básica
     document.getElementById("rolTitulo").innerText = sesion.rolName;
     document.getElementById("usuarioPerfil").innerText = sesion.usuario;
 
-    // 2. Cargar Datos Extendidos
     await cargarDatosDeCuenta(sesion.idUsuario);
 
     const esCliente = sesion.rolName.toUpperCase() === "CLIENTE";
-
-    if (esCliente) {
-        await cargarPerfilPersonal(API_CLIENTE, sesion.idPersona);
-        document.getElementById("seccionHistorial").style.display = "block";
-        await cargarHistorialPedidos(sesion.idPersona);
-    } else {
-        await cargarPerfilPersonal(API_EMPLEADO, sesion.idPersona);
-        document.getElementById("seccionHistorial").style.display = "none";
-    }
+    const urlBase = esCliente ? API_CLIENTE : API_EMPLEADO;
+    
+    await cargarPerfilPersonal(urlBase, sesion.idPersona);
+    
+    if (esCliente) document.getElementById("cardAccesoPedidos").style.display = "block";
 });
 
-// --- LÓGICA DE CARGA ---
+// --- CARGA DE DATOS ---
 
 async function cargarDatosDeCuenta(idUsuario) {
     try {
-        const res = await fetch(`${API_USUARIO}/${idUsuario}`);
+        const res = await fetch(`${API_USUARIO}/buscar/${idUsuario}`);
         if (res.ok) {
             const u = await res.json();
-            document.getElementById("emailPerfil").innerText = u.email || "No registrado";
-            document.getElementById("estadoPerfil").innerText = u.estado || "Activo";
+            document.getElementById("emailPerfil").innerText = u.email;
+            const badge = document.getElementById("estadoPerfil");
+            badge.innerText = u.estado;
+            badge.className = u.estado === 'Activo' ? 'badge bg-success' : 'badge bg-danger';
         }
     } catch (e) { console.error(e); }
 }
@@ -60,36 +53,7 @@ async function cargarPerfilPersonal(urlBase, idPersona) {
     } catch (e) { console.error(e); }
 }
 
-async function cargarHistorialPedidos(idCliente) {
-    const tabla = document.getElementById("lista-pedidos");
-    try {
-        const res = await fetch(`${API_VENTAS}/cliente/${idCliente}`);
-        const pedidos = await res.json();
-        tabla.innerHTML = "";
-
-        if (pedidos.length === 0) {
-            tabla.innerHTML = '<tr><td colspan="5" class="text-center p-3">No hay pedidos registrados</td></tr>';
-            return;
-        }
-
-        pedidos.forEach(p => {
-            const fecha = new Date(p.fechaventa).toLocaleDateString();
-            tabla.innerHTML += `
-                <tr>
-                    <td><strong>#${p.idVenta}</strong></td>
-                    <td>${fecha}</td>
-                    <td>S/ ${p.total.toFixed(2)}</td>
-                    <td><span class="badge bg-primary">${p.estado}</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-info" onclick="verDetallePedido(${p.idVenta}, ${p.total})">Ver</button>
-                    </td>
-                </tr>
-            `;
-        });
-    } catch (e) { tabla.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error al cargar historial</td></tr>'; }
-}
-
-// --- FUNCIONES GLOBALES ---
+// --- GESTIÓN DE PERFIL (DATOS) ---
 
 window.abrirModalEditar = () => {
     document.getElementById("editNombre").value = datosCargados.nombre || "";
@@ -104,61 +68,82 @@ window.abrirModalEditar = () => {
     modalEditar.show();
 };
 
-window.verDetallePedido = async (idVenta, total) => {
-    try {
-        const res = await fetch(`${API_VENTAS}/detalle/${idVenta}`);
-        const detalles = await res.json();
-        
-        const tablaDetalle = document.getElementById("lista-detalle-pedido");
-        document.getElementById("numPedido").innerText = idVenta;
-        document.getElementById("totalPedidoModal").innerText = total.toFixed(2);
-        
-        tablaDetalle.innerHTML = "";
-        detalles.forEach(d => {
-            tablaDetalle.innerHTML += `
-                <tr>
-                    <td>${d.nombreProducto}</td>
-                    <td>S/ ${d.precioUnitario.toFixed(2)}</td>
-                    <td>${d.cantidad}</td>
-                    <td>S/ ${d.subtotal.toFixed(2)}</td>
-                </tr>
-            `;
-        });
-        modalDetalle.show();
-    } catch (e) { alert("No se pudo cargar el detalle del pedido"); }
-};
-
 document.getElementById("formEditarPerfil").addEventListener("submit", async (e) => {
     e.preventDefault();
     const sesion = JSON.parse(localStorage.getItem("usuario"));
     const urlBase = sesion.rolName.toUpperCase() === "CLIENTE" ? API_CLIENTE : API_EMPLEADO;
 
+    const personaBody = {
+        nombre: document.getElementById("editNombre").value,
+        apellido: document.getElementById("editApellido").value,
+        dni: document.getElementById("editDni").value,
+        telefono: document.getElementById("editTelefono").value,
+        direccion: document.getElementById("editDireccion").value
+    };
+
+    const usuarioBody = {
+        idUsuario: sesion.idUsuario,
+        usuario: document.getElementById("editUsuario").value,
+        email: document.getElementById("editEmail").value
+    };
+
     try {
-        await fetch(`${urlBase}/actualizar/${sesion.idPersona}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                nombre: document.getElementById("editNombre").value,
-                apellido: document.getElementById("editApellido").value,
-                dni: document.getElementById("editDni").value,
-                telefono: document.getElementById("editTelefono").value,
-                direccion: document.getElementById("editDireccion").value
+        const [resP, resU] = await Promise.all([
+            fetch(`${urlBase}/actualizar/${sesion.idPersona}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(personaBody)
+            }),
+            fetch(`${API_USUARIO}/actualizar`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(usuarioBody)
             })
-        });
+        ]);
 
-        await fetch(`${API_USUARIO}/actualizar`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                idUsuario: sesion.idUsuario,
-                usuario: document.getElementById("editUsuario").value,
-                email: document.getElementById("editEmail").value
-            })
-        });
-
-        alert("Datos actualizados");
-        sesion.usuario = document.getElementById("editUsuario").value;
-        localStorage.setItem("usuario", JSON.stringify(sesion));
-        location.reload();
+        if (resP.ok && resU.ok) {
+            alert("Perfil actualizado");
+            sesion.usuario = usuarioBody.usuario;
+            localStorage.setItem("usuario", JSON.stringify(sesion));
+            location.reload();
+        }
     } catch (e) { alert("Error al actualizar"); }
+});
+
+// --- GESTIÓN DE SEGURIDAD (PASSWORD) ---
+
+window.abrirModalPassword = () => {
+    document.getElementById("formPassword").reset();
+    modalPassword.show();
+};
+
+document.getElementById("formPassword").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const sesion = JSON.parse(localStorage.getItem("usuario"));
+    const passNueva = document.getElementById("passNueva").value;
+    const passConfirmar = document.getElementById("passConfirmar").value;
+
+    if (passNueva !== passConfirmar) return alert("Las contraseñas no coinciden");
+
+    const dto = {
+        idUsuario: sesion.idUsuario,
+        oldPassword: document.getElementById("passActual").value,
+        newPassword: passNueva
+    };
+
+    try {
+        const res = await fetch(`${API_USUARIO}/actualizar-password`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dto)
+        });
+
+        if (res.ok) {
+            alert("Contraseña cambiada correctamente");
+            modalPassword.hide();
+        } else {
+            const msg = await res.text();
+            alert("Error: " + msg);
+        }
+    } catch (e) { alert("Error de conexión"); }
 });

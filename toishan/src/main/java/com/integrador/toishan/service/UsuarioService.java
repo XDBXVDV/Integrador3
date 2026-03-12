@@ -9,6 +9,7 @@ import com.integrador.toishan.model.Rol;
 import com.integrador.toishan.model.Usuario;
 import com.integrador.toishan.repo.RolRepo;
 import com.integrador.toishan.repo.UsuarioRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -86,20 +87,22 @@ public class UsuarioService {
         usuarioRepo.save(usuario);
     }
 
+    @Transactional
     public void actualizarPassword(PasswordUpdateDto dto) {
-
-        if (dto.getIdUsuario() == null) {
-            throw new IllegalArgumentException("ID de usuario es obligatorio");
-        }
-
+        // 1. Buscar al usuario
         Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        // 2. VALIDACIÓN CRÍTICA: Comparar contraseña encriptada
+        // passwordEncoder.matches(clave_plana_del_dto, clave_encriptada_de_db)
         if (!passwordEncoder.matches(dto.getPasswordActual(), usuario.getContrasena())) {
-            throw new RuntimeException("Contraseña actual incorrecta");
+            throw new RuntimeException("La contraseña actual es incorrecta");
         }
 
-        usuario.setContrasena(passwordEncoder.encode(dto.getPasswordNueva()));
+        // 3. Encriptar la NUEVA contraseña antes de guardar
+        String nuevoHash = passwordEncoder.encode(dto.getPasswordNueva());
+        usuario.setContrasena(nuevoHash);
+
         usuarioRepo.save(usuario);
     }
 }

@@ -2,52 +2,67 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Carrito</title>
-    <link rel="stylesheet" href="../css/navbar.css">
+    <title>Carrito de Compras - TOISHAN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/navbar.css">
 </head>
 <body>
     <div id="navbarContainer"></div>
-     <div class="container mt-5">
-        <h2>Tu Carrito de Compras</h2>
-    <div class="table-responsive">
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th>Imagen</th>
-                    <th>Producto</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Subtotal</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="lista-carrito"></tbody>
-        </table>
-    </div>
 
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card p-3">
-                <h5>Método de Pago</h5>
-                <select id="selectMetodoPago" class="form-select">
-                    <option value="TARJETA">💳 Tarjeta de Crédito/Débito</option>
-                    <option value="YAPE">📱 Yape</option>
-                    <option value="PLIN">📱 Plin</option>
-                    <option value="PAYPAL">🅿️ PayPal</option>
-                </select>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h4>Tu Carrito</h4>
+                <div id="lista-carrito" class="list-group mb-3">
+                    </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5>Resumen de Compra</h5>
+                        <hr>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tipo de Comprobante</label>
+                            <div class="d-flex gap-3 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipoDoc" id="rBoleta" value="BOLETA" checked onchange="actualizarResumenPrecios()">
+                                    <label class="form-check-label" for="rBoleta">Boleta</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipoDoc" id="rFactura" value="FACTURA" onchange="actualizarResumenPrecios()">
+                                    <label class="form-check-label" for="rFactura">Factura</label>
+                                </div>
+                            </div>
+                            <input type="text" id="nroDocumento" class="form-control" placeholder="DNI o RUC" maxlength="11">
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Subtotal:</span>
+                            <span>S/ <span id="subtotalCart">0.00</span></span>
+                        </div>
+                        <div id="filaIGV" class="d-flex justify-content-between mb-1" style="display: none !important;">
+                            <span>IGV (18%):</span>
+                            <span>S/ <span id="igvCart">0.00</span></span>
+                        </div>
+                        <div class="d-flex justify-content-between fw-bold fs-4">
+                            <span>Total:</span>
+                            <span>S/ <span id="totalCart">0.00</span></span>
+                        </div>
+
+                        <button class="btn btn-success w-100 mt-3" onclick="realizarPedido()">
+                            <i class="fa fa-shopping-bag"></i> Finalizar Compra
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-6 text-end">
-            <h3>Total: S/ <span id="total-carrito">0.00</span></h3>
-            <button class="btn btn-success btn-lg w-100 mt-2" onclick="finalizarCompra()">
-                Finalizar Compra
-            </button>
-        </div>
-    </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="../js/navbar.js"></script>
     <script src="../js/carrito.js"></script>
 </body>

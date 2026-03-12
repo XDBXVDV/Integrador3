@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Seguridad: Solo empleados o admin
     if (!sesion || sesion.rolName.toUpperCase() === "CLIENTE") {
         alert("No tienes permisos para acceder a este módulo.");
-        window.location.href = "index.html";
+        window.location.href = "acceso_denegado.html";
         return;
     }
 

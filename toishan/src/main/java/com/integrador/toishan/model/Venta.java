@@ -17,26 +17,41 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idVenta;
 
-    // Relación con Cliente (Muchos pedidos pertenecen a un cliente)
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime fechaventa = LocalDateTime.now();
+    @Column(nullable = false)
+    private LocalDateTime fechaventa;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal total;
 
-    @Enumerated(EnumType.STRING)
-    private EstadoVenta estado = EstadoVenta.Registrada;
+    // --- NUEVOS CAMPOS FISCALES ---
 
-    @Enumerated(EnumType.STRING)
-    private MetodoPago metodoPago = MetodoPago.TARJETA;
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal igv;
 
+    @Column(length = 20, nullable = false)
+    private String tipoComprobante;
 
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    @Column(length = 15, nullable = false)
+    private String nroDocumento;
+
+    @Column(length = 50)
+    private String metodoPago;
+
+    @Column(length = 20)
+    private String estado;
+
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetalleVenta> detalles;
+
+    @PrePersist
+    protected void onCreate() {
+        this.fechaventa = LocalDateTime.now();
+        if (this.estado == null) this.estado = "REGISTRADA";
+    }
 
     public Long getIdVenta() {
         return idVenta;
@@ -70,20 +85,44 @@ public class Venta {
         this.total = total;
     }
 
-    public EstadoVenta getEstado() {
-        return estado;
+    public BigDecimal getIgv() {
+        return igv;
     }
 
-    public void setEstado(EstadoVenta estado) {
-        this.estado = estado;
+    public void setIgv(BigDecimal igv) {
+        this.igv = igv;
     }
 
-    public MetodoPago getMetodoPago() {
+    public String getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(String tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
+
+    public String getNroDocumento() {
+        return nroDocumento;
+    }
+
+    public void setNroDocumento(String nroDocumento) {
+        this.nroDocumento = nroDocumento;
+    }
+
+    public String getMetodoPago() {
         return metodoPago;
     }
 
-    public void setMetodoPago(MetodoPago metodoPago) {
+    public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public List<DetalleVenta> getDetalles() {

@@ -5,9 +5,27 @@ import java.util.List;
 
 public class VentaRequestDTO {
     private Long idCliente;
-    private BigDecimal total;
+    private String tipoComprobante;
+    private String nroDocumento;
+    private BigDecimal subtotal;
     private String metodoPago;
     private List<DetalleVentaDTO> detalles;
+
+    public String getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(String tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
+
+    public String getNroDocumento() {
+        return nroDocumento;
+    }
+
+    public void setNroDocumento(String nroDocumento) {
+        this.nroDocumento = nroDocumento;
+    }
 
     public String getMetodoPago() {
         return metodoPago;
@@ -25,12 +43,12 @@ public class VentaRequestDTO {
         this.idCliente = idCliente;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public BigDecimal getSubtotal() {
+        return subtotal;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
     }
 
     public List<DetalleVentaDTO> getDetalles() {
