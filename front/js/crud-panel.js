@@ -20,9 +20,6 @@ this.listar()
 
 },
 
-/* =========================
-   LOADER
-========================= */
 
 mostrarLoader(){
 
@@ -35,10 +32,6 @@ ocultarLoader(){
 document.getElementById("loader").style.display="none"
 
 },
-
-/* =========================
-   LISTAR
-========================= */
 
 listar(){
 
@@ -61,10 +54,6 @@ this.ocultarLoader()
 })
 
 },
-
-/* =========================
-   TABLA
-========================= */
 
 renderTabla(){
 
@@ -122,10 +111,6 @@ tbody.appendChild(fila)
 
 },
 
-/* =========================
-   PAGINACION
-========================= */
-
 renderPaginacion(){
 
 const totalPaginas=Math.ceil(this.datos.length/this.filasPorPagina)
@@ -154,10 +139,6 @@ cont.appendChild(btn)
 
 },
 
-/* =========================
-   ORDENAR
-========================= */
-
 ordenar(campo){
 
 this.ordenAsc=!this.ordenAsc
@@ -175,10 +156,6 @@ return 0
 this.renderTabla()
 
 },
-
-/* =========================
-   BUSCAR
-========================= */
 
 filtrar(valor){
 
@@ -198,10 +175,6 @@ this.renderPaginacion()
 
 },
 
-/* =========================
-   CONFIRMACION BONITA
-========================= */
-
 confirmar(tipo,id){
 
 const texto=tipo==="desactivar"
@@ -216,9 +189,6 @@ tipo==="activar"
 
 },
 
-/* =========================
-   ACTIVAR
-========================= */
 
 activar(id){
 
@@ -235,10 +205,6 @@ this.listar()
 
 },
 
-/* =========================
-   DESACTIVAR
-========================= */
-
 desactivar(id){
 
 this.mostrarLoader()
@@ -253,10 +219,6 @@ this.listar()
 })
 
 },
-
-/* =========================
-   EDITAR
-========================= */
 
 abrirEditar(id){
 
@@ -306,9 +268,6 @@ this.listar()
 
 },
 
-/* =========================
-   CREAR
-========================= */
 
 guardarNuevo(){
 
@@ -338,9 +297,6 @@ this.listar()
 
 },
 
-/* =========================
-   TOAST
-========================= */
 
 toast(msg){
 

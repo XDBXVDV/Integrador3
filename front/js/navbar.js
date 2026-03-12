@@ -2,19 +2,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("navbarContainer");
     if (!container) return;
 
-    // 1. Cargar el HTML
+
     const res = await fetch("../components/navbarclientes.html");
     const html = await res.text();
     container.innerHTML = html;
 
-    // 2. Inicializar lógica
+    
     iniciarNavbar();
     actualizarContadorNavbar();
 });
 
 function getUsuarioSesion() {
     const usuario = localStorage.getItem("usuario");
-    // Si no hay nada o es "undefined" por error, retornamos null
+    
     if (!usuario || usuario === "undefined") return null;
     try {
         return JSON.parse(usuario);
@@ -32,18 +32,16 @@ function iniciarNavbar() {
     const btnUsuario = document.getElementById("btnUsuario");
     const dropdown = document.getElementById("dropdownUsuario");
 
-    // Validar que los elementos existan en el DOM antes de usarlos
+   
     if (!usuarioInfo || !btnLogin || !btnLogout) return;
 
     if (!usuario) {
-        // --- ESTADO INVITADO ---
         usuarioInfo.innerText = "Invitado";
         btnLogin.style.display = "block";
         btnLogout.style.display = "none";
         if (areaEmpleado) areaEmpleado.style.display = "none";
     } else {
-        // --- ESTADO LOGUEADO ---
-        // Usamos cortocircuito (&&) para evitar el error si rolName no viene
+
         const nombreRol = usuario.rolName || "CLIENTE";
         usuarioInfo.innerText = `${usuario.usuario} (${nombreRol})`;
 
@@ -51,7 +49,6 @@ function iniciarNavbar() {
         btnLogout.style.display = "block";
 
         if (areaEmpleado) {
-            // Si el rol es distinto a CLIENTE, mostramos el área privada
             if (nombreRol.toUpperCase() !== "CLIENTE") {
                 areaEmpleado.style.display = "inline";
             } else {
@@ -60,7 +57,6 @@ function iniciarNavbar() {
         }
     }
 
-    // Configuración del Dropdown
     if (btnUsuario && dropdown) {
         btnUsuario.onclick = (e) => {
             e.stopPropagation();

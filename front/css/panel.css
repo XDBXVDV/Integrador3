@@ -1,6 +1,3 @@
-/* =========================
-   CONTENEDOR PRINCIPAL
-========================= */
 
 .panel-container{
 
@@ -16,11 +13,6 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 
 }
-
-
-/* =========================
-   HEADER DEL PANEL
-========================= */
 
 .panel-header{
 
@@ -41,9 +33,6 @@
 }
 
 
-/* =========================
-   BOTON CREAR
-========================= */
 
 .btn-crear{
 
@@ -72,9 +61,6 @@
 }
 
 
-/* =========================
-   TABLA PANEL
-========================= */
 
 .tabla-panel{
 
@@ -87,7 +73,7 @@
 }
 
 
-/* HEADER TABLA */
+
 
 .tabla-panel thead{
 
@@ -106,7 +92,6 @@
 }
 
 
-/* FILAS */
 
 .tabla-panel td{
 
@@ -117,7 +102,6 @@
 }
 
 
-/* HOVER FILA */
 
 .tabla-panel tbody tr:hover{
 
@@ -126,9 +110,6 @@
 }
 
 
-/* =========================
-   BOTONES DE ACCIONES
-========================= */
 
 .tabla-panel button{
 
@@ -147,8 +128,6 @@
 }
 
 
-/* EDITAR */
-
 .tabla-panel button:first-child{
 
     background-color: #3498db;
@@ -163,8 +142,6 @@
 
 }
 
-
-/* DESACTIVAR */
 
 .tabla-panel button:nth-child(2){
 
@@ -181,7 +158,6 @@
 }
 
 
-/* REACTIVAR */
 
 .tabla-panel button:nth-child(3){
 
@@ -198,9 +174,6 @@
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media(max-width:768px){
 
@@ -224,9 +197,6 @@
 
 }
 
-/* =========================
-   HERRAMIENTAS DEL PANEL
-========================= */
 
 .panel-tools{
 
@@ -239,7 +209,6 @@ justify-content:flex-end;
 }
 
 
-/* BUSCADOR */
 
 #buscadorTabla{
 
@@ -265,9 +234,6 @@ box-shadow:0 0 4px rgba(52,152,219,0.4);
 
 }
 
-/* =========================
-   BADGES DE ESTADO
-========================= */
 
 .badge{
 
@@ -295,10 +261,6 @@ background:#e74c3c;
 
 }
 
-
-/* =========================
-   PAGINACION
-========================= */
 
 .paginacion{
 
@@ -335,10 +297,6 @@ background:#2980b9;
 }
 
 
-/* =========================
-   NOTIFICACIONES
-========================= */
-
 .toast{
 
 position:fixed;
@@ -369,9 +327,6 @@ opacity:1;
 
 }
 
-/* =========================
-   SPINNER DE CARGA
-========================= */
 
 .loader{
 
@@ -420,11 +375,6 @@ transform:rotate(360deg);
 
 }
 
-
-/* =========================
-   BOTONES ACCIONES
-========================= */
-
 .btn-editar{
 
 background:#f1c40f;
@@ -446,10 +396,6 @@ color:white;
 
 }
 
-
-/* =========================
-   ORDENAR COLUMNAS
-========================= */
 
 .sortable{
 

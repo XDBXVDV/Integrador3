@@ -33,12 +33,12 @@ public class VentaService {
     public Venta registrarVenta(VentaRequestDTO request) {
         Venta venta = new Venta();
 
-        // 1. Buscar Cliente
+
         Cliente cliente = clienteRepo.findById(request.getIdCliente())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
         venta.setCliente(cliente);
 
-        // 2. Lógica de montos (Boleta/Factura)
+
         BigDecimal subtotal = request.getSubtotal();
         BigDecimal igv = BigDecimal.ZERO;
         if ("FACTURA".equalsIgnoreCase(request.getTipoComprobante())) {

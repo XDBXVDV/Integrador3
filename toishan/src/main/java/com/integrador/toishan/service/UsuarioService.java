@@ -89,17 +89,17 @@ public class UsuarioService {
 
     @Transactional
     public void actualizarPassword(PasswordUpdateDto dto) {
-        // 1. Buscar al usuario
+
         Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // 2. VALIDACIÓN CRÍTICA: Comparar contraseña encriptada
-        // passwordEncoder.matches(clave_plana_del_dto, clave_encriptada_de_db)
+
+
         if (!passwordEncoder.matches(dto.getPasswordActual(), usuario.getContrasena())) {
             throw new RuntimeException("La contraseña actual es incorrecta");
         }
 
-        // 3. Encriptar la NUEVA contraseña antes de guardar
+
         String nuevoHash = passwordEncoder.encode(dto.getPasswordNueva());
         usuario.setContrasena(nuevoHash);
 

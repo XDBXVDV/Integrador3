@@ -16,9 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-
-/* ---------------- PRODUCTOS ---------------- */
-
 async function cargarProductos(){
 
     try{
@@ -85,9 +82,6 @@ Ver producto
 
 }
 
-
-/* ---------------- BUSCADOR ---------------- */
-
 function activarBuscador(){
 
     buscador.addEventListener("input", () => {
@@ -104,8 +98,6 @@ function activarBuscador(){
 
 }
 
-
-/* ---------------- FILTROS ---------------- */
 
 function llenarFiltros(){
 
@@ -159,8 +151,6 @@ function aplicarFiltros(listaBase){
 
 }
 
-
-/* ---------------- DETALLE ---------------- */
 
 function verDetalle(id){
 

@@ -1,27 +1,23 @@
 const API_REPORTES = "http://localhost:8080/producto/ventas/reporte";
 let chartVentas = null;
 let chartTop = null;
-let datosFiltradosParaPDF = []; // Variable global para sincronizar con el PDF
+let datosFiltradosParaPDF = []; 
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Verificar seguridad (solo empleados/admin)
+
     if (typeof verificarEmpleado === "function") {
         verificarEmpleado();
     }
-
-    // 2. Carga inicial de datos
     cargarReportes();
 });
 
-/**
- * Carga los datos de los endpoints y aplica filtros de fecha si existen
- */
+
 async function cargarReportes() {
     const fechaDesde = document.getElementById("repDesde").value;
     const fechaHasta = document.getElementById("repHasta").value;
 
     try {
-        // Peticiones en paralelo para mayor velocidad
+       
         const [resDiario, resTop] = await Promise.all([
             fetch(`${API_REPORTES}/diario`),
             fetch(`${API_REPORTES}/top-productos`)
@@ -30,10 +26,10 @@ async function cargarReportes() {
         let datosDiario = await resDiario.json();
         const datosTop = await resTop.json();
 
-        // --- LÓGICA DE FILTRADO ---
+        
         if (fechaDesde || fechaHasta) {
             datosDiario = datosDiario.filter(d => {
-                // Normalizamos la fecha (YYYY-MM-DD)
+               
                 const fechaItem = d.etiqueta.split('T')[0].split(' ')[0];
                 
                 let cumpleDesde = true;
@@ -46,10 +42,8 @@ async function cargarReportes() {
             });
         }
 
-        // Guardamos en la global para el PDF
         datosFiltradosParaPDF = datosDiario;
 
-        // --- RENDERIZADO ---
         renderizarGraficoVentas(datosDiario);
         renderizarGraficoTop(datosTop);
         actualizarTarjetasResumen(datosDiario);
@@ -60,9 +54,6 @@ async function cargarReportes() {
     }
 }
 
-/**
- * Genera o actualiza el gráfico de líneas de ventas diarias
- */
 function renderizarGraficoVentas(datos) {
     const ctx = document.getElementById('chartVentas').getContext('2d');
     
@@ -94,9 +85,6 @@ function renderizarGraficoVentas(datos) {
     });
 }
 
-/**
- * Genera o actualiza el gráfico de dona de productos más vendidos
- */
 function renderizarGraficoTop(datos) {
     const ctx = document.getElementById('chartTop').getContext('2d');
     
@@ -122,9 +110,6 @@ function renderizarGraficoTop(datos) {
     });
 }
 
-/**
- * Actualiza los números de las tarjetas superiores
- */
 function actualizarTarjetasResumen(datos) {
     const total = datos.reduce((acc, curr) => acc + curr.valor, 0);
     const numVentas = datos.length;
@@ -135,14 +120,12 @@ function actualizarTarjetasResumen(datos) {
     document.getElementById("resumenTicket").innerText = `S/ ${ticketPromedio.toFixed(2)}`;
 }
 
-/**
- * Genera el archivo PDF con una tabla detallada de lo filtrado
- */
+
 window.exportarPDF = function() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Configuración inicial del PDF
+
     doc.setFillColor(13, 110, 253);
     doc.rect(0, 0, 210, 35, 'F');
     
@@ -157,10 +140,9 @@ window.exportarPDF = function() {
     doc.setFontSize(12);
     doc.text("Resumen de Periodo Seleccionado", 15, 45);
 
-    // Verificamos si hay datos para la tabla
     if (datosFiltradosParaPDF && datosFiltradosParaPDF.length > 0) {
         
-        // Formatear datos para AutoTable: [[col1, col2]]
+
         const filas = datosFiltradosParaPDF.map(item => [
             item.etiqueta.split('T')[0],
             `S/ ${item.valor.toFixed(2)}`
@@ -191,9 +173,7 @@ window.exportarPDF = function() {
     doc.save(`Reporte_Ventas_${new Date().getTime()}.pdf`);
 };
 
-/**
- * Función opcional para limpiar filtros
- */
+
 window.limpiarFiltros = function() {
     document.getElementById("repDesde").value = "";
     document.getElementById("repHasta").value = "";

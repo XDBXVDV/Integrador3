@@ -10,19 +10,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (modalElement) modalProducto = new bootstrap.Modal(modalElement);
     form = document.getElementById('formProducto');
 
-    // Ejecutamos cargas iniciales
+    // cargas iniciales
     listarProductos();
     cargarCombos();
-
-    // Configurar el evento submit del formulario
     if (form) {
         form.onsubmit = guardarProducto;
     }
 });
 
-/* =========================
-   FUNCIONES GLOBALES (window)
-========================= */
 
 window.listarProductos = async function() {
     try {
@@ -102,8 +97,6 @@ async function guardarProducto(e) {
     const id = document.getElementById("idProducto").value;
     const formData = new FormData(form); 
     
-    // Si usas FormData(form), asegúrate que los 'name' de los inputs coincidan con los @RequestParam del Controller
-    // Si no, añádelos manualmente como antes:
     const manualData = new FormData();
     manualData.append("nombre", document.getElementById("nombre").value);
     manualData.append("descripcion", document.getElementById("descripcion").value);
@@ -127,7 +120,7 @@ async function guardarProducto(e) {
     }
 }
 
-// Exponer las funciones que faltan para los botones de la tabla
+// Funciones
 window.prepararEdicion = async function(id) {
     const res = await fetch(`${API_URL}/buscar/${id}`);
     const p = await res.json();

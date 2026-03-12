@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     modalDetalle = new bootstrap.Modal(document.getElementById('modalDetalleVenta'));
     
     const sesion = JSON.parse(localStorage.getItem("usuario"));
-    // Seguridad: Solo empleados o admin
     if (!sesion || sesion.rolName.toUpperCase() === "CLIENTE") {
         alert("No tienes permisos para acceder a este módulo.");
         window.location.href = "acceso_denegado.html";
@@ -71,19 +70,19 @@ function filtrarVentas() {
     const hasta = document.getElementById("fechaHasta").value;
 
     const filtradas = todasLasVentas.filter(v => {
-        // 1. Filtro de Texto (Nombre o ID)
+        //  Filtro de Texto (Nombre o ID)
         const nombreCliente = v.nombreCliente ? v.nombreCliente.toLowerCase() : "";
         const idVenta = v.idVenta ? v.idVenta.toString() : "";
         const coincideTexto = nombreCliente.includes(texto) || idVenta.includes(texto);
 
-        // 2. Filtro de Estado
+        // Filtro de Estado
         const estadoVenta = v.estado ? v.estado.toUpperCase() : "";
         const coincideEstado = estadoSeleccionado === "TODOS" || estadoVenta === estadoSeleccionado;
 
-        // 3. Filtro de Fechas
+        //  Filtro de Fechas
         let coincideFecha = true;
         if (v.fechaVenta) {
-            // Convertimos la fecha de la venta (string ISO) a un objeto Date (solo yyyy-mm-dd)
+            
             const fechaVentaCorta = v.fechaVenta.split('T')[0]; 
             
             if (desde && fechaVentaCorta < desde) coincideFecha = false;
@@ -150,14 +149,12 @@ async function confirmarAnulacion(idVenta) {
         if (response.ok) {
             alert(`¡Venta #${idVenta} anulada correctamente!`);
             
-            // ACTUALIZACIÓN LOCAL: 
-            // Buscamos la venta en el array 'todasLasVentas' y cambiamos su estado
+            // ACTUALIZACIÓN 
             const index = todasLasVentas.findIndex(v => v.idVenta === idVenta);
             if (index !== -1) {
                 todasLasVentas[index].estado = "ANULADA";
                 
-                // Volvemos a renderizar la tabla con los datos actualizados
-                // Esto hará que el botón de anular se deshabilite y el badge cambie a rojo
+                
                 renderizarTabla(todasLasVentas);
             }
         } else {

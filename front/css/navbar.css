@@ -153,10 +153,6 @@ background:#f2f2f2;
 }
 
 
-/* =========================
-   PREVENIR CONFLICTOS BOOTSTRAP
-========================= */
-
 .navbar *{
 box-sizing:border-box;
 line-height:normal;

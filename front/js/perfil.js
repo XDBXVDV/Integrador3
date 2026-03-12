@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (esCliente) document.getElementById("cardAccesoPedidos").style.display = "block";
 });
 
-// --- CARGA DE DATOS ---
+
 
 async function cargarDatosDeCuenta(idUsuario) {
     try {
@@ -53,7 +53,7 @@ async function cargarPerfilPersonal(urlBase, idPersona) {
     } catch (e) { console.error(e); }
 }
 
-// --- GESTIÓN DE PERFIL (DATOS) ---
+
 
 window.abrirModalEditar = () => {
     document.getElementById("editNombre").value = datosCargados.nombre || "";
@@ -110,7 +110,7 @@ document.getElementById("formEditarPerfil").addEventListener("submit", async (e)
     } catch (e) { alert("Error al actualizar"); }
 });
 
-// --- GESTIÓN DE SEGURIDAD (PASSWORD) ---
+
 
 window.abrirModalPassword = () => {
     document.getElementById("formPassword").reset();

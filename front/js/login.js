@@ -1,7 +1,7 @@
 const API_AUTH = "http://localhost:8080/auth";
 const API_CLIENTES = "http://localhost:8080/cliente";
 
-// --- PROCESO DE LOGIN ---
+// Login
 document.getElementById("formLogin").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -21,18 +21,14 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
         });
 
         if (!res.ok) {
-            // Si el backend lanza error (401 o 400), capturamos el mensaje
             const errorText = await res.text();
             throw new Error(errorText || "Error en la autenticación");
         }
 
-        // data recibirá: { idUsuario, usuario, rolName, idPersona }
         const data = await res.json();
 
-        // Guardamos el objeto completo para tener el idPersona disponible para el carrito
         localStorage.setItem("usuario", JSON.stringify(data));
 
-        // Redirigir según el rol si fuera necesario, o al index por defecto
         window.location.href = "index.html";
 
     } catch (error) {
@@ -40,7 +36,7 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
     }
 });
 
-// --- PROCESO DE REGISTRO ---
+// REGISTRO 
 document.getElementById("formRegistro").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -48,7 +44,7 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
         usuario: document.getElementById("usuarioRegistro").value,
         email: document.getElementById("email").value,
         contrasena: document.getElementById("contrasena").value,
-        idRol: 1, // Rol Cliente por defecto
+        idRol: 1, 
         nombre: document.getElementById("nombre").value,
         apellido: document.getElementById("apellido").value,
         dni: document.getElementById("dni").value,
