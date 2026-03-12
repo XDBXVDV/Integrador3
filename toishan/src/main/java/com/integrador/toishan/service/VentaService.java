@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VentaService {
@@ -85,4 +87,50 @@ public class VentaService {
 
         return ventaGuardada;
     }
+
+    public List<Venta> listarVentasPorCliente(Long idCliente) {
+        return  ventaRepo.findByCliente_IdClienteOrderByIdVentaDesc(idCliente);
+    }
+
+    public List<DetalleVentaDTO> listarDetallesPorVenta(Integer idVenta) {
+
+        List<DetalleVenta> lista = detalleRepo.findByVenta_IdVenta(idVenta);
+
+
+        return lista.stream().map(d -> {
+            DetalleVentaDTO dto = new DetalleVentaDTO();
+            dto.setIdProducto(d.getProducto().getIdProducto());
+            dto.setNombreProducto(d.getProducto().getNombre());
+            dto.setCantidad(d.getCantidad());
+            dto.setPrecioUnitario(d.getPrecioUnitario());
+            dto.setSubtotal(d.getSubtotal());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public void anularVenta(Long idVenta) {
+        Venta venta = ventaRepo.findById(idVenta)
+                .orElseThrow(() -> new RuntimeException("Venta no encontrada con ID: " + idVenta));
+
+        if ("ANULADA".equalsIgnoreCase(venta.getEstado().toString())) {
+            throw new RuntimeException("La venta ya está anulada.");
+        }
+        for (DetalleVenta detalle : venta.getDetalles()) {
+            Producto producto = detalle.getProducto();
+            int cantidadComprada = detalle.getCantidad();
+
+            producto.setStock(producto.getStock() + cantidadComprada);
+
+            if (producto.getStock() > 0) {
+                producto.setCondicion(Condicion.En_stock);
+            }
+
+            productoRepo.save(producto);
+        }
+        venta.setEstado(EstadoVenta.Anulada);
+        ventaRepo.save(venta);
+    }
+
 }

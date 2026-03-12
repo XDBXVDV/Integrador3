@@ -7,13 +7,19 @@ import java.util.List;
 public class VentaDTO {
     private Long idVenta;
     private String nombreCliente;
-    private String nombreEmpleado;
-    private LocalDateTime fechaVenta;
+
+    private String fechaVenta;
     private BigDecimal total;
     private String estado;
-    private List<DetalleVentaDTO> detalles;
+    private String metodoPago;
 
+    public String getMetodoPago() {
+        return metodoPago;
+    }
 
+    public void setMetodoPago(String metodoPago) {
+        this.metodoPago = metodoPago;
+    }
 
     public String getNombreCliente() {
         return nombreCliente;
@@ -22,15 +28,6 @@ public class VentaDTO {
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
     }
-
-    public String getNombreEmpleado() {
-        return nombreEmpleado;
-    }
-
-    public void setNombreEmpleado(String nombreEmpleado) {
-        this.nombreEmpleado = nombreEmpleado;
-    }
-
 
 
     public Long getIdVenta() {
@@ -41,11 +38,11 @@ public class VentaDTO {
         this.idVenta = idVenta;
     }
 
-    public LocalDateTime getFechaVenta() {
+    public String getFechaVenta() {
         return fechaVenta;
     }
 
-    public void setFechaVenta(LocalDateTime fechaVenta) {
+    public void setFechaVenta(String fechaVenta) {
         this.fechaVenta = fechaVenta;
     }
 
@@ -68,11 +65,4 @@ public class VentaDTO {
 
 
 
-    public List<DetalleVentaDTO> getDetalles() {
-        return detalles;
-    }
-
-    public void setDetalles(List<DetalleVentaDTO> detalles) {
-        this.detalles = detalles;
-    }
 }

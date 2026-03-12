@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Ventas - TOISHAN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/navbar.css">
+</head>
+<body>
+    <div id="navbarContainer"></div>
+
+    <div class="container mt-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Control Maestro de Ventas</h4>
+                <span class="badge bg-primary" id="totalVentasBadge">0 Ventas</span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"></span>
+                            <input type="text" id="busquedaCliente" class="form-control" 
+                                   placeholder="Buscar por nombre de cliente o ID de venta..." onkeyup="filtrarVentas()">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Desde</label>
+                        <input type="date" id="fechaDesde" class="form-control" onchange="filtrarVentas()">
+                     </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Hasta</label>
+                        <input type="date" id="fechaHasta" class="form-control" onchange="filtrarVentas()">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filtroEstado" class="form-select" onchange="filtrarVentas()">
+                            <option value="TODOS">Todos los estados</option>
+                            <option value="REGISTRADA">Registrada</option>
+                            <option value="COMPLETADA">Completada</option>
+                            <option value="ANULADA">Anulada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID Venta</th>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-maestra-ventas">
+                            <tr><td colspan="6" class="text-center">Cargando ventas...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-secondary w-100" onclick="limpiarFiltros()">Limpiar</button>
+    </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalDetalleVenta" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Detalle de Operación #<span id="detIdVenta"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-6"><strong>Cliente:</strong> <span id="detCliente"></span></div>
+                        <div class="col-6 text-end"><strong>Pago:</strong> <span id="detMetodo"></span></div>
+                    </div>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio Unit.</th>
+                                <th>Cant.</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detCuerpoTabla"></tbody>
+                    </table>
+                    <div class="text-end border-top pt-2">
+                        <h4>Total: S/ <span id="detTotal"></span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/navbarempleados.js"></script>
+    <script src="../js/ventas.js"></script>
+</body>
+</html>

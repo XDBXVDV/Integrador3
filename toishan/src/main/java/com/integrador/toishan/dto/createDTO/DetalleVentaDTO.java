@@ -4,9 +4,18 @@ import java.math.BigDecimal;
 
 public class DetalleVentaDTO {
     private Long idProducto;
+    private String nombreProducto;
     private Integer cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal subtotal;
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
 
     public Long getIdProducto() {
         return idProducto;

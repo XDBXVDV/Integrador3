@@ -1,10 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+    validarAccesoCarrito();
     renderizarCarrito();
 });
 
 function obtenerCarrito() {
     return JSON.parse(localStorage.getItem('carrito')) || [];
 }
+
+function validarAccesoCarrito() {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    
+    if (usuario && usuario.rolName.toUpperCase() !== "CLIENTE") {
+       
+        const contenedor = document.querySelector('.container');
+        contenedor.innerHTML = `
+            <div class="alert alert-warning mt-5 text-center">
+                <h4>Solo clientes</h4>
+                <p>Lo sentimos, las cuentas de <strong>${usuario.rolName}</strong> no pueden realizar compras en la tienda virtual.</p>
+                <a href="index.html" class="btn btn-primary">Volver a la tienda</a>
+            </div>
+        `;
+    }
+}
+
 
 function renderizarCarrito() {
     const carrito = obtenerCarrito();
@@ -57,15 +75,22 @@ async function finalizarCompra() {
 
     if (carrito.length === 0) return alert("Tu carrito está vacío.");
     
-    // CAMBIO AQUÍ: Validamos idPersona en lugar de id_cliente
+    // 1. Validar que exista la sesión y el idPersona
     if (!usuario || !usuario.idPersona) {
-        alert("Error de sesión o perfil no encontrado. Por favor, inicia sesión nuevamente.");
+        alert("Error de sesión. Por favor, inicia sesión nuevamente.");
+        window.location.href = "login.html";
         return;
     }
 
-    // Armamos el DTO para el Backend
+    // 2. Doble validación de Rol (por seguridad)
+    if (usuario.rolName.toUpperCase() !== "CLIENTE") {
+        alert("Solo los clientes pueden finalizar compras.");
+        return;
+    }
+
+    // Armamos el objeto para el Backend (usando idPersona como idCliente)
     const ventaRequest = {
-        idCliente: usuario.idPersona, // CAMBIO AQUÍ: idPersona es el ID del Cliente
+        idCliente: usuario.idPersona, 
         total: parseFloat(document.getElementById('total-carrito').innerText),
         metodoPago: metodoPago,
         detalles: carrito.map(item => ({
@@ -86,7 +111,6 @@ async function finalizarCompra() {
         if (response.ok) {
             const data = await response.json();
             alert(`¡Venta #${data.idVenta} registrada con éxito!`);
-            
             localStorage.removeItem('carrito');
             window.location.href = "index.html";
         } else {
@@ -94,7 +118,7 @@ async function finalizarCompra() {
             alert("Error: " + errorMsg);
         }
     } catch (error) {
-        console.error("Error en la petición:", error);
+        console.error("Error:", error);
         alert("No se pudo conectar con el servidor.");
     }
 }
@@ -118,3 +142,4 @@ window.eliminarProducto = function(id) {
     localStorage.setItem('carrito', JSON.stringify(carrito));
     renderizarCarrito();
 };
+

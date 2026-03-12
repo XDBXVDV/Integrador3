@@ -116,18 +116,14 @@ public class ProductoController {
         p.setCategoria(c);
         p.setMarca(m);
 
-        // Si suben nueva imagen
         if(imagen != null && !imagen.isEmpty()){
 
-            // eliminar imagen anterior
-            eliminarImagen(p.getImagen());
-
-            // guardar nueva
+            if(p.getImagen() != null) {
+                eliminarImagen(p.getImagen());
+            }
             String rutaImagen = guardarImagen(imagen);
-
             p.setImagen(rutaImagen);
         }
-
         repo.save(p);
 
         return ResponseEntity.ok("Producto actualizado");
