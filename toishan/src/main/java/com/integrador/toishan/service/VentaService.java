@@ -52,7 +52,7 @@ public class VentaService {
         venta.setNroDocumento(request.getNroDocumento());
         venta.setMetodoPago(MetodoPago.valueOf(request.getMetodoPago().toString().toUpperCase()).toString().toUpperCase());
 
-        // 3. MAPEAR DETALLES (Aquí estaba el error)
+
         List<DetalleVenta> detalles = new ArrayList<>();
 
         for (DetalleVentaDTO dDto : request.getDetalles()) {
@@ -71,7 +71,7 @@ public class VentaService {
             dv.setSubtotal(dDto.getPrecioUnitario().multiply(new BigDecimal(dDto.getCantidad())));
             dv.setVenta(venta);
 
-            // Descontar stock
+
             producto.setStock(producto.getStock() - dDto.getCantidad());
             productoRepo.save(producto);
 

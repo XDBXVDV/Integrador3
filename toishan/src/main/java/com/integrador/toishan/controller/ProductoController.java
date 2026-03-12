@@ -183,7 +183,7 @@ public class ProductoController {
         if(!directorio.exists()){
             directorio.mkdirs();
         }
-        // Guardar archivo
+
         Path ruta = Paths.get(carpeta + nombreArchivo);
         Files.write(ruta, imagen.getBytes());
         return "/img/productos/" + nombreArchivo;

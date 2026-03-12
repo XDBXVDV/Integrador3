@@ -35,7 +35,6 @@ public class AuthService {
         String nombreRol = usuario.getRol().getRolName().toUpperCase();
         response.setRolName(nombreRol);
 
-        // Lógica según el rol para evitar errores de "no encontrado"
         if (nombreRol.equals("CLIENTE")) {
             Cliente c = clienteRepo.findByUsuario(usuario)
                     .orElseThrow(() -> new RuntimeException("Perfil de cliente no existe"));

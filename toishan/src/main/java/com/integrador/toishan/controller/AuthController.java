@@ -20,19 +20,18 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto dto) {
         try {
-            // El servicio ahora retorna un LoginResponseDto con idPersona (Cliente o Empleado)
+
             LoginResponseDto response = authService.login(dto);
 
-            // Retornamos el objeto con estatus 200 OK
+
             return ResponseEntity.ok(response);
 
         } catch (RuntimeException e) {
-            // Si el usuario no existe o la contraseña falla (mensajes del AuthService)
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 
         } catch (Exception e) {
-            // Error genérico para cualquier otro fallo inesperado
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error interno en el servidor: " + e.getMessage());
         }
     }
