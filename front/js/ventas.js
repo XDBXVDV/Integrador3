@@ -1,5 +1,5 @@
 const API_VENTAS = "http://localhost:8080/producto/ventas";
-let todasLasVentas = []; // Caché local para filtrado rápido
+let todasLasVentas = [];
 let modalDetalle = null;
 
 document.addEventListener("DOMContentLoaded", async () => {

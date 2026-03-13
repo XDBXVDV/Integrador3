@@ -70,7 +70,7 @@ CREATE TABLE ventas (
     id_cliente INT NOT NULL,
     fechaventa TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     total DECIMAL(10,2) NOT NULL,
-    igv DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- Monto del 18% si es factura
+    igv DECIMAL(10,2) NOT NULL DEFAULT 0.00, 
     tipo_comprobante ENUM('BOLETA', 'FACTURA') NOT NULL DEFAULT 'BOLETA',
     nro_documento VARCHAR(15) NOT NULL, -- DNI o RUC capturado en la compra
     metodo_pago ENUM('TARJETA', 'YAPE', 'PLIN', 'PAYPAL', 'TRANSFERENCIA') DEFAULT 'TARJETA',

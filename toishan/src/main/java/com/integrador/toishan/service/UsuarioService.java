@@ -89,17 +89,11 @@ public class UsuarioService {
 
     @Transactional
     public void actualizarPassword(PasswordUpdateDto dto) {
-
         Usuario usuario = usuarioRepo.findById(dto.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-
-
         if (!passwordEncoder.matches(dto.getPasswordActual(), usuario.getContrasena())) {
             throw new RuntimeException("La contraseña actual es incorrecta");
         }
-
-
         String nuevoHash = passwordEncoder.encode(dto.getPasswordNueva());
         usuario.setContrasena(nuevoHash);
 

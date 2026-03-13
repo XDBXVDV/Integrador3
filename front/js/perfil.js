@@ -123,13 +123,18 @@ document.getElementById("formPassword").addEventListener("submit", async (e) => 
     const passNueva = document.getElementById("passNueva").value;
     const passConfirmar = document.getElementById("passConfirmar").value;
 
-    if (passNueva !== passConfirmar) return alert("Las contraseñas no coinciden");
+    if (passNueva !== passConfirmar) {
+        return alert("La nueva contraseña y la confirmación no coinciden");
+    }
+    if (passNueva.length < 6) {
+        return alert("La nueva contraseña debe tener al menos 6 caracteres");
+    }
 
+   
     const dto = {
         idUsuario: sesion.idUsuario,
-        oldPassword: document.getElementById("passActual").value,
-        newPassword: passNueva
-    };
+        passwordActual: document.getElementById("passActual").value, 
+        passwordNueva: passNueva                                         };
 
     try {
         const res = await fetch(`${API_USUARIO}/actualizar-password`, {
@@ -139,11 +144,14 @@ document.getElementById("formPassword").addEventListener("submit", async (e) => 
         });
 
         if (res.ok) {
-            alert("Contraseña cambiada correctamente");
-            modalPassword.hide();
+            alert("Contraseña actualizada con éxito. Por seguridad, inicia sesión nuevamente.");
+            logout(); 
         } else {
             const msg = await res.text();
             alert("Error: " + msg);
         }
-    } catch (e) { alert("Error de conexión"); }
+    } catch (e) { 
+        console.error(e);
+        alert("No se pudo conectar con el servidor."); 
+    }
 });
