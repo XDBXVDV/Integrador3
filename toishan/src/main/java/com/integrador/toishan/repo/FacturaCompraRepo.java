@@ -1,4 +1,7 @@
 package com.integrador.toishan.repo;
 
-public interface FacturaCompraRepo {
+import com.integrador.toishan.model.FacturaCompra;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface FacturaCompraRepo extends JpaRepository<FacturaCompra, Long> {
 }

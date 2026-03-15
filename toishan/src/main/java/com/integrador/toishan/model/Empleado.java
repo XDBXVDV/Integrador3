@@ -26,6 +26,9 @@ import java.util.List;
 
         private String dni;
 
+    @OneToMany(mappedBy = "empleado")
+    @JsonIgnore
+    private List<PedidoCompra> pedidos;
 
         public Empleado(Long idEmpleado, Usuario usuario, String nombre, String apellido, String dni) {
             this.idEmpleado = idEmpleado;
@@ -77,6 +80,14 @@ import java.util.List;
         public void setDni(String dni) {
             this.dni = dni;
         }
+
+    public List<PedidoCompra> getPedidos() {
+        return pedidos;
     }
+
+    public void setPedidos(List<PedidoCompra> pedidos) {
+        this.pedidos = pedidos;
+    }
+}
 
 

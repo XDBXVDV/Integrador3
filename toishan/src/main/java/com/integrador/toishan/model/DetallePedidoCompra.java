@@ -1,5 +1,6 @@
 package com.integrador.toishan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -10,23 +11,25 @@ public class DetallePedidoCompra {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_detalle")
     private Long idDetalle;
 
     @ManyToOne
-    @JoinColumn(name = "id_pedido_compra", nullable = false)
+    @JoinColumn(name = "id_pedido_compra")
+    @JsonIgnore
     private PedidoCompra pedidoCompra;
 
     @ManyToOne
-    @JoinColumn(name = "id_producto", nullable = false)
+    @JoinColumn(name = "id_producto")
     private Producto producto;
 
     @Column(nullable = false)
     private int cantidad;
 
-    @Column(nullable = false)
+    @Column(name = "precio_unitario")
     private BigDecimal precioUnitario;
 
-    @Column(nullable = false)
+    @Column(name = "subtotal")
     private BigDecimal subtotal;
 
     public DetallePedidoCompra(Long idDetalle, PedidoCompra pedidoCompra, Producto producto, int cantidad, BigDecimal precioUnitario, BigDecimal subtotal) {

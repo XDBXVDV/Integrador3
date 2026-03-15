@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/proveedor")
 public class ProveedorController {
@@ -56,6 +58,11 @@ public class ProveedorController {
             proveedorService.actualizarProveedor(id, proveedor);
             return ResponseEntity.ok(proveedor);
         }  else return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/activos")
+    public ResponseEntity<List<Proveedor>> listarActivos() {
+        return ResponseEntity.ok(proveedorService.listarActivos());
     }
 
 }

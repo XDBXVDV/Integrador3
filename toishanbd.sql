@@ -117,15 +117,17 @@ idDetalle int auto_increment primary key,
 id_pedido_compra int not null,
 id_producto int not null,
 cantidad int not null,
-precioUnitario Decimal(10,2) not null,
+precio_unitario Decimal(10,2) not null,
 subtotal Decimal(10,2) not null,
 foreign key(id_pedido_compra) references pedidos_compra(id_pedido_compra),
 foreign key(id_producto) references productos(id_producto)
 );
 
+drop table detalle_pedidos_compra;
+drop table pedidos_compra;
 
 insert into roles (nombre) values ('Cliente'),('Administrador'),('Area de ventas'),('Area de compras'),('Area de almacén');
-insert into usuario(usuario,email,contrasena,id_rol) values('ADMIN','ADMIN@ADMIN.ADMIN','$2a$10$V7KQnrDxYWXyir/G7m96Ue4ThrLoH6DyLOrCZQW6S2smdopCCSHu2',2);
+insert into usuarios(usuario,email,contrasena,id_rol) values('ADMIN','ADMIN@ADMIN.ADMIN','$2a$10$V7KQnrDxYWXyir/G7m96Ue4ThrLoH6DyLOrCZQW6S2smdopCCSHu2',2);
 insert into empleados (id_usuario,nombre,apellido,dni) values(1,'ADMIN','ADMIN','15984267');
 
 select * from roles;
@@ -137,7 +139,7 @@ select * from marcas;
 select * from productos;
 select * from ventas;
 select * from detalle_ventas;
-select * from devoluciones;
+
 select * from proveedores;
 select * from pedidos_compra;
 select * from detalle_pedidos_compra
