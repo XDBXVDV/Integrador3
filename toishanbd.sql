@@ -1,4 +1,4 @@
-drop database toishan;
+
 create database toishan;
 use toishan; 
 
@@ -103,17 +103,17 @@ CREATE TABLE proveedores(
 
 CREATE TABLE pedidos_compra(
 id_pedido_compra int auto_increment primary key,
-id_proveedor int not null,
+id_proveedor int null,
 id_empleado int not null,
-estado enum ('Registrado','Aprobado','Recibido','Anulado'),
-total Decimal(10,2),
+estado enum ('PENDIENTE','COTIZADO','ANULADO'),
+total Decimal(10,2) DEFAULT 0.00,
 fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 foreign key(id_proveedor) references proveedores(id_proveedor),
 foreign key(id_empleado) references empleados(id_empleado)
 );
 
 create table detalle_pedidos_compra(
-idDetalle int auto_increment primary key,
+id_detalle int auto_increment primary key,
 id_pedido_compra int not null,
 id_producto int not null,
 cantidad int not null,
@@ -123,8 +123,49 @@ foreign key(id_pedido_compra) references pedidos_compra(id_pedido_compra),
 foreign key(id_producto) references productos(id_producto)
 );
 
-drop table detalle_pedidos_compra;
-drop table pedidos_compra;
+CREATE TABLE cotizaciones (
+    id_cotizacion int auto_increment primary key,
+    id_pedido_compra int not null,
+    id_proveedor int not null,
+    fecha_emision TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    validez_dias int DEFAULT 5,
+    total_cotizado Decimal(10,2) not null,
+    estado enum('PENDIENTE', 'ACEPTADA', 'RECHAZADA') DEFAULT 'PENDIENTE',
+    foreign key(id_pedido_compra) references pedidos_compra(id_pedido_compra),
+    foreign key(id_proveedor) references proveedores(id_proveedor)
+);
+
+CREATE TABLE detalle_cotizaciones (
+    id_detalle_cot int auto_increment primary key,
+    id_cotizacion int not null,
+    id_producto int not null,
+    cantidad int not null,
+    precio_unitario_ofertado Decimal(10,2) not null,
+    subtotal Decimal(10,2) not null,
+    foreign key(id_cotizacion) references cotizaciones(id_cotizacion),
+    foreign key(id_producto) references productos(id_producto)
+);
+
+CREATE TABLE ordenes_compra (
+    id_orden_compra int auto_increment primary key,
+    id_cotizacion int not null,
+    nro_orden varchar(20) not null unique, -- Ejemplo: OC-2026-001
+    fecha_emision TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado enum('EMITIDA', 'FACTURADA', 'ANULADA') DEFAULT 'EMITIDA',
+    total Decimal(10,2) not null,
+    foreign key(id_cotizacion) references cotizaciones(id_cotizacion)
+);
+
+CREATE TABLE facturas_compra (
+    id_factura_compra int auto_increment primary key,
+    id_orden_compra int not null,
+    serie_factura varchar(10) not null,
+    correlativo_factura varchar(15) not null,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_pagado Decimal(10,2) not null,
+    pdf_url varchar(255),
+    foreign key(id_orden_compra) references ordenes_compra(id_orden_compra)
+);
 
 insert into roles (nombre) values ('Cliente'),('Administrador'),('Area de ventas'),('Area de compras'),('Area de almacén');
 insert into usuarios(usuario,email,contrasena,id_rol) values('ADMIN','ADMIN@ADMIN.ADMIN','$2a$10$V7KQnrDxYWXyir/G7m96Ue4ThrLoH6DyLOrCZQW6S2smdopCCSHu2',2);
@@ -139,8 +180,10 @@ select * from marcas;
 select * from productos;
 select * from ventas;
 select * from detalle_ventas;
-
+select * from cotizaciones;
+select * from detalle_cotizaciones;
 select * from proveedores;
 select * from pedidos_compra;
-select * from detalle_pedidos_compra
-
+select * from detalle_pedidos_compra;
+select * from ordenes_compra;
+select * from facturas_compra
