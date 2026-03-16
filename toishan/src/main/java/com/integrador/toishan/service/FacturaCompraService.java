@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.*;
 import java.util.List;
 import java.util.UUID;
@@ -63,49 +62,22 @@ public class FacturaCompraService {
         if(archivo == null || archivo.isEmpty()){
             return null;
         }
-
-        // Validar extensión
         String nombreOriginal = archivo.getOriginalFilename();
         String extension = nombreOriginal.substring(nombreOriginal.lastIndexOf(".")).toLowerCase();
         if(!extension.equals(".pdf")){
             throw new RuntimeException("Solo se permiten archivos PDF");
         }
-
-        // Generar nombre único
         String nombreArchivo = UUID.randomUUID().toString() + extension;
-
-        // Carpeta al lado de tus productos
         String carpeta = "src/main/resources/static/docs/facturas/";
         File directorio = new File(carpeta);
         if(!directorio.exists()){
             directorio.mkdirs();
         }
-
         Path ruta = Paths.get(carpeta + nombreArchivo);
         Files.write(ruta, archivo.getBytes());
-
-        // Retorna la URL relativa para el navegador
         return "/docs/facturas/" + nombreArchivo;
     }
-
-    private String guardarArchivoFisico(MultipartFile archivo) throws IOException {
-        if (archivo == null || archivo.isEmpty()) {
-            throw new RuntimeException("El archivo de factura es obligatorio.");
-        }
-
-        String nombreOriginal = archivo.getOriginalFilename();
-        if (nombreOriginal == null || !nombreOriginal.toLowerCase().endsWith(".pdf")) {
-            throw new RuntimeException("Formato no permitido. Solo se aceptan archivos .pdf");
-        }
-        Path rutaDirectorio = Paths.get("Uploads", "Facturas").toAbsolutePath().normalize();
-        if (!Files.exists(rutaDirectorio)) {
-            Files.createDirectories(rutaDirectorio);
-        }
-        String nombreArchivo = "FACT_" + UUID.randomUUID().toString() + ".pdf";
-        Path rutaDestino = rutaDirectorio.resolve(nombreArchivo);
-        Files.copy(archivo.getInputStream(), rutaDestino, StandardCopyOption.REPLACE_EXISTING);
-        return "/Uploads/Facturas/" + nombreArchivo;
-    }
+    
 
     public List<FacturaCompra> listarTodas() {
         return facturaRepo.findAll();
