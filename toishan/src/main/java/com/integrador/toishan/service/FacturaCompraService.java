@@ -77,8 +77,6 @@ public class FacturaCompraService {
         Files.write(ruta, archivo.getBytes());
         return "/docs/facturas/" + nombreArchivo;
     }
-    
-
     public List<FacturaCompra> listarTodas() {
         return facturaRepo.findAll();
     }
