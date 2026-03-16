@@ -31,6 +31,7 @@ public class FacturaCompraController {
             facturaService.registrarFacturaYSubirStock(idOrden, serie, correlativo, archivo);
             return ResponseEntity.ok("Factura registrada e inventario actualizado");
         } catch (RuntimeException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

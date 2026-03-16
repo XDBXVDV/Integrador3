@@ -172,18 +172,19 @@ insert into usuarios(usuario,email,contrasena,id_rol) values('ADMIN','ADMIN@ADMI
 insert into empleados (id_usuario,nombre,apellido,dni) values(1,'ADMIN','ADMIN','15984267');
 
 select * from roles;
-select * from clientes;
 select * from usuarios;
+select * from clientes;
+select * from detalle_pedidos_compra;
 select * from empleados;
-select * from categorias;
 select * from marcas;
-select * from productos;
 select * from ventas;
 select * from detalle_ventas;
-select * from cotizaciones;
-select * from detalle_cotizaciones;
 select * from proveedores;
 select * from pedidos_compra;
-select * from detalle_pedidos_compra;
+select * from productos;
+select * from categorias;
+
+select * from cotizaciones;
+select * from detalle_cotizaciones;
 select * from ordenes_compra;
 select * from facturas_compra
