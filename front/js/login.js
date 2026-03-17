@@ -36,10 +36,8 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
     }
 });
 
-// REGISTRO 
 document.getElementById("formRegistro").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const body = {
         usuario: document.getElementById("usuarioRegistro").value,
         email: document.getElementById("email").value,
@@ -51,22 +49,17 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
         telefono: document.getElementById("telefono").value,
         direccion: document.getElementById("direccion").value
     };
-
     try {
         const res = await fetch(`${API_CLIENTES}/crear`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
         });
-
         if (!res.ok) {
             const errorMsg = await res.text();
             throw new Error(errorMsg || "No se pudo crear la cuenta");
         }
-
         alert("¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");
-        
-        // Cerrar modal y resetear form
         document.getElementById("formRegistro").reset();
         const modalElement = document.getElementById("modalRegistro");
         const modalInstance = bootstrap.Modal.getInstance(modalElement);

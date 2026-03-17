@@ -16,7 +16,7 @@ async function cargarProducto() {
     }
 
     try {
-        // Listar
+
         const res = await fetch("http://localhost:8080/producto/listarDTO");
         const productos = await res.json();
         
@@ -27,14 +27,12 @@ async function cargarProducto() {
             return;
         }
 
-        // Carga de datos
         const imagenUrl = productoActual.imagen
             ? "http://localhost:8080" + productoActual.imagen
             : "http://localhost:8080/img/productos/default.png";
 
         const tieneStock = productoActual.stock > 0;
-        
-        // Validar Rol de Usuario
+
         const usuario = JSON.parse(localStorage.getItem('usuario'));
         const esInvitado = !usuario;
         const esCliente = usuario && usuario.rolName.toUpperCase() === "CLIENTE";
@@ -87,7 +85,7 @@ async function cargarProducto() {
 }
 
 function agregarAlCarrito() {
-    // Validar Sesión
+
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     if (!usuario) {
         alert("Debes iniciar sesión para agregar productos.");
@@ -95,7 +93,6 @@ function agregarAlCarrito() {
         return;
     }
 
-    // Validar que sea Cliente
     if (usuario.rolName.toUpperCase() !== "CLIENTE") {
         alert("Solo los clientes pueden usar el carrito de compras.");
         return;
@@ -109,7 +106,6 @@ function agregarAlCarrito() {
         return;
     }
 
-    //  Obtener carrito y validar Stock acumulado
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     const index = carrito.findIndex(item => item.idProducto === productoActual.idProducto);
     const cantidadEnCarrito = index !== -1 ? carrito[index].cantidad : 0;
@@ -119,7 +115,6 @@ function agregarAlCarrito() {
         return;
     }
 
-    //  Guardar en LocalStorage
     if (index !== -1) {
         carrito[index].cantidad += cantidadSeleccionada;
     } else {

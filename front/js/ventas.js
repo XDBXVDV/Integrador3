@@ -70,16 +70,14 @@ function filtrarVentas() {
     const hasta = document.getElementById("fechaHasta").value;
 
     const filtradas = todasLasVentas.filter(v => {
-        //  Filtro de Texto (Nombre o ID)
+
         const nombreCliente = v.nombreCliente ? v.nombreCliente.toLowerCase() : "";
         const idVenta = v.idVenta ? v.idVenta.toString() : "";
         const coincideTexto = nombreCliente.includes(texto) || idVenta.includes(texto);
 
-        // Filtro de Estado
         const estadoVenta = v.estado ? v.estado.toUpperCase() : "";
         const coincideEstado = estadoSeleccionado === "TODOS" || estadoVenta === estadoSeleccionado;
 
-        //  Filtro de Fechas
         let coincideFecha = true;
         if (v.fechaVenta) {
             
@@ -95,7 +93,6 @@ function filtrarVentas() {
     renderizarTabla(filtradas);
 }
 
-// Función para resetear todo rápidamente
 window.limpiarFiltros = function() {
     document.getElementById("busquedaCliente").value = "";
     document.getElementById("filtroEstado").value = "TODOS";
@@ -148,8 +145,7 @@ async function confirmarAnulacion(idVenta) {
 
         if (response.ok) {
             alert(`¡Venta #${idVenta} anulada correctamente!`);
-            
-            // ACTUALIZACIÓN 
+
             const index = todasLasVentas.findIndex(v => v.idVenta === idVenta);
             if (index !== -1) {
                 todasLasVentas[index].estado = "ANULADA";

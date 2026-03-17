@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarCarrito();
 });
 
-// --- LÓGICA DE DATOS LOCALES ---
-
 function obtenerCarrito() {
     return JSON.parse(localStorage.getItem('carrito')) || [];
 }
@@ -84,8 +82,6 @@ function renderizarCarrito() {
     if(typeof actualizarContadorNavbar === 'function') actualizarContadorNavbar();
 }
 
-// --- SIMULADOR DE PASARELA MULTI-MÉTODO ---
-
 window.abrirPasarela = function() {
     const total = document.getElementById("totalCart").innerText;
     const nroDoc = document.getElementById("nroDocumento").value;
@@ -141,8 +137,6 @@ window.procesarSimulacion = function(metodo) {
     }, 2000);
 }
 
-// --- REGISTRO EN BACKEND ---
-
 async function registrarVentaBackend(metodoConfirmado) {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     const tipoComprobante = document.querySelector('input[name="tipoDoc"]:checked').value;
@@ -185,7 +179,6 @@ async function registrarVentaBackend(metodoConfirmado) {
     }
 }
 
-// --- GENERACIÓN DE PDF Y SOPORTE ---
 
 function generarComprobantePDF(v) {
     const { jsPDF } = window.jspdf;

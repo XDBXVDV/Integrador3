@@ -163,27 +163,23 @@ public class ProductoController {
         if(imagen == null || imagen.isEmpty()){
             return null;
         }
-        // Validar tamaño (máx 5MB)
+
         long maxSize = 5 * 1024 * 1024;
         if(imagen.getSize() > maxSize){
             throw new RuntimeException("La imagen supera el tamaño máximo de 5MB");
         }
-        // Validar extensión
         String nombreOriginal = imagen.getOriginalFilename();
         String extension = nombreOriginal.substring(nombreOriginal.lastIndexOf(".")).toLowerCase();
         List<String> extensionesPermitidas = List.of(".jpg", ".jpeg", ".png", ".webp");
         if(!extensionesPermitidas.contains(extension)){
             throw new RuntimeException("Formato de imagen no permitido");
         }
-        // Generar nombre único
         String nombreArchivo = UUID.randomUUID().toString() + extension;
-        // Carpeta
         String carpeta = "src/main/resources/static/img/productos/";
         File directorio = new File(carpeta);
         if(!directorio.exists()){
             directorio.mkdirs();
         }
-
         Path ruta = Paths.get(carpeta + nombreArchivo);
         Files.write(ruta, imagen.getBytes());
         return "/img/productos/" + nombreArchivo;
