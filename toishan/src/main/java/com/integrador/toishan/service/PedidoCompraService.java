@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -86,9 +86,6 @@ public class PedidoCompraService {
 
     @Transactional
     public void convertirRequerimientosAPedido(List<Long> idsRequerimientos, Long idProveedor, Long idEmpleado) {
-        System.out.println("DEBUG -> IDs Req: " + idsRequerimientos);
-        System.out.println("DEBUG -> ID Prov: " + idProveedor);
-        System.out.println("DEBUG -> ID Emp: " + idEmpleado);
 
         if (idsRequerimientos == null || idProveedor == null || idEmpleado == null) {
             throw new RuntimeException("Uno de los IDs principales llegó NULO al servicio");
@@ -101,11 +98,9 @@ public class PedidoCompraService {
 
         PedidoCompra pedidoGuardado = pedidoRepo.save(pedido);
 
-        // 2. Procesar cada requerimiento de Almacén
         for (Long idReq : idsRequerimientos) {
             Requerimiento req = requerimientoRepo.findById(idReq).get();
 
-            // Crear el detalle del pedido
             DetallePedidoCompra detalle = new DetallePedidoCompra();
             detalle.setPedidoCompra(pedidoGuardado);
             detalle.setProducto(req.getProducto());
@@ -115,7 +110,6 @@ public class PedidoCompraService {
 
             detalleRepo.save(detalle);
 
-            // 3. Marcar el requerimiento como ATENDIDO para que ya no salga en Almacén
             req.setEstado(EstadoRequerimiento.ATENDIDO);
             requerimientoRepo.save(req);
         }

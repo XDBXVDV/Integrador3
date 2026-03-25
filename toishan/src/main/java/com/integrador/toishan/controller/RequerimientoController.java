@@ -20,11 +20,6 @@ public class RequerimientoController {
 
     @PostMapping("/registrar-masivo")
     public ResponseEntity<?> registrarMasivo(@RequestBody List<RequerimientoDTO> listaDTO) {
-        // Si esto imprime "null", el problema es el nombre de la variable en el JS
-        for(RequerimientoDTO d : listaDTO) {
-            System.out.println("JSON mapeado -> ID: " + d.getIdProducto() + ", Cant: " + d.getCantidadSugerida());
-        }
-
         try {
             requerimientoService.registrarRequerimientosMasivos(listaDTO);
             return ResponseEntity.ok("Requerimientos registrados");

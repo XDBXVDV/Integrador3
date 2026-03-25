@@ -71,7 +71,6 @@ public class PedidoCompraController {
     @PostMapping("/convertir-desde-requerimientos")
     public ResponseEntity<?> convertir(@RequestBody ConversionPedidoDTO datos) {
         try {
-            // Ahora los datos ya vienen con el tipo correcto (Long y List<Long>)
             pedidoService.convertirRequerimientosAPedido(
                     datos.getIdsRequerimientos(),
                     datos.getIdProveedor(),
@@ -79,7 +78,7 @@ public class PedidoCompraController {
             );
             return ResponseEntity.ok("Pedido Creado Correctamente");
         } catch (Exception e) {
-            e.printStackTrace(); // Revisa la consola de tu IDE si esto falla
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Error en la conversión: " + e.getMessage());
         }
     }
