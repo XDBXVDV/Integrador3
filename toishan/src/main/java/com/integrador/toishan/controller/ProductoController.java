@@ -209,4 +209,9 @@ public class ProductoController {
         }
 
     }
+
+    @GetMapping("/faltantes")
+    public ResponseEntity<List<Producto>> listarFaltantes() {
+        return ResponseEntity.ok(repo.findProductosFaltantes());
+    }
 }

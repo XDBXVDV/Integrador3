@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Compra - TOISHAN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+</head>
+<body class="bg-light">
+    <div id="navbarContainer"></div>
+
+    <div class="container mt-4 mb-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4"><i class="fas fa-chart-line me-2 text-primary"></i>Panel de Control de Compras</h4>
+                        
+                        <div class="row align-items-end g-3">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicio" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Fecha Fin:</label>
+                                <input type="date" id="fechaFin" class="form-control">
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <button class="btn btn-danger px-4" onclick="descargarReportePDF()">
+                                    <i class="fas fa-file-pdf me-2"></i>Exportar PDF Filtrado
+                                </button>
+                                <button class="btn btn-primary px-4" onclick="actualizarDashboard()">
+                                    <i class="fas fa-sync-alt me-2"></i>Actualizar Datos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white py-3">
+                        <h6 class="mb-0 fw-bold text-secondary">Inversión por Proveedor (S/)</h6>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="graficoProveedores" style="max-height: 400px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 mb-4 bg-primary text-white">
+                    <div class="card-body text-center py-4">
+                        <h6 class="text-white-50 mb-2 text-uppercase">Gasto Total Acumulado</h6>
+                        <h2 class="display-6 fw-bold" id="totalGeneral">S/ 0.00</h2>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white fw-bold">Últimas Facturas Registradas</div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" id="listaUltimosMovimientos">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/navbarempleados.js"></script>
+    <script src="../js/reportes_compra.js"></script>
+</body>
+</html>
