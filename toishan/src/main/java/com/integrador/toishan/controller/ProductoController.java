@@ -7,6 +7,14 @@ import com.integrador.toishan.repo.MarcaRepo;
 import com.integrador.toishan.repo.ProductoRepo;
 import com.integrador.toishan.service.ProductoDtoService;
 import com.integrador.toishan.service.ProductoService;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.UnitValue;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +26,8 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -213,5 +223,66 @@ public class ProductoController {
     @GetMapping("/faltantes")
     public ResponseEntity<List<Producto>> listarFaltantes() {
         return ResponseEntity.ok(repo.findProductosFaltantes());
+    }
+
+    @GetMapping("/inventario-filtrado")
+    public ResponseEntity<List<Producto>> listarInventario(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Long idCategoria,
+            @RequestParam(required = false) Long idMarca,
+            @RequestParam(required = false) Estado estado
+    ) {
+        List<Producto> lista = productoService.filtrarInventario(nombre, idCategoria, idMarca, estado);
+        return ResponseEntity.ok(lista);
+    }
+
+    // 2. Endpoint para el Reporte PDF
+    @GetMapping("/inventario-reporte-pdf")
+    public void exportarInventarioPdf(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Long idCategoria,
+            @RequestParam(required = false) Long idMarca,
+            @RequestParam(required = false) Estado estado,
+            HttpServletResponse response
+    ) throws IOException {
+
+        List<Producto> productos = productoService.filtrarInventario(nombre, idCategoria, idMarca, estado);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=reporte_inventario.pdf");
+
+        PdfWriter writer = new PdfWriter(response.getOutputStream());
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf, PageSize.A4.rotate()); // Rotamos a horizontal para que quepa todo
+
+        // Títulos
+        document.add(new Paragraph("TOISHAN - REPORTE DE INVENTARIO").setBold().setFontSize(18));
+        document.add(new Paragraph("Filtros aplicados: " +
+                (nombre != null ? "Nombre: " + nombre + " | " : "") +
+                (estado != null ? "Estado: " + estado : "Todos")));
+        document.add(new Paragraph("\n"));
+
+        // Definición de tabla (ID, Nombre, Categoría, Marca, Stock, Estado)
+        Table table = new Table(new float[]{1, 4, 2, 2, 1, 1});
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        table.addHeaderCell("ID");
+        table.addHeaderCell("Producto");
+        table.addHeaderCell("Categoría");
+        table.addHeaderCell("Marca");
+        table.addHeaderCell("Stock");
+        table.addHeaderCell("Estado");
+
+        for (Producto p : productos) {
+            table.addCell(String.valueOf(p.getIdProducto()));
+            table.addCell(p.getNombre());
+            table.addCell(p.getCategoria().getNombre());
+            table.addCell(p.getMarca().getNombre());
+            table.addCell(String.valueOf(p.getStock()));
+            table.addCell(p.getEstado().toString());
+        }
+
+        document.add(table);
+        document.close();
     }
 }

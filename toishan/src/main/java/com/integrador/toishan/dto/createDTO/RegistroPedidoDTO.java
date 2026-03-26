@@ -1,4 +1,6 @@
-package com.integrador.toishan.dto.modelDTO;
+package com.integrador.toishan.dto.createDTO;
+
+import com.integrador.toishan.dto.detalleDto.ItemPedidoDTO;
 
 import java.util.List;
 

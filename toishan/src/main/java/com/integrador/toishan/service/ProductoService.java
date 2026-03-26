@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional
@@ -180,6 +181,12 @@ public class ProductoService {
         }
 
         return Condicion.En_stock;
+    }
+
+    public List<Producto> filtrarInventario(String nombre, Long idCategoria, Long idMarca, Estado estado) {
+        String nombreBusqueda = (nombre != null && !nombre.trim().isEmpty()) ? nombre.trim() : null;
+
+        return productoRepo.filtrarInventario(nombreBusqueda, idCategoria, idMarca, estado);
     }
 
 }

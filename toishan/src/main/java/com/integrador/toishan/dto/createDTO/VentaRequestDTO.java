@@ -1,5 +1,7 @@
 package com.integrador.toishan.dto.createDTO;
 
+import com.integrador.toishan.dto.detalleDto.DetalleVentaDTO;
+
 import java.math.BigDecimal;
 import java.util.List;
 

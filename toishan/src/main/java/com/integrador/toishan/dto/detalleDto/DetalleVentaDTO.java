@@ -1,4 +1,4 @@
-package com.integrador.toishan.dto.createDTO;
+package com.integrador.toishan.dto.detalleDto;
 
 import java.math.BigDecimal;
 

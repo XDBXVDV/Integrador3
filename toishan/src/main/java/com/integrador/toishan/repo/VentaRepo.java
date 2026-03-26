@@ -24,11 +24,16 @@ public interface VentaRepo extends JpaRepository<Venta,Long> {
             "GROUP BY dv.producto.nombre ORDER BY SUM(dv.cantidad) DESC")
     List<ReporteDTO> obtenerTopProductos();
 
-    @Query("SELECT new com.integrador.toishan.dto.modelDTO.ReporteDTO(STR(v.fechaventa), SUM(v.total)) " +
-            "FROM Venta v " +
-            "WHERE v.estado != 'ANULADA' " +
-            "AND (:inicio IS NULL OR v.fechaventa >= :inicio) " +
-            "AND (:fin IS NULL OR v.fechaventa <= :fin) " +
-            "GROUP BY STR(v.fechaventa) ORDER BY STR(v.fechaventa) ASC")
-    List<ReporteDTO> obtenerVentasPorDiaFiltrado(@Param("inicio") LocalDateTime inicio, @Param("fin") LocalDateTime fin);
+    @Query(value = "SELECT COALESCE(SUM(total), 0.0) FROM ventas " +
+            "WHERE MONTH(fechaventa) = MONTH(CURRENT_DATE()) " +
+            "AND YEAR(fechaventa) = YEAR(CURRENT_DATE()) AND estado != 'ANULADA'", nativeQuery = true)
+    Double sumarVentasMesActual();
+
+    @Query(value = "SELECT DAYNAME(fechaventa) as dia, SUM(total) as monto " +
+            "FROM ventas " +
+            "WHERE fechaventa >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) " +
+            "AND estado != 'ANULADA' " +
+            "GROUP BY dia, DAYOFWEEK(fechaventa) " +
+            "ORDER BY DAYOFWEEK(fechaventa)", nativeQuery = true)
+    List<Object[]> obtenerVentasUltimaSemana();
 }

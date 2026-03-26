@@ -1,7 +1,7 @@
 package com.integrador.toishan.controller;
 
 import com.integrador.toishan.dto.createDTO.ConversionPedidoDTO;
-import com.integrador.toishan.dto.modelDTO.RegistroPedidoDTO;
+import com.integrador.toishan.dto.createDTO.RegistroPedidoDTO;
 import com.integrador.toishan.model.EstadoPedidoCompra;
 import com.integrador.toishan.model.PedidoCompra;
 import com.integrador.toishan.model.Producto;
@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pedidos-compra")

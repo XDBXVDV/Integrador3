@@ -1,5 +1,7 @@
 package com.integrador.toishan.dto.modelDTO;
 
+import com.integrador.toishan.dto.detalleDto.ItemCotizacionDTO;
+
 import java.util.List;
 
 public class CotizacionDTO {

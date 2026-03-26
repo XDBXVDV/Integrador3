@@ -1,7 +1,7 @@
 package com.integrador.toishan.service;
 
 
-import com.integrador.toishan.dto.createDTO.DetalleVentaDTO;
+import com.integrador.toishan.dto.detalleDto.DetalleVentaDTO;
 import com.integrador.toishan.dto.createDTO.VentaRequestDTO;
 import com.integrador.toishan.model.*;
 import com.integrador.toishan.repo.*;

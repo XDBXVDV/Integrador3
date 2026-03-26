@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Guías - TOISHAN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+</head>
+<body class="bg-light">
+    <div id="navbarContainer"></div>
+
+    <div class="container mt-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-primary"><i class="fas fa-exchange-alt me-2"></i> Movimientos de Almacén</h5>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalGuia">
+                    <i class="fas fa-plus me-2"></i> Nueva Guía
+                </button>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Número</th>
+                            <th>Tipo</th>
+                            <th>Fecha</th>
+                            <th>Motivo</th>
+                            <th>Responsable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaGuias"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalGuia" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Registrar Movimiento de Almacén</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formGuia">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Número de Guía</label>
+                                <input type="text" id="numGuia" class="form-control" placeholder="G001-0000" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Tipo</label>
+                                <select id="tipoMov" class="form-select" required>
+                                    <option value="ENTRADA">ENTRADA (Suma Stock)</option>
+                                    <option value="SALIDA">SALIDA (Resta Stock)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Motivo</label>
+                                <input type="text" id="motivoGuia" class="form-control" placeholder="Ej: Compra local" required>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6>Productos a mover</h6>
+                        <div class="row g-2 align-items-end mb-3">
+                            <div class="col-md-7">
+                                <select id="selectProd" class="form-select"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" id="cantProd" class="form-control" value="1">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-success w-100" onclick="agregarFila()"><i class="fas fa-plus">Agregar</i></button>
+                            </div>
+                        </div>
+                        <table class="table table-sm border">
+                            <thead class="bg-light">
+                                <tr><th>Producto</th><th>Cantidad</th><th>Acción</th></tr>
+                            </thead>
+                            <tbody id="listaTemporal"></tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarGuiaCompleta()">Procesar Guía</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-list me-2"></i>Detalle de Guía</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaDetalles"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnDescargarPdf" class="btn btn-danger">
+                        <i class="fas fa-file-pdf me-2">Descargar PDF</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/guias_almacen.js"></script>
+    <script src="../js/navbarempleados.js"></script>
+</body>
+</html>
