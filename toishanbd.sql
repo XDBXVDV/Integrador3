@@ -167,6 +167,38 @@ CREATE TABLE facturas_compra (
     foreign key(id_orden_compra) references ordenes_compra(id_orden_compra)
 );
 
+CREATE TABLE requerimientos_reposicion (
+    id_requerimiento INT AUTO_INCREMENT PRIMARY KEY,
+    id_producto INT NOT NULL,
+    id_empleado_almacen INT NOT NULL,
+    cantidad_sugerida INT NOT NULL,
+    fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    prioridad ENUM('BAJA', 'MEDIA', 'ALTA', 'CRITICA') DEFAULT 'MEDIA',
+    estado ENUM('PENDIENTE', 'EN_PROCESO', 'ATENDIDO', 'RECHAZADO') DEFAULT 'PENDIENTE',
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
+    FOREIGN KEY (id_empleado_almacen) REFERENCES empleados(id_empleado)
+);
+
+CREATE TABLE guias_almacen (
+    id_guia INT AUTO_INCREMENT PRIMARY KEY,
+    numero_guia VARCHAR(20) NOT NULL, -- Ejemplo: G001-00045
+    tipo_movimiento ENUM('ENTRADA', 'SALIDA') NOT NULL,
+    fecha_movimiento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    motivo VARCHAR(100), -- Ejemplo: "Compra", "Venta", "Devolución"
+    id_empleado_almacen INT NOT NULL,
+    id_documento_referencia INT, -- ID de la Factura o Venta vinculada
+    FOREIGN KEY (id_empleado_almacen) REFERENCES empleados(id_empleado)
+);
+
+CREATE TABLE detalle_guia (
+    id_detalle_guia INT AUTO_INCREMENT PRIMARY KEY,
+    id_guia INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    FOREIGN KEY (id_guia) REFERENCES guias_almacen(id_guia) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
 insert into roles (nombre) values ('Cliente'),('Administrador'),('Area de ventas'),('Area de compras'),('Area de almacén');
 insert into usuarios(usuario,email,contrasena,id_rol) values('ADMIN','ADMIN@ADMIN.ADMIN','$2a$10$V7KQnrDxYWXyir/G7m96Ue4ThrLoH6DyLOrCZQW6S2smdopCCSHu2',2);
 insert into empleados (id_usuario,nombre,apellido,dni) values(1,'ADMIN','ADMIN','15984267');
@@ -183,8 +215,10 @@ select * from proveedores;
 select * from pedidos_compra;
 select * from productos;
 select * from categorias;
-
+select * from requerimientos_reposicion;
 select * from cotizaciones;
 select * from detalle_cotizaciones;
 select * from ordenes_compra;
-select * from facturas_compra
+select * from facturas_compra;
+select * from guias_almacen;
+select * from detalle_guia;
