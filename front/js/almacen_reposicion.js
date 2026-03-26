@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/api";
+const API_URL = "http://localhost:8081/api";
 
 document.addEventListener("DOMContentLoaded", () => {
     cargarProductosCriticos();
@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function cargarProductosCriticos() {
     try {
         // Usamos el endpoint que filtra por condición 'Agotado' o 'Stock_bajo'
-        const res = await fetch(`http://localhost:8080/producto/faltantes`);
+        const res = await fetch(`http://localhost:8081/producto/faltantes`);
         const productos = await res.json();
         
         const tbody = document.getElementById("listaFaltantes");

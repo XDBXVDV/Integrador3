@@ -181,12 +181,12 @@ CREATE TABLE requerimientos_reposicion (
 
 CREATE TABLE guias_almacen (
     id_guia INT AUTO_INCREMENT PRIMARY KEY,
-    numero_guia VARCHAR(20) NOT NULL, -- Ejemplo: G001-00045
+    numero_guia VARCHAR(20) NOT NULL,
     tipo_movimiento ENUM('ENTRADA', 'SALIDA') NOT NULL,
     fecha_movimiento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    motivo VARCHAR(100), -- Ejemplo: "Compra", "Venta", "Devolución"
+    motivo VARCHAR(100), 
     id_empleado_almacen INT NOT NULL,
-    id_documento_referencia INT, -- ID de la Factura o Venta vinculada
+    id_documento_referencia INT, 
     FOREIGN KEY (id_empleado_almacen) REFERENCES empleados(id_empleado)
 );
 

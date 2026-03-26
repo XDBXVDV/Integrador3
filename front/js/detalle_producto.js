@@ -65,13 +65,14 @@ async function cargarProducto() {
                                        value="${tieneStock ? 1 : 0}" min="1" max="${productoActual.stock}" 
                                        style="width: 80px;" ${!tieneStock ? 'disabled' : ''}>
                             </div>
-
+<br>
                             <button onclick="agregarAlCarrito()" class="btn btn-primary btn-lg w-100" 
                                     ${!tieneStock ? 'disabled' : ''}>
                                 ${esInvitado ? 'Inicia sesión para comprar' : 'Agregar al carrito'}
                             </button>
                         `}
                     </div>
+                    <br>
                     <div class="mt-3">
                         <a href="index.html" class="text-decoration-none">← Volver a la tienda</a>
                     </div>
