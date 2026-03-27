@@ -29,28 +29,59 @@ public class DashboardController {
     public ResponseEntity<?> obtenerResumen() {
         Map<String, Object> stats = new HashMap<>();
         try {
-            Double ventasMes = ventaRepo.sumarVentasMesActual();
-            Double comprasMes = compraRepo.sumarComprasMesActual();
-
-            // Debug para consola
-            System.out.println("Ventas recuperadas: " + ventasMes);
-            System.out.println("Compras recuperadas: " + comprasMes);
-
-            stats.put("totalVentasMes", ventasMes);
-            stats.put("totalComprasMes", comprasMes);
+            // 1. KPIs de las tarjetas
+            stats.put("totalVentasMes", ventaRepo.sumarVentasMesActual());
+            stats.put("totalComprasMes", compraRepo.sumarComprasMesActual());
             stats.put("productosCriticos", productoRepo.countByCondicionIn(Arrays.asList(Condicion.Agotado, Condicion.Stock_bajo)));
 
-            List<Object[]> ventasSemanales = ventaRepo.obtenerVentasUltimaSemana();
+            // 2. Gráfico Comparativo (Ventas vs Compras) - Sincronización de Fechas
+            List<Object[]> ventasRaw = ventaRepo.obtenerVentasUltimaSemana();
+            List<Object[]> comprasRaw = compraRepo.obtenerComprasUltimaSemana();
+
+            Map<String, Double> ventasMap = new LinkedHashMap<>();
+            Map<String, Double> comprasMap = new LinkedHashMap<>();
+
+            for (Object[] v : ventasRaw) ventasMap.put(v[0].toString(), Double.valueOf(v[1].toString()));
+            for (Object[] c : comprasRaw) comprasMap.put(c[0].toString(), Double.valueOf(c[1].toString()));
+
+            Set<String> todasLasFechas = new TreeSet<>(ventasMap.keySet());
+            todasLasFechas.addAll(comprasMap.keySet());
+
             List<String> etiquetasDias = new ArrayList<>();
             List<Double> datosVentas = new ArrayList<>();
+            List<Double> datosCompras = new ArrayList<>();
 
-            for (Object[] fila : ventasSemanales) {
-                etiquetasDias.add(fila[0].toString());
-                datosVentas.add(Double.valueOf(fila[1].toString()));
+            for (String fecha : todasLasFechas) {
+                etiquetasDias.add(fecha);
+                datosVentas.add(ventasMap.getOrDefault(fecha, 0.0));
+                datosCompras.add(comprasMap.getOrDefault(fecha, 0.0));
             }
-
             stats.put("etiquetasDias", etiquetasDias);
             stats.put("datosVentas", datosVentas);
+            stats.put("datosCompras", datosCompras);
+
+            // 3. Gráfico Circular (Categorías)
+            List<Object[]> catRaw = ventaRepo.obtenerVentasPorCategoria();
+            List<String> etiquetasCat = new ArrayList<>();
+            List<Double> datosCat = new ArrayList<>();
+            for (Object[] fila : catRaw) {
+                etiquetasCat.add(fila[0].toString());
+                datosCat.add(Double.valueOf(fila[1].toString()));
+            }
+            stats.put("etiquetasCat", etiquetasCat);
+            stats.put("datosCat", datosCat);
+
+            // 4. Tabla Top Productos
+            List<Object[]> topRaw = ventaRepo.obtenerTopProductosDashboard();
+            List<Map<String, Object>> topProcesados = new ArrayList<>();
+            for (Object[] f : topRaw) {
+                Map<String, Object> p = new HashMap<>();
+                p.put("nombre", f[0]);
+                p.put("cantidad", f[1]);
+                p.put("total", f[2]);
+                topProcesados.add(p);
+            }
+            stats.put("topProductos", topProcesados);
 
             return ResponseEntity.ok(stats);
         } catch (Exception e) {
