@@ -1,43 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Area de Empleados</title>
+    <title>Panel de Gestión | TOISHAN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
     <link rel="stylesheet" href="../css/navbar.css">
-
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="../css/area_empleados.css">
 </head>
-<body>
-<div id="navbarContainer"></div>
+<body class="bg-light">
+    <div id="navbarContainer"></div>
 
+    <div class="container py-5">
+        <h2 class="fw-bold mb-4 text-dark text-center">Centro de Operaciones TOISHAN</h2>
+        <p class="text-center text-muted mb-5">Bienvenido al sistema de gestión interna. Selecciona el módulo correspondiente a tu área.</p>
 
-<a href="clientes.html">Tabla de clientes</a>
-<br>
-<a href="empleados.html">Tabla de empleados</a>
-<br>
-<a href="ventas.html">Ver ventas</a>
-<br>
-<a href="gestion_pedidos.html">Ver compras</a>
-<br>
-<a href="aprobar_cotizaciones.html">Ver cotizaciones</a>
-<br>
-<a href="gestion_ordenes.html">Ver ordenes de compra</a>
-<br>
-<a href="reportes_compra.html">Generar reporte de compra</a>
-<br>
-<a href="almacen_reposicion.html">Generar pedidos de productos faltantes</a>
-<br>
-<a href="logistica_pedidos.html">Convertir pedidos </a>
+        <h4 class="section-title">Ventas</h4>
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <a href="ventas.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <div class="p-3 bg-primary bg-opacity-10 rounded-circle d-inline-block mx-auto mb-3">
+                        <i class="fas fa-cash-register fa-2x text-primary"></i>
+                    </div>
+                    <h6 class="fw-bold mb-1">Ver Ventas</h6>
+                    <small class="text-muted">Historial y estados</small>
+                </a>
+            </div>
+        </div>
 
+        <h4 class="section-title">Compras</h4>
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <a href="gestion_pedidos.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <i class="fas fa-shopping-bag fa-2x text-success mb-3"></i>
+                    <h6 class="fw-bold mb-1">Pedidos</h6>
+                    <small class="text-muted">Gestión de stock</small>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="aprobar_cotizaciones.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <i class="fas fa-file-invoice-dollar fa-2x text-success mb-3"></i>
+                    <h6 class="fw-bold mb-1">Cotizaciones</h6>
+                    <small class="text-muted">Aprobar precios</small>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="gestion_ordenes.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <i class="fas fa-check-double fa-2x text-success mb-3"></i>
+                    <h6 class="fw-bold mb-1">Órdenes de Compra</h6>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="reportes_compra.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <i class="fas fa-file-pdf fa-2x text-success mb-3"></i>
+                    <h6 class="fw-bold mb-1">Reportes de Compra</h6>
+                </a>
+            </div>
+        </div>
+
+        <h4 class="section-title">Almacén y Logística</h4>
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <a href="almacen_reposicion.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <i class="fas fa-boxes fa-2x text-warning mb-3"></i>
+                    <h6 class="fw-bold mb-1">Reposición</h6>
+                    <small class="text-muted">Faltantes</small>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="logistica_pedidos.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <i class="fas fa-truck-loading fa-2x text-warning mb-3"></i>
+                    <h6 class="fw-bold mb-1">Logística</h6>
+                    <small class="text-muted">Convertir pedidos</small>
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a href="Inventario.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                    <i class="fas fa-truck-loading fa-2x text-warning mb-3"></i>
+                    <h6 class="fw-bold mb-1">Inventario</h6>
+                    <small class="text-muted">Generar documento de inventario</small>
+                </a>
+            </div>
+        </div>
+
+        <div id="seccionSeguridad" style="display: none;">
+            <h4 class="section-title text-danger">Administración y Seguridad</h4>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <a href="clientes.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                        <i class="fas fa-users fa-2x text-danger mb-3"></i>
+                        <h6 class="fw-bold mb-1">Usuarios Clientes</h6>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="empleados.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                        <i class="fas fa-user-shield fa-2x text-danger mb-3"></i>
+                        <h6 class="fw-bold mb-1">Gestión Empleados</h6>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="backups.html" class="card h-100 border-0 shadow-sm p-3 text-center menu-card">
+                        <i class="fas fa-server fa-2x text-danger mb-3"></i>
+                        <h6 class="fw-bold mb-1">Backup del Sistema</h6>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="../js/auth.js"></script>
-<script>
-verificarEmpleado();
-</script>
-<script src="../js/navbarempleados.js"></script>
+    <script src="../js/navbarempleados.js"></script>
+    <script>
+        // Ejecutamos validaciones al cargar
+        document.addEventListener("DOMContentLoaded", () => {
+            verificarEmpleado();
+            mostrarSeccionesPorRol();
+        });
+    </script>
 </body>
-
 </html>

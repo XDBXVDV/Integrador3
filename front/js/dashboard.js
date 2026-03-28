@@ -98,3 +98,40 @@ function cerrarSesion() {
     localStorage.removeItem("usuario");
     window.location.href = "login.html";
 }
+
+async function generarBackup() {
+
+    if (!confirm("¿Deseas generar un respaldo de la base de datos TOISHAN ahora?")) return;
+
+    const btn = event.currentTarget;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Procesando...';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch(`${API_URL}/backup`, {
+            method: "GET",
+        });
+
+        const mensaje = await res.text();
+
+        if (res.ok) {
+            alert("✅ Éxito: " + mensaje);
+        } else {
+            alert("❌ Error: " + mensaje);
+        }
+    } catch (error) {
+        console.error("Error en backup:", error);
+        alert("Hubo un fallo en la conexión con el servidor.");
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+}
+
+async function descargarBackup() {
+    const res = await fetch("http://localhost:8080/api/dashboard/backup", {
+    });
+    const msg = await res.text();
+    alert(msg);
+}
