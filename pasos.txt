@@ -1,0 +1,5 @@
+pasos para abrir
+1- abrir ngrok 
+2- ejecutar ngrok http 5500
+3- copiar la url + la direccion de la vista que se quiera abrir
+https://carpetless-lorenzo-lambdoid.ngrok-free.dev/front/html/carrito.html

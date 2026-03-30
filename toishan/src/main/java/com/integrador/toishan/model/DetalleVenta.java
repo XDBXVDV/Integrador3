@@ -16,6 +16,7 @@ public class DetalleVenta {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_venta", nullable = false)
     @JsonIgnore
+
     private Venta venta;
 
     @ManyToOne(fetch = FetchType.LAZY)
