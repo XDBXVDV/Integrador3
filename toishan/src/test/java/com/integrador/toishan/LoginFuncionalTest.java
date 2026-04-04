@@ -22,14 +22,12 @@ public class LoginFuncionalTest {
 
     @BeforeEach
     void setupTest() {
-        // Silencia los logs innecesarios de Selenium en la consola
         System.setProperty("webdriver.chrome.silentOutput", "true");
         java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(java.util.logging.Level.OFF);
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--start-maximized");
-        // Esto ayuda a evitar errores de compatibilidad de protocolo
         options.addArguments("--disable-blink-features=AutomationControlled");
 
         driver = new ChromeDriver(options);
@@ -51,7 +49,6 @@ public class LoginFuncionalTest {
         driver.findElement(By.id("contrasenaLogin")).sendKeys("ADMIN");
         driver.findElement(By.id("btnIngresar")).click();
 
-        // Esperamos a que la URL cambie al index
         wait.until(ExpectedConditions.urlContains("index.html"));
 
         assertTrue(driver.getCurrentUrl().contains("index.html"));
