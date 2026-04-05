@@ -1,0 +1,76 @@
+/* =========================
+   BODY
+========================= */
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(135deg,#f5f7fb,#eef1f5);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* =========================
+   CARD
+========================= */
+.acceso-denegado{
+    background:white;
+    padding:40px;
+    border-radius:16px;
+    text-align:center;
+    max-width:400px;
+    width:90%;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    animation:fadeIn 0.4s ease;
+}
+
+/* ICONO */
+.acceso-denegado i{
+    font-size:60px;
+    color:#e74c3c;
+    margin-bottom:15px;
+}
+
+/* TITULO */
+.acceso-denegado h2{
+    color:#2c3e50;
+    margin-bottom:10px;
+}
+
+/* TEXTO */
+.acceso-denegado p{
+    color:#666;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+/* BOTON */
+.acceso-denegado a{
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:8px;
+    background:#d6ca85;
+    color:#1f1f1f;
+    text-decoration:none;
+    font-weight:500;
+    transition:0.25s;
+}
+
+.acceso-denegado a:hover{
+    background:#cbbf70;
+}
+
+/* ANIMACION */
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
