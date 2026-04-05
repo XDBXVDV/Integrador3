@@ -43,33 +43,23 @@ public class FlujoCompletoTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("usuarioLogin"))).sendKeys("CLIENTE");
         driver.findElement(By.id("contrasenaLogin")).sendKeys("CLIENTE");
         driver.findElement(By.id("btnIngresar")).click();
-
         wait.until(ExpectedConditions.urlContains("index.html"));
-
         WebElement btnVer = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Ver producto')]")));
         btnVer.click();
-
         wait.until(ExpectedConditions.urlContains("detalle_producto.html"));
-
         WebElement btnAgregar = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(text(), 'Agregar al carrito')]")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", btnAgregar);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnAgregar);
-
         wait.until(ExpectedConditions.alertIsPresent());
         Alert alertExito = driver.switchTo().alert();
         System.out.println("Alerta confirmada: " + alertExito.getText());
         alertExito.accept();
-
         driver.get("http://127.0.0.1:5500/front/html/carrito.html");
-
         WebElement totalElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("totalCart")));
-
         WebElement radioFactura = driver.findElement(By.id("rFactura"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", radioFactura);
-
         wait.until(ExpectedConditions.not(ExpectedConditions.textToBe(By.id("totalCart"), "0.00")));
         String montoFinal = driver.findElement(By.id("totalCart")).getText();
-
         System.out.println("Monto final en carrito: S/ " + montoFinal);
         assertNotEquals("0.00", montoFinal);
     }

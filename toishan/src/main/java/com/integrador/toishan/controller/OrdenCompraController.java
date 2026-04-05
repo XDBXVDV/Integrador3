@@ -17,8 +17,6 @@ public class OrdenCompraController {
     @Autowired
     private OrdenCompraService ordenService;
 
-    // Ruta: GET /api/ordenes/estado/EMITIDA
-    // El JS usa esto para llenar la tabla inicial
     @GetMapping("/estado/{estado}")
     public ResponseEntity<List<OrdenCompra>> listarPorEstado(@PathVariable String estado) {
         try {
@@ -31,7 +29,6 @@ public class OrdenCompraController {
         }
     }
 
-    // Ruta: GET /api/ordenes/{id}
     @GetMapping("/{id}")
     public ResponseEntity<OrdenCompra> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(ordenService.buscarPorId(id));

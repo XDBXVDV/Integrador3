@@ -31,16 +31,8 @@ public class LoginFuncionalTest {
         options.addArguments("--disable-blink-features=AutomationControlled");
 
         driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15)); // Un poco más de tiempo
+        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
-
-    @AfterEach
-    void teardown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
     @Test
     void testLoginExitoso() {
         driver.get("http://127.0.0.1:5500/front/html/login.html"); // Tu URL local
