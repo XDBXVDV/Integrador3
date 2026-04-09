@@ -1,0 +1,179 @@
+/* =========================
+   VARIABLES
+========================= */
+:root{
+    --color-principal: #d6ca85;
+    --color-hover: #cbbf70;
+}
+
+/* =========================
+   BODY (NO ROMPE BOOTSTRAP)
+========================= */
+body{
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f5f7fb;
+}
+
+/* =========================
+   TITULOS
+========================= */
+h2{
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.section-title{
+    border-left: 5px solid var(--color-principal);
+    padding-left: 14px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* =========================
+   CARDS MENU (UX PRO)
+========================= */
+.menu-card{
+    transition: all 0.25s ease;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: inherit;
+    border-radius: 14px !important;
+}
+
+/* HOVER PRO */
+.menu-card:hover{
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12) !important;
+}
+
+/* ICONOS */
+.menu-card i{
+    transition: 0.3s;
+}
+
+.menu-card:hover i{
+    transform: scale(1.2);
+}
+
+/* =========================
+   CIRCULOS ICONOS
+========================= */
+.menu-card .rounded-circle{
+    transition: 0.3s;
+}
+
+.menu-card:hover .rounded-circle{
+    transform: scale(1.1);
+}
+
+/* =========================
+   TEXTO
+========================= */
+.menu-card h6{
+    font-size: 15px;
+}
+
+.menu-card small{
+    font-size: 12px;
+}
+
+/* =========================
+   GRID RESPONSIVE MEJORADO
+========================= */
+@media(max-width: 768px){
+
+    .section-title{
+        font-size: 18px;
+    }
+
+    .menu-card{
+        padding: 20px !important;
+    }
+}
+
+/* =========================
+   SECCION SEGURIDAD
+========================= */
+#seccionSeguridad .menu-card{
+    border: 1px solid rgba(220,53,69,0.15);
+}
+
+#seccionSeguridad .menu-card:hover{
+    box-shadow: 0 10px 25px rgba(220,53,69,0.2) !important;
+}
+
+/* =========================
+   ACCESO DENEGADO (INTEGRADO)
+========================= */
+
+.acceso-denegado-wrapper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:linear-gradient(135deg,#f5f7fb,#eef1f5);
+}
+
+/* CARD */
+.acceso-denegado{
+    background:white;
+    padding:40px;
+    border-radius:16px;
+    text-align:center;
+    max-width:400px;
+    width:90%;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    animation:fadeIn 0.4s ease;
+}
+
+/* ICONO */
+.acceso-denegado i{
+    font-size:60px;
+    color:#e74c3c;
+    margin-bottom:15px;
+}
+
+/* TITULO */
+.acceso-denegado h2{
+    color:#2c3e50;
+    margin-bottom:10px;
+}
+
+/* TEXTO */
+.acceso-denegado p{
+    color:#666;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+/* BOTON */
+.acceso-denegado a{
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:8px;
+    background:var(--color-principal);
+    color:#1f1f1f;
+    text-decoration:none;
+    font-weight:500;
+    transition:0.25s;
+}
+
+.acceso-denegado a:hover{
+    background:var(--color-hover);
+}
+
+/* =========================
+   ANIMACION
+========================= */
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}

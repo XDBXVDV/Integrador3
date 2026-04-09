@@ -1,3 +1,5 @@
+
+Culqi.publicKey = 'pk_test_LB4RPCTbzBp2ewa7'; 
 document.addEventListener('DOMContentLoaded', () => {
     validarAccesoCarrito();
     renderizarCarrito();
@@ -13,12 +15,11 @@ function validarAccesoCarrito() {
         const contenedor = document.querySelector('.container');
         if (contenedor) {
             contenedor.innerHTML = `
-                <div class="alert alert-warning mt-5 text-center">
-                    <h4>Acceso Restringido</h4>
+                <div class="alert alert-warning mt-5 text-center shadow-sm">
+                    <h4 class="fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Acceso Restringido</h4>
                     <p>Solo los usuarios con rol <strong>CLIENTE</strong> pueden procesar compras.</p>
-                    <a href="index.html" class="btn btn-primary">Volver a la tienda</a>
-                </div>
-            `;
+                    <a href="index.html" class="btn btn-primary mt-2">Volver a la tienda</a>
+                </div>`;
         }
     }
 }
@@ -40,7 +41,7 @@ function renderizarCarrito() {
     listaContenedor.innerHTML = '';
 
     if (carrito.length === 0) {
-        listaContenedor.innerHTML = '<div class="list-group-item text-center py-5">Tu carrito está vacío</div>';
+        listaContenedor.innerHTML = '<div class="list-group-item text-center py-5 text-muted">Tu carrito está vacío</div>';
         if(subtotalSpan) subtotalSpan.innerText = '0.00';
         if(totalSpan) totalSpan.innerText = '0.00';
         return;
@@ -49,10 +50,16 @@ function renderizarCarrito() {
     carrito.forEach(item => {
         const subtotalItem = item.precio * item.cantidad;
         subtotalGeneral += subtotalItem;
+
+        // Limpieza de ruta para imágenes (Compatibilidad con ngrok)
+        const nombreArchivo = item.imagen.split('/').pop(); 
+        const urlImagenFinal = `http://localhost:8080/img/productos/${nombreArchivo}`;
+
         listaContenedor.innerHTML += `
-            <div class="list-group-item d-flex justify-content-between align-items-center p-3">
+            <div class="list-group-item d-flex justify-content-between align-items-center p-3 border-0 border-bottom">
                 <div class="d-flex align-items-center">
-                    <img src="${item.imagen}" width="60" class="me-3 rounded shadow-sm">
+                    <img src="${urlImagenFinal}" width="60" height="60" class="me-3 rounded shadow-sm object-fit-cover" 
+                         onerror="this.onerror=null; this.src='https://placehold.jp/150x150.png?text=Error';">
                     <div>
                         <h6 class="mb-0 fw-bold">${item.nombre}</h6>
                         <small class="text-muted">S/ ${item.precio.toFixed(2)} x ${item.cantidad}</small>
@@ -60,14 +67,13 @@ function renderizarCarrito() {
                 </div>
                 <div class="text-end">
                     <span class="d-block mb-2 fw-bold">S/ ${subtotalItem.toFixed(2)}</span>
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-outline-secondary" onclick="actualizarCantidad(${item.idProducto}, -1)">-</button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="actualizarCantidad(${item.idProducto}, 1)">+</button>
+                    <div class="btn-group shadow-sm">
+                        <button class="btn btn-sm btn-light border" onclick="actualizarCantidad(${item.idProducto}, -1)">-</button>
+                        <button class="btn btn-sm btn-light border" onclick="actualizarCantidad(${item.idProducto}, 1)">+</button>
                         <button class="btn btn-sm btn-outline-danger ms-2" onclick="eliminarProducto(${item.idProducto})"><i class="fa fa-trash"></i></button>
                     </div>
                 </div>
-            </div>
-        `;
+            </div>`;
     });
 
     const tipoDoc = document.querySelector('input[name="tipoDoc"]:checked')?.value || "BOLETA";
@@ -82,74 +88,71 @@ function renderizarCarrito() {
     if(typeof actualizarContadorNavbar === 'function') actualizarContadorNavbar();
 }
 
+// 2. LÓGICA DE CULQI
 window.abrirPasarela = function() {
-    const total = document.getElementById("totalCart").innerText;
+    const totalStr = document.getElementById("totalCart").innerText;
+    const totalCentavos = Math.round(parseFloat(totalStr) * 100); 
     const nroDoc = document.getElementById("nroDocumento").value;
     const tipoDoc = document.querySelector('input[name="tipoDoc"]:checked')?.value;
 
     if (obtenerCarrito().length === 0) return alert("El carrito está vacío.");
-    if (tipoDoc === "FACTURA" && nroDoc.length !== 11) return alert("Se requiere un RUC válido de 11 dígitos.");
-    if (tipoDoc === "BOLETA" && nroDoc.length !== 8) return alert("Se requiere un DNI válido de 8 dígitos.");
+    if (tipoDoc === "FACTURA" && nroDoc.length !== 11) return alert("RUC inválido (11 dígitos).");
+    if (tipoDoc === "BOLETA" && nroDoc.length !== 8) return alert("DNI inválido (8 dígitos).");
 
-    const overlay = document.createElement('div');
-    overlay.id = "pago-simulado-overlay";
-    overlay.innerHTML = `
-        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter: blur(5px);">
-            <div class="card shadow" style="width: 400px; border-radius: 15px; overflow: hidden; border: none;">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h5 class="mb-0 text-uppercase fw-bold">Pasarela de Pago Segura</h5>
-                </div>
-                <div class="card-body p-4" id="cuerpo-pasarela">
-                    <p class="text-center text-muted small mb-4">Monto total a debitar: <br> <span class="fs-3 fw-bold text-dark">S/ ${total}</span></p>
-                    
-                    <div class="d-grid gap-3">
-                        <button class="btn btn-outline-primary p-3 text-start" onclick="procesarSimulacion('TARJETA')">
-                            <i class="fa fa-credit-card me-2"></i> Tarjeta de Crédito / Débito
-                        </button>
-                        <button class="btn btn-outline-success p-3 text-start" onclick="procesarSimulacion('YAPE')">
-                            <i class="fa fa-mobile-alt me-2"></i> Pagar con Yape
-                        </button>
-                        <button class="btn btn-outline-info p-3 text-start text-dark" onclick="procesarSimulacion('PLIN')">
-                            <i class="fa fa-qrcode me-2"></i> Pagar con Plin
-                        </button>
-                    </div>
-                    
-                    <button class="btn btn-link w-100 text-muted mt-4" onclick="document.getElementById('pago-simulado-overlay').remove()">Cancelar Compra</button>
-                </div>
-                <div id="loader-pasarela" class="card-body p-5 text-center" style="display:none;">
-                    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
-                    <h5 class="fw-bold">Procesando...</h5>
-                    <p class="text-muted">Validando con la entidad financiera</p>
-                </div>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-}
+    Culqi.settings({
+        title: 'TOISHAN S.A.C.',
+        currency: 'PEN',
+        description: 'Compra de Repuestos Automotrices',
+        amount: totalCentavos
+    });
 
-window.procesarSimulacion = function(metodo) {
-    document.getElementById("cuerpo-pasarela").style.display = "none";
-    document.getElementById("loader-pasarela").style.display = "block";
+    // Opciones limpias para evitar errores de carga de logo externo
+    Culqi.options({
+        lang: 'auto',
+        installments: false,
+        style: {
+            maincolor: '#0d6efd',
+            buttontext: '#ffffff'
+        }
+    });
 
-    setTimeout(() => {
-        document.getElementById("pago-simulado-overlay").remove();
-        registrarVentaBackend(metodo);
-    }, 2000);
-}
+    Culqi.open(); 
+};
 
-async function registrarVentaBackend(metodoConfirmado) {
+window.culqi = async function() {
+    if (Culqi.token) { 
+        const tokenID = Culqi.token.id;
+        const email = Culqi.token.email;
+        registrarVentaBackend("TARJETA", tokenID, email);
+    } else {
+        console.error("Error Culqi:", Culqi.error);
+        alert("Pago no procesado: " + Culqi.error.user_message);
+    }
+};
+
+// 3. ENVÍO AL BACKEND (RESOLVIENDO ERROR DE VALORES NULOS)
+async function registrarVentaBackend(metodo, culqiToken = null, culqiEmail = null) {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
-    const tipoComprobante = document.querySelector('input[name="tipoDoc"]:checked').value;
-    const nroDoc = document.getElementById("nroDocumento").value;
-    const subtotal = parseFloat(document.getElementById("subtotalCart").innerText);
+    const carritoActual = obtenerCarrito();
+    // Capturamos montos asegurando que sean números (no strings)
+    const totalVenta = parseFloat(document.getElementById("totalCart").innerText);
+    const subtotalVenta = parseFloat(document.getElementById("subtotalCart").innerText);
+    const igvVenta = parseFloat(document.getElementById("igvCart").innerText);
+    
     const carrito = obtenerCarrito();
 
     const ventaDTO = {
         idCliente: parseInt(usuario.idPersona),
-        tipoComprobante: tipoComprobante.toUpperCase(),
-        nroDocumento: nroDoc,
-        metodoPago: metodoConfirmado,
-        subtotal: subtotal,
+        tipoComprobante: document.querySelector('input[name="tipoDoc"]:checked').value.toUpperCase(),
+        nroDocumento: document.getElementById("nroDocumento").value,
+        metodoPago: metodo,
+        
+        total: totalVenta, 
+        subtotal: subtotalVenta,
+        igv: igvVenta,
+        
+        tokenCulqi: culqiToken,
+        emailCulqi: culqiEmail,
         detalles: carrito.map(item => ({
             idProducto: parseInt(item.idProducto),
             cantidad: parseInt(item.cantidad),
@@ -157,73 +160,83 @@ async function registrarVentaBackend(metodoConfirmado) {
         }))
     };
 
+    const btn = document.getElementById("btnPagar");
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+
     try {
         const res = await fetch("http://localhost:8080/producto/ventas/registrar", {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(ventaDTO)
         });
 
         if (res.ok) {
             const ventaFinal = await res.json();
-            alert("¡Pago exitoso! Su pedido ha sido registrado correctamente.");
-            generarComprobantePDF(ventaFinal);
+            alert("¡Compra exitosa! Su pedido ha sido registrado.");
+            generarComprobantePDF(ventaFinal, carritoActual);
             localStorage.removeItem("carrito");
             window.location.href = "index.html";
         } else {
             const errorMsg = await res.text();
-            alert("Error del servidor: " + errorMsg);
+            // Esto te dirá exactamente qué campo falta si Java sigue rechazando
+            alert("Error en el servidor: " + errorMsg);
         }
     } catch (e) {
-        alert("Error crítico: No se pudo conectar con el servidor backend (Puerto 8080).");
+        alert("Error de conexión con el servidor TOISHAN.");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa fa-credit-card"></i> Pagar ahora';
     }
 }
 
-
-function generarComprobantePDF(v) {
+function generarComprobantePDF(v, carritoAux) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
+    
+    // Configuración de estilo
     doc.setFontSize(18);
-    doc.setTextColor(40);
     doc.text("TOISHAN S.A.C.", 105, 20, { align: "center" });
     
     doc.setFontSize(12);
-    doc.setTextColor(100);
-    doc.text(v.tipoComprobante, 170, 30, { align: "center" });
-    doc.text(`N° 001-${String(v.idVenta).padStart(6, '0')}`, 170, 37, { align: "center" });
+    doc.text(`Comprobante: ${v.tipoComprobante}`, 20, 40);
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
+    doc.text(`ID Venta: ${v.idVenta || 'N/A'}`, 20, 60);
 
-    doc.setFontSize(10);
-    doc.setTextColor(0);
-    doc.text(`Cliente: ${v.cliente.nombre} ${v.cliente.apellido}`, 15, 50);
-    doc.text(`Documento: ${v.nroDocumento}`, 15, 57);
-    doc.text(`Método de Pago: ${v.metodoPago}`, 15, 64);
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 15, 71);
+    doc.text("Detalle de Productos:", 20, 80);
+    doc.line(20, 82, 190, 82);
 
-    const rows = v.detalles.map(d => [
-        d.cantidad, 
-        d.producto.nombre, 
-        `S/ ${d.precioUnitario.toFixed(2)}`, 
-        `S/ ${(d.cantidad * d.precioUnitario).toFixed(2)}`
-    ]);
+    let yPos = 90; 
+    
+    carritoAux.forEach((item) => {
+        const nombre = item.nombre; 
+        const cant = item.cantidad;
+        const precioUnit = item.precio;
+        const subtotalItem = (precioUnit * cant).toFixed(2);
 
-    doc.autoTable({
-        startY: 80,
-        head: [['Cant', 'Descripción del Producto', 'P. Unitario', 'Subtotal']],
-        body: rows,
-        theme: 'striped',
-        headStyles: { fillColor: [13, 110, 253] }
+        const linea = `${cant} x ${nombre}`;
+        const precioTexto = `S/ ${subtotalItem}`;
+        
+        doc.text(linea, 20, yPos);
+        doc.text(precioTexto, 170, yPos, { align: "right" });
+        
+        yPos += 10;
+
+        // Control básico de espacio en la página
+        if (yPos > 270) {
+            doc.addPage();
+            yPos = 20;
+        }
     });
 
-    const finalY = doc.lastAutoTable.finalY + 10;
-    doc.setFontSize(11);
-    doc.text(`Subtotal: S/ ${(v.total - v.igv).toFixed(2)}`, 140, finalY);
-    if(v.igv > 0) doc.text(`IGV (18%): S/ ${v.igv.toFixed(2)}`, 140, finalY + 7);
-    doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
-    doc.text(`TOTAL: S/ ${v.total.toFixed(2)}`, 140, finalY + 15);
+    // El Total final lo seguimos sacando de 'v' (la respuesta oficial del backend)
+    doc.line(20, yPos, 190, yPos); 
+    doc.setFont("helvetica", "bold");
+    doc.text(`TOTAL A PAGAR: S/ ${v.total.toFixed(2)}`, 190, yPos + 10, { align: "right" });
 
-    doc.save(`${v.tipoComprobante}_${v.idVenta}.pdf`);
+    doc.save(`${v.tipoComprobante}_${v.idVenta || 'Ticket'}.pdf`);
 }
 
 window.actualizarCantidad = function(id, cambio) {
@@ -231,7 +244,7 @@ window.actualizarCantidad = function(id, cambio) {
     const item = carrito.find(p => p.idProducto === id);
     if (item) {
         const nuevaCant = item.cantidad + cambio;
-        if (nuevaCant > item.stock) return alert("Stock máximo alcanzado.");
+        if (nuevaCant > item.stock) return alert("Sin stock suficiente.");
         if (nuevaCant <= 0) return eliminarProducto(id);
         item.cantidad = nuevaCant;
         localStorage.setItem('carrito', JSON.stringify(carrito));

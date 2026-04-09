@@ -1,0 +1,148 @@
+/* =========================
+   FONDO GENERAL
+========================= */
+body{
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fb, #eef1f5);
+}
+
+/* =========================
+   CARD LOGIN
+========================= */
+.card{
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    animation: fadeIn 0.4s ease;
+}
+
+/* HOVER SUTIL */
+.card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+}
+
+/* =========================
+   TITULO
+========================= */
+h2{
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.form-control{
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+/* FOCUS UX */
+.form-control:focus{
+    border-color: #d6ca85;
+    box-shadow: 0 0 0 3px rgba(214,202,133,0.25);
+}
+
+/* =========================
+   BOTÓN LOGIN
+========================= */
+.btn-primary{
+    background: linear-gradient(135deg, #d6ca85, #cbbf70);
+    border: none;
+    color: #1f1f1f;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.25s ease;
+}
+
+/* HOVER */
+.btn-primary:hover{
+    background: #1f1f1f;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* =========================
+   BOTÓN REGISTRO
+========================= */
+.btn-success{
+    background: linear-gradient(135deg, #28a745, #218838);
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: 0.25s;
+}
+
+.btn-success:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* =========================
+   LINKS
+========================= */
+a{
+    color: #d6ca85;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+a:hover{
+    color: #bfb06f;
+}
+
+/* =========================
+   TEXTO SECUNDARIO
+========================= */
+.text-muted{
+    font-size: 13px;
+}
+
+/* =========================
+   MODAL UX
+========================= */
+.modal-content{
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* HEADER MODAL */
+.modal-header{
+    background: #f8f9fa;
+    border-bottom: none;
+}
+
+/* =========================
+   ANIMACIÓN
+========================= */
+@keyframes fadeIn{
+    from{
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width: 500px){
+
+    .card{
+        padding: 20px !important;
+    }
+
+    h2{
+        font-size: 22px;
+    }
+}

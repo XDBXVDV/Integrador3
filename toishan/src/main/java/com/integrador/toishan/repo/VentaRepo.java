@@ -29,11 +29,27 @@ public interface VentaRepo extends JpaRepository<Venta,Long> {
             "AND YEAR(fechaventa) = YEAR(CURRENT_DATE()) AND estado != 'ANULADA'", nativeQuery = true)
     Double sumarVentasMesActual();
 
-    @Query(value = "SELECT DAYNAME(fechaventa) as dia, SUM(total) as monto " +
+    @Query(value = "SELECT DATE_FORMAT(fechaventa, '%d/%m') as dia, SUM(total) as monto " +
             "FROM ventas " +
-            "WHERE fechaventa >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) " +
+            "WHERE fechaventa >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) " +
             "AND estado != 'ANULADA' " +
-            "GROUP BY dia, DAYOFWEEK(fechaventa) " +
-            "ORDER BY DAYOFWEEK(fechaventa)", nativeQuery = true)
+            "GROUP BY dia, fechaventa ORDER BY fechaventa ASC", nativeQuery = true)
     List<Object[]> obtenerVentasUltimaSemana();
+
+    @Query(value = "SELECT c.nombre as categoria, SUM(dv.cantidad * dv.precio_unitario) as total " +
+            "FROM detalle_ventas dv " +
+            "JOIN productos p ON dv.id_producto = p.id_producto " +
+            "JOIN categorias c ON p.id_categoria = c.id_categoria " +
+            "JOIN ventas v ON dv.id_venta = v.id_venta " +
+            "WHERE v.estado != 'ANULADA' " +
+            "GROUP BY c.nombre ORDER BY total DESC LIMIT 5", nativeQuery = true)
+    List<Object[]> obtenerVentasPorCategoria();
+
+    @Query(value = "SELECT p.nombre, SUM(dv.cantidad) as cant, SUM(dv.cantidad * dv.precio_unitario) as total " +
+            "FROM detalle_ventas dv " +
+            "JOIN productos p ON dv.id_producto = p.id_producto " +
+            "JOIN ventas v ON dv.id_venta = v.id_venta " +
+            "WHERE v.estado != 'ANULADA' " +
+            "GROUP BY p.nombre ORDER BY cant DESC LIMIT 5", nativeQuery = true)
+    List<Object[]> obtenerTopProductosDashboard();
 }

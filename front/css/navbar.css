@@ -1,189 +1,200 @@
 /* =========================
-   FUENTE GLOBAL
+   VARIABLES
 ========================= */
+:root{
+    --color-principal: #d6ca85;
+    --color-hover: #cbbf70;
+}
 
+/* =========================
+   BODY
+========================= */
 body{
-margin:0;
-font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    margin:0;
+    font-family: 'Poppins', sans-serif;
+    background:#f5f7fb;
 }
 
-
 /* =========================
-   NAVBAR
+   NAVBAR BASE
 ========================= */
-
 .navbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:#1f1f1f;
-color:white;
-padding:12px 30px;
-height:60px;
-box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--color-principal);
+    padding:0 30px;
+    height:65px;
+    border-bottom:2px solid var(--color-hover);
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
-
 /* =========================
-   LOGO
+   IZQUIERDA
 ========================= */
+.nav-left{
+    display:flex;
+    align-items:center;
+}
 
 .logo{
-color:white;
-font-size:20px;
-font-weight:bold;
-text-decoration:none;
+    font-size:20px;
+    font-weight:700;
+    color:#1f1f1f;
+    text-decoration:none;
 }
-
 
 /* =========================
-   SECCIONES NAVBAR
+   CENTRO (NO TOCAR)
 ========================= */
-
-.nav-left{
-display:flex;
-align-items:center;
-gap:20px;
-}
-
 .nav-center{
-flex:1;
-text-align:center;
+    flex:1;
+    text-align:center;
 }
 
+/* =========================
+   DERECHA
+========================= */
 .nav-right{
-display:flex;
-align-items:center;
-gap:20px;
+    display:flex;
+    align-items:center;
+    gap:22px;
 }
 
+/* LINKS */
+.nav-right a{
+    position:relative;
+    color:#1f1f1f;
+    font-size:14px;
+    text-decoration:none;
+}
+
+/* EFECTO UNDERLINE */
+.nav-right a::after{
+    content:"";
+    position:absolute;
+    width:0%;
+    height:2px;
+    left:0;
+    bottom:-4px;
+    background:#1f1f1f;
+    transition:0.3s;
+}
+
+.nav-right a:hover::after{
+    width:100%;
+}
 
 /* =========================
-   BUSCADOR
+   USUARIO (FIX REAL)
 ========================= */
-
-.search{
-width:320px;
-padding:6px 10px;
-border-radius:4px;
-border:1px solid #ccc;
-font-size:14px;
-}
-
-
-/* =========================
-   LINK EMPLEADOS
-========================= */
-
-.empleados-link{
-color:white;
-text-decoration:none;
-font-weight:500;
-}
-
-.empleados-link:hover{
-text-decoration:underline;
-}
-
-
-/* =========================
-   USUARIO
-========================= */
-
 .usuario-menu{
-position:relative;
+    position:relative;
+    display:flex;
+    align-items:center;
 }
 
+/* BOTON */
 .usuario-btn{
-background:none;
-border:none;
-color:white;
-font-size:15px;
-display:flex;
-align-items:center;
-gap:6px;
-cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:8px; /* 🔥 separación clave */
+    background:rgba(0,0,0,0.08);
+    border:none;
+    padding:6px 12px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:14px;
 }
 
+/* TEXTO */
+#usuarioInfo{
+    white-space:nowrap; /* 🔥 evita que se junte */
+}
 
 /* =========================
    DROPDOWN
 ========================= */
-
 .dropdown{
-display:none;
-position:absolute;
-top:45px;
-right:0;
-background:white;
-min-width:170px;
-border-radius:6px;
-box-shadow:0 4px 12px rgba(0,0,0,0.2);
-z-index:9999;
-overflow:hidden;
+    display:none;
+    position:absolute;
+    top:42px;
+    right:0;
+    background:white;
+    min-width:180px;
+    border-radius:10px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    overflow:hidden;
+    z-index:9999;
 }
-
-
-/* dropdown activo */
 
 .dropdown.show{
-display:block;
+    display:block;
 }
-
-
-/* items */
 
 .dropdown a,
 .dropdown button{
-display:block;
-width:100%;
-padding:10px 15px;
-text-align:left;
-background:none;
-border:none;
-text-decoration:none;
-color:#333;
-cursor:pointer;
-font-size:14px;
+    display:block;
+    width:100%;
+    padding:10px 14px;
+    border:none;
+    background:none;
+    text-align:left;
+    font-size:14px;
+    cursor:pointer;
+    color:#333;
 }
 
 .dropdown a:hover,
 .dropdown button:hover{
-background:#f2f2f2;
+    background:#f5f7fb;
 }
-
 
 /* =========================
-   PREVENIR CONFLICTOS BOOTSTRAP
+   BUSCADOR (INDEX)
 ========================= */
-
-.navbar *{
-box-sizing:border-box;
-line-height:normal;
+.search{
+    width:320px;
+    padding:8px 12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:14px;
 }
+
+.search:focus{
+    outline:none;
+    border-color:var(--color-principal);
+    box-shadow:0 0 0 2px rgba(214,202,133,0.3);
+}
+
 /* =========================
-   COLOR PRINCIPAL LOGIN
+   BOTON SALIR
 ========================= */
-
-.btn-primary{
-background-color:#D0BD56;
-border-color:#D0BD56;
-color:#1f1f1f;
-font-weight:600;
+.btn-salir{
+    background:#1f1f1f;
+    color:white !important;
+    padding:6px 14px;
+    border-radius:6px;
 }
 
-.btn-primary:hover{
-background-color:#b6a84c;
-border-color:#b6a84c;
-color:#1f1f1f;
+.btn-salir:hover{
+    background:black;
 }
 
-/* link registro */
-a{
-color:#D0BD56;
-}
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:768px){
 
-a:hover{
-color:#b6a84c;
-}
+    .nav-right{
+        gap:12px;
+    }
 
+    .logo{
+        font-size:16px;
+    }
+
+    .search{
+        width:200px;
+    }
+}
