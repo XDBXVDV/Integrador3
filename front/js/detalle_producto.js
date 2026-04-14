@@ -29,7 +29,7 @@ async function cargarProducto() {
 
         const imagenUrl = productoActual.imagen
             ? "http://localhost:8080" + productoActual.imagen
-            : "http://localhost:8080/img/productos/default.png";
+            : "http://localhost:8080/img/productos/default.jpg";
 
         const tieneStock = productoActual.stock > 0;
 
