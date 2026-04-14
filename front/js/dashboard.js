@@ -56,7 +56,6 @@ async function cargarDatosDashboard() {
             }
         });
 
-        // 3. Gráfico Doughnut: Categorías
         const ctxCat = document.getElementById('chartCategorias').getContext('2d');
         if (window.myChartCat) window.myChartCat.destroy();
 
@@ -76,7 +75,6 @@ async function cargarDatosDashboard() {
             }
         });
 
-        // 4. Tabla Top Productos
         const tbody = document.getElementById("tablaTopProductos");
         tbody.innerHTML = "";
         data.topProductos.forEach(p => {
